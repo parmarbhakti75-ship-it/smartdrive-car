@@ -75,15 +75,15 @@ const uint8_t MIN_SPEED       = 100;  // Minimum stall prevention threshold
 const uint8_t MAX_SPEED       = 255;  // 100% full battery voltage
 
 // Obstacle Avoidance Thresholds (in centimeters)
-const int DISTANCE_SAFE_THRESHOLD = 30; // Obstacle detection distance (cm)
-const int DISTANCE_CRITICAL_STOP  = 15; // Emergency brake distance (cm)
+const int DISTANCE_SAFE_THRESHOLD = 45; // Early obstacle warning & slow down (cm)
+const int DISTANCE_CRITICAL_STOP  = 25; // Complete brake threshold (cm)
 const int SENSOR_TIMEOUT_MICROS   = 25000; // ~4 meters max range timeout
 
 // Servo Calibration Angles (in degrees)
 const int SERVO_CENTER = 90;   // Looking straight ahead
 const int SERVO_LEFT   = 150;  // Looking towards the left
 const int SERVO_RIGHT  = 30;   // Looking towards the right
-const int SERVO_SWEEP_DELAY_MS = 280; // Delay for servo to reach mechanical position
+const int SERVO_SWEEP_DELAY_MS = 200; // Snappy delay for servo to reach mechanical position
 
 // Bluetooth Watchdog / Connection Safety Timeout
 const unsigned long BT_HEARTBEAT_TIMEOUT_MS = 1200; // Stop car if no command for 1.2s

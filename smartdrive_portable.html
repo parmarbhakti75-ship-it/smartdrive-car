@@ -3,42 +3,38 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SMARTDRIVE - Interactive 4WD Robot Digital Twin & Simulator</title>
+  <title>SMARTDRIVE - Autonomous 4WD Robot Car Simulator</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@500;600&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
 /* ==============================================================================
-   SMARTDRIVE ROBOTICS SIMULATOR - DESIGN SYSTEM & STYLES
-   Theme: High-Tech Cybernetics / Dark Glassmorphism / Clean Engineering
+   SMARTDRIVE ROBOTICS COCKPIT - STREAMLINED MODERN DESIGN SYSTEM
    ============================================================================== */
 
 :root {
-  --bg-primary: #0b0f19;
-  --bg-secondary: #111827;
-  --bg-panel: rgba(17, 24, 39, 0.75);
-  --bg-panel-hover: rgba(30, 41, 59, 0.85);
-  --border-subtle: rgba(255, 255, 255, 0.08);
-  --border-highlight: rgba(56, 189, 248, 0.3);
-  
-  --text-main: #f3f4f6;
-  --text-muted: #9ca3af;
-  --text-dim: #6b7280;
+  --bg-deep: #080d1a;
+  --bg-card: rgba(15, 23, 42, 0.75);
+  --border-card: rgba(255, 255, 255, 0.08);
+  --border-cyan: rgba(6, 182, 212, 0.35);
 
-  --accent-cyan: #06b6d4;
-  --accent-blue: #3b82f6;
-  --accent-sky: #38bdf8;
-  --accent-green: #10b981;
-  --accent-yellow: #f59e0b;
-  --accent-red: #ef4444;
-  --accent-purple: #8b5cf6;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --text-dim: #64748b;
 
-  --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --cyan: #06b6d4;
+  --sky: #38bdf8;
+  --blue: #3b82f6;
+  --green: #10b981;
+  --amber: #f59e0b;
+  --red: #ef4444;
+  --purple: #8b5cf6;
+
+  --font-sans: 'Outfit', sans-serif;
   --font-mono: 'Fira Code', monospace;
   --radius-lg: 16px;
   --radius-md: 10px;
   --radius-sm: 6px;
-  --shadow-glow: 0 0 25px rgba(6, 182, 212, 0.15);
 }
 
 * {
@@ -49,72 +45,54 @@
 
 body {
   font-family: var(--font-sans);
-  background: radial-gradient(circle at 10% 10%, #172554 0%, #0b0f19 50%, #05070d 100%);
+  background: radial-gradient(circle at 15% 15%, #1e1b4b 0%, #080d1a 60%, #030712 100%);
   color: var(--text-main);
   min-height: 100vh;
   line-height: 1.5;
   overflow-x: hidden;
 }
 
-/* Scrollbars */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-::-webkit-scrollbar-track {
-  background: var(--bg-primary);
-}
-::-webkit-scrollbar-thumb {
-  background: #374151;
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #4b5563;
-}
-
-/* App Container */
-.app-container {
+.cockpit-container {
+  max-width: 1520px;
+  margin: 0 auto;
+  padding: 14px 20px;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
-  max-width: 1560px;
-  margin: 0 auto;
-  padding: 12px 20px;
+  gap: 14px;
 }
 
-/* Top Navigation Bar */
-.top-nav {
+/* TOP HEADER */
+.cockpit-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 20px;
-  background: var(--bg-panel);
-  backdrop-filter: blur(12px);
-  border: 1px solid var(--border-subtle);
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border-card);
   border-radius: var(--radius-lg);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-  margin-bottom: 12px;
+  padding: 12px 24px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
 }
 
-.brand {
+.brand-group {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
 }
 
 .brand-icon {
   width: 44px;
   height: 44px;
-  border-radius: 10px;
+  border-radius: 12px;
   background: linear-gradient(135deg, #0284c7, #2563eb);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 0 15px rgba(37, 99, 235, 0.4);
+  box-shadow: 0 0 20px rgba(37, 99, 235, 0.45);
 }
 .brand-icon svg {
-  width: 26px;
-  height: 26px;
+  width: 24px;
+  height: 24px;
   color: #fff;
 }
 
@@ -122,237 +100,191 @@ body {
   font-size: 1.35rem;
   font-weight: 800;
   letter-spacing: -0.5px;
-  color: #ffffff;
+  color: #fff;
 }
 .brand-title span {
-  font-size: 0.75rem;
-  background: rgba(6, 182, 212, 0.2);
-  color: var(--accent-cyan);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--cyan);
+  background: rgba(6, 182, 212, 0.15);
+  border: 1px solid rgba(6, 182, 212, 0.3);
   padding: 2px 8px;
   border-radius: 6px;
   margin-left: 6px;
-  font-weight: 700;
-  border: 1px solid rgba(6, 182, 212, 0.3);
 }
 
-.brand-subtitle {
+.brand-meta {
   font-size: 0.8rem;
   color: var(--text-muted);
 }
 
-.top-badges {
+.header-actions {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
-.badge {
+.status-pill {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   padding: 6px 14px;
   border-radius: 30px;
-  font-size: 0.85rem;
-  font-weight: 600;
+  font-size: 0.8rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
   border: 1px solid transparent;
-  transition: all 0.25s ease;
+  transition: all 0.2s ease;
 }
-
-.connection-badge.connected {
+.status-pill.safe {
   background: rgba(16, 185, 129, 0.15);
-  color: var(--accent-green);
-  border-color: rgba(16, 185, 129, 0.4);
+  color: var(--green);
+  border-color: rgba(16, 185, 129, 0.35);
 }
-.connection-badge.connected .dot {
-  width: 8px;
-  height: 8px;
-  background: var(--accent-green);
-  border-radius: 50%;
-  box-shadow: 0 0 8px var(--accent-green);
-  animation: pulse 1.5s infinite;
+.status-pill.warning {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--amber);
+  border-color: rgba(245, 158, 11, 0.35);
 }
-
-.connection-badge.disconnected {
-  background: rgba(239, 68, 68, 0.12);
-  color: var(--accent-red);
-  border-color: rgba(239, 68, 68, 0.3);
-}
-.connection-badge.disconnected .dot {
-  width: 8px;
-  height: 8px;
-  background: var(--accent-red);
-  border-radius: 50%;
+.status-pill.danger {
+  background: rgba(239, 68, 68, 0.15);
+  color: var(--red);
+  border-color: rgba(239, 68, 68, 0.35);
 }
 
-.mode-badge.manual {
-  background: rgba(59, 130, 246, 0.15);
-  color: #60a5fa;
-  border-color: rgba(59, 130, 246, 0.35);
-}
-.mode-badge.auto {
-  background: rgba(139, 92, 246, 0.18);
-  color: #c084fc;
-  border-color: rgba(139, 92, 246, 0.4);
+.pulse-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 10px currentColor;
 }
 
 .nav-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
   padding: 8px 16px;
   border-radius: var(--radius-md);
   font-family: var(--font-sans);
-  font-size: 0.88rem;
+  font-size: 0.86rem;
   font-weight: 600;
   cursor: pointer;
-  border: none;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.15s ease;
 }
-
-.nav-btn.primary {
-  background: linear-gradient(135deg, #0284c7, #2563eb);
-  color: #fff;
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+.nav-btn.outline {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-card);
+  color: var(--text-main);
 }
-.nav-btn.primary:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.5);
+.nav-btn.outline:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.25);
 }
-
 .nav-btn.emergency {
-  background: linear-gradient(135deg, #dc2626, #b91c1c);
+  background: linear-gradient(135deg, #dc2626, #991b1b);
+  border: none;
   color: #fff;
-  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.35);
+  box-shadow: 0 4px 14px rgba(220, 38, 38, 0.4);
 }
 .nav-btn.emergency:hover {
-  background: linear-gradient(135deg, #ef4444, #dc2626);
   transform: scale(1.02);
   box-shadow: 0 0 20px rgba(239, 68, 68, 0.6);
 }
 
-/* Sub Navigation Tabs */
-.sub-nav {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 14px;
-  overflow-x: auto;
-  padding-bottom: 2px;
-}
-
-.tab-btn {
-  background: rgba(17, 24, 39, 0.6);
-  border: 1px solid var(--border-subtle);
-  color: var(--text-muted);
-  padding: 8px 18px;
-  border-radius: var(--radius-md);
-  font-family: var(--font-sans);
-  font-size: 0.9rem;
-  font-weight: 500;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: all 0.2s ease;
-}
-.tab-btn:hover {
-  background: rgba(30, 41, 59, 0.7);
-  color: var(--text-main);
-  border-color: rgba(255, 255, 255, 0.15);
-}
-.tab-btn.active {
-  background: rgba(6, 182, 212, 0.15);
-  color: var(--accent-cyan);
-  border-color: rgba(6, 182, 212, 0.4);
-  font-weight: 600;
-}
-
-/* Glass Panels */
-.glass-panel {
-  background: var(--bg-panel);
-  backdrop-filter: blur(12px);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-lg);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
-  overflow: hidden;
-}
-
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 18px;
-  border-bottom: 1px solid var(--border-subtle);
-  background: rgba(255, 255, 255, 0.02);
-}
-.card-header h3 {
-  font-size: 1rem;
-  font-weight: 700;
-  color: #fff;
-}
-.card-header .hint {
-  font-size: 0.75rem;
-  color: var(--text-muted);
-  margin-left: 8px;
-}
-
-/* TAB 1: SIMULATOR LAYOUT */
-.tab-pane {
-  display: none;
-}
-.tab-pane.active {
-  display: block;
-}
-
-.simulator-layout {
+/* MAIN GRID LAYOUT */
+.cockpit-grid {
   display: grid;
   grid-template-columns: 1.45fr 1fr;
   gap: 16px;
 }
 
-/* Arena Card */
-.arena-card {
+.glass-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+
+/* ARENA SECTION */
+.arena-section {
   display: flex;
   flex-direction: column;
 }
 
-.arena-controls {
+.section-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--border-card);
+  background: rgba(255, 255, 255, 0.015);
+}
+.toolbar-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.indicator-led {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--cyan);
+  box-shadow: 0 0 8px var(--cyan);
+}
+.toolbar-title strong {
+  font-size: 0.95rem;
+  color: #fff;
+}
+.toolbar-title small {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-left: 6px;
+}
+
+.toolbar-btns {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-.tool-btn {
+.pill-btn {
   background: rgba(255, 255, 255, 0.06);
-  border: 1px solid var(--border-subtle);
+  border: 1px solid var(--border-card);
   color: var(--text-main);
-  padding: 5px 10px;
+  padding: 5px 12px;
+  border-radius: 6px;
   font-size: 0.78rem;
   font-weight: 600;
-  border-radius: var(--radius-sm);
   cursor: pointer;
   transition: all 0.15s ease;
 }
-.tool-btn:hover {
+.pill-btn:hover {
   background: rgba(255, 255, 255, 0.14);
   border-color: rgba(255, 255, 255, 0.25);
 }
+.pill-btn.highlight {
+  background: rgba(6, 182, 212, 0.15);
+  color: var(--cyan);
+  border-color: rgba(6, 182, 212, 0.35);
+}
 
-.toggle-label {
-  font-size: 0.8rem;
-  color: var(--text-muted);
+.audio-switch {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
+  font-size: 0.78rem;
+  color: var(--text-muted);
   cursor: pointer;
   margin-left: 4px;
 }
 
-.canvas-wrapper {
+.canvas-viewport {
   position: relative;
-  background: #060911;
-  width: 100%;
+  background: #040711;
   display: flex;
   justify-content: center;
   align-items: center;
-  border-bottom: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-card);
 }
 
 #arenaCanvas {
@@ -362,682 +294,388 @@ body {
   cursor: crosshair;
 }
 
-/* Canvas HUD */
-.canvas-hud {
+/* FLOATING HUD OVERLAY */
+.hud-overlay {
   position: absolute;
-  top: 12px;
-  left: 12px;
+  top: 14px;
+  left: 14px;
   display: flex;
   gap: 8px;
   pointer-events: none;
 }
-.hud-item {
-  background: rgba(11, 15, 25, 0.85);
+.hud-badge {
+  background: rgba(8, 13, 26, 0.85);
   backdrop-filter: blur(8px);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 6px 10px;
+  padding: 6px 12px;
   border-radius: var(--radius-sm);
   display: flex;
   flex-direction: column;
 }
-.hud-item .label {
-  font-size: 0.65rem;
+.hud-label {
+  font-size: 0.62rem;
+  font-weight: 700;
   color: var(--text-dim);
-  text-transform: uppercase;
   letter-spacing: 0.5px;
 }
-.hud-item .val {
+.hud-value {
   font-family: var(--font-mono);
-  font-size: 0.85rem;
+  font-size: 0.88rem;
   font-weight: 600;
   color: #fff;
 }
-.hud-item .val.highlight {
-  color: var(--accent-cyan);
+.hud-value.highlight {
+  color: var(--cyan);
 }
 
-.arena-legend {
+.arena-footer {
   display: flex;
+  flex-wrap: wrap;
   gap: 16px;
   padding: 10px 18px;
-  font-size: 0.76rem;
-  color: var(--text-muted);
   background: rgba(0, 0, 0, 0.2);
-  flex-wrap: wrap;
+  font-size: 0.75rem;
+  color: var(--text-muted);
 }
-.legend-item {
+.legend-chip {
   display: flex;
   align-items: center;
   gap: 6px;
 }
-.legend-dot {
+.chip-dot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
 }
-.legend-dot.cyan { background: var(--accent-cyan); box-shadow: 0 0 6px var(--accent-cyan); }
-.legend-dot.yellow { background: var(--accent-yellow); }
-.legend-dot.red { background: var(--accent-red); box-shadow: 0 0 6px var(--accent-red); }
-.legend-dot.purple { background: var(--accent-purple); }
+.chip-dot.cyan { background: var(--cyan); box-shadow: 0 0 6px var(--cyan); }
+.chip-dot.green { background: var(--green); }
+.chip-dot.amber { background: var(--amber); box-shadow: 0 0 6px var(--amber); }
+.chip-dot.red { background: var(--red); box-shadow: 0 0 6px var(--red); }
 
-/* Control Column */
-.control-column {
+/* CONTROL SECTION */
+.control-section {
   display: flex;
   flex-direction: column;
+  padding: 16px 20px;
   gap: 14px;
 }
 
-/* Remote Control Card */
-.remote-card {
-  padding: 14px 18px;
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
-.bt-rate {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  color: var(--accent-green);
-  background: rgba(16, 185, 129, 0.1);
-  padding: 2px 8px;
-  border-radius: 4px;
+.group-label {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  color: var(--text-dim);
 }
 
-.mode-selector {
+/* MODE TOGGLE */
+.mode-toggle-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
-  margin-top: 12px;
-  margin-bottom: 14px;
 }
-
-.mode-toggle-btn {
+.mode-btn {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 10px 12px;
+  padding: 10px 14px;
   background: rgba(255, 255, 255, 0.04);
-  border: 1px solid var(--border-subtle);
+  border: 1px solid var(--border-card);
   border-radius: var(--radius-md);
   color: var(--text-muted);
   cursor: pointer;
   text-align: left;
   transition: all 0.2s ease;
 }
-.mode-toggle-btn .icon {
+.mode-btn .mode-icon {
   font-size: 1.4rem;
 }
-.mode-toggle-btn strong {
+.mode-btn strong {
   display: block;
-  font-size: 0.85rem;
-  color: var(--text-main);
+  font-size: 0.88rem;
+  color: #fff;
 }
-.mode-toggle-btn small {
+.mode-btn small {
   font-size: 0.7rem;
   color: var(--text-dim);
 }
-.mode-toggle-btn.active {
-  background: rgba(6, 182, 212, 0.12);
+.mode-btn.active {
+  background: rgba(6, 182, 212, 0.15);
   border-color: rgba(6, 182, 212, 0.5);
-  box-shadow: 0 0 16px rgba(6, 182, 212, 0.15);
+  box-shadow: 0 0 16px rgba(6, 182, 212, 0.2);
 }
-.mode-toggle-btn.active strong {
-  color: var(--accent-cyan);
-}
-
-/* DPAD Container */
-.dpad-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  margin: 10px 0;
-}
-.dpad-middle {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.mode-btn.active strong {
+  color: var(--cyan);
 }
 
-.dpad-btn {
-  width: 60px;
-  height: 54px;
+/* GAMEPAD */
+.gamepad-group {
+  align-items: center;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 12px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-card);
+}
+.gamepad-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 72px);
+  grid-template-rows: repeat(3, 56px);
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.pad-btn {
   background: linear-gradient(180deg, #1e293b, #0f172a);
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  color: #fff;
-  cursor: pointer;
   transition: all 0.12s ease;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
 }
-.dpad-btn svg {
+.pad-btn svg {
   width: 20px;
   height: 20px;
   fill: currentColor;
 }
-.dpad-btn span {
+.pad-btn span {
   font-size: 0.65rem;
   font-weight: 700;
-  color: var(--accent-cyan);
+  color: var(--cyan);
   margin-top: -2px;
 }
-.dpad-btn:hover {
+.pad-btn:hover {
   background: linear-gradient(180deg, #334155, #1e293b);
-  border-color: var(--accent-cyan);
+  border-color: var(--cyan);
   transform: translateY(-2px);
-  box-shadow: 0 0 12px rgba(6, 182, 212, 0.3);
+  box-shadow: 0 0 12px rgba(6, 182, 212, 0.35);
 }
-.dpad-btn:active, .dpad-btn.pressed {
+.pad-btn:active, .pad-btn.pressed {
   transform: translateY(1px);
   background: #0284c7;
   border-color: #38bdf8;
   box-shadow: 0 0 18px rgba(56, 189, 248, 0.6);
 }
 
-.dpad-btn.stop {
+.pad-btn.stop {
   background: linear-gradient(180deg, #7f1d1d, #450a0a);
   border-color: rgba(239, 68, 68, 0.4);
 }
-.dpad-btn.stop .stop-box {
+.pad-btn.stop .stop-glyph {
   width: 14px;
   height: 14px;
-  background: var(--accent-red);
+  background: var(--red);
   border-radius: 3px;
 }
-.dpad-btn.stop span {
+.pad-btn.stop span {
   color: #fca5a5;
 }
-.dpad-btn.stop:hover {
+.pad-btn.stop:hover {
   background: linear-gradient(180deg, #991b1b, #7f1d1d);
-  border-color: var(--accent-red);
-  box-shadow: 0 0 15px rgba(239, 68, 68, 0.5);
+  box-shadow: 0 0 16px rgba(239, 68, 68, 0.5);
 }
 
-/* Speed Slider */
-.speed-slider-section {
-  margin-top: 12px;
-  background: rgba(0, 0, 0, 0.2);
-  padding: 10px 14px;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border-subtle);
-}
-.speed-label-row {
+/* SPEED SLIDER */
+.slider-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 0.8rem;
-  color: var(--text-muted);
-  margin-bottom: 6px;
 }
-.speed-val {
+.speed-number {
   font-family: var(--font-mono);
-  font-size: 0.9rem;
   font-weight: 700;
-  color: var(--accent-yellow);
+  font-size: 0.95rem;
+  color: var(--amber);
 }
 
-.custom-slider {
+.tech-slider {
   width: 100%;
-  accent-color: var(--accent-cyan);
+  accent-color: var(--cyan);
   cursor: pointer;
 }
 
-.speed-presets {
+.preset-row {
   display: flex;
-  gap: 6px;
-  margin-top: 8px;
+  gap: 8px;
 }
-.preset-btn {
+.preset-chip {
   flex: 1;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid var(--border-subtle);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-card);
   color: var(--text-muted);
-  padding: 4px;
-  border-radius: 4px;
+  padding: 5px 8px;
+  border-radius: 6px;
   font-size: 0.72rem;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.15s ease;
 }
-.preset-btn:hover {
+.preset-chip:hover {
   background: rgba(255, 255, 255, 0.12);
   color: #fff;
 }
-
-.keyboard-guide {
-  margin-top: 10px;
-  font-size: 0.72rem;
-  color: var(--text-dim);
-  text-align: center;
-}
-kbd {
-  background: #1f2937;
-  color: #e5e7eb;
-  padding: 2px 5px;
-  border-radius: 4px;
-  font-size: 0.68rem;
-  font-family: var(--font-mono);
-  border: 1px solid #374151;
+.preset-chip.active {
+  background: rgba(6, 182, 212, 0.15);
+  color: var(--cyan);
+  border-color: rgba(6, 182, 212, 0.4);
 }
 
-/* Arduino Pin Status Grid */
-.pins-card {
-  padding: 12px 18px;
+/* LOG STREAM */
+.log-group {
+  margin-top: auto;
 }
-.active-pulse {
-  font-size: 0.7rem;
-  color: var(--accent-green);
-  font-family: var(--font-mono);
-  font-weight: 700;
-  letter-spacing: 0.5px;
-}
-
-.pins-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 6px;
-  margin-top: 10px;
-}
-.pin-indicator {
-  background: rgba(0, 0, 0, 0.35);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 6px;
-  padding: 6px 8px;
+.log-header {
   display: flex;
-  flex-direction: column;
-  transition: all 0.2s ease;
-}
-.pin-id {
-  font-size: 0.65rem;
-  font-family: var(--font-mono);
-  color: var(--text-dim);
-}
-.pin-val {
-  font-size: 0.75rem;
-  font-family: var(--font-mono);
-  font-weight: 700;
-  color: #94a3b8;
-}
-.pin-indicator.active {
-  background: rgba(6, 182, 212, 0.18);
-  border-color: rgba(6, 182, 212, 0.5);
-}
-.pin-indicator.active .pin-val {
-  color: var(--accent-cyan);
-  text-shadow: 0 0 6px var(--accent-cyan);
-}
-.pin-indicator.warning {
-  background: rgba(245, 158, 11, 0.18);
-  border-color: rgba(245, 158, 11, 0.5);
-}
-.pin-indicator.warning .pin-val {
-  color: var(--accent-yellow);
-}
-
-/* Virtual Serial Monitor */
-.terminal-card {
-  display: flex;
-  flex-direction: column;
-}
-.terminal-title {
-  display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 8px;
-  font-size: 0.85rem;
-  font-family: var(--font-mono);
-  color: var(--text-muted);
 }
-.terminal-dot {
-  width: 7px;
-  height: 7px;
-  background: var(--accent-green);
-  border-radius: 50%;
-  box-shadow: 0 0 6px var(--accent-green);
-}
-.clear-log-btn {
-  background: transparent;
+.clear-btn {
+  background: none;
   border: none;
   color: var(--text-dim);
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   cursor: pointer;
 }
-.clear-log-btn:hover { color: #fff; }
+.clear-btn:hover { color: #fff; }
 
-.serial-output {
-  height: 140px;
+.log-stream {
+  height: 95px;
   overflow-y: auto;
-  background: #05070d;
-  padding: 10px 14px;
-  font-family: var(--font-mono);
-  font-size: 0.74rem;
-  line-height: 1.45;
-  color: #e2e8f0;
-}
-.serial-line {
-  margin-bottom: 2px;
-  word-break: break-all;
-}
-.serial-line .time {
-  color: #64748b;
-  margin-right: 6px;
-}
-.serial-line.cmd { color: var(--accent-cyan); }
-.serial-line.alert { color: var(--accent-red); font-weight: 600; }
-.serial-line.auto { color: #c084fc; }
-
-.serial-input-row {
-  display: flex;
-  border-top: 1px solid var(--border-subtle);
-  background: rgba(0, 0, 0, 0.4);
-}
-.serial-input-row input {
-  flex: 1;
-  background: transparent;
-  border: none;
+  background: #030610;
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-sm);
   padding: 8px 12px;
   font-family: var(--font-mono);
-  font-size: 0.8rem;
-  color: #fff;
-  outline: none;
+  font-size: 0.72rem;
+  line-height: 1.45;
+  color: #cbd5e1;
 }
-.serial-input-row button {
+.log-line { margin-bottom: 2px; }
+.log-line .t { color: #64748b; margin-right: 6px; }
+.log-line.cmd { color: var(--cyan); }
+.log-line.alert { color: var(--red); font-weight: 600; }
+.log-line.auto { color: #c084fc; }
+
+/* MODALS */
+.modal-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(10px);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.modal-backdrop.open {
+  display: flex;
+}
+
+.modal-box {
+  background: #0b1120;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-lg);
+  max-width: 860px;
+  width: 100%;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 22px;
+  border-bottom: 1px solid var(--border-card);
+  background: rgba(255, 255, 255, 0.02);
+}
+.modal-header h3 {
+  font-size: 1.15rem;
+  color: #fff;
+}
+.modal-subtitle {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+}
+.modal-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.close-btn {
   background: rgba(255, 255, 255, 0.08);
   border: none;
   color: #fff;
-  padding: 0 16px;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.close-btn:hover { background: rgba(255, 255, 255, 0.2); }
+
+.copy-code-btn {
+  background: linear-gradient(135deg, #0284c7, #2563eb);
+  border: none;
+  color: #fff;
+  padding: 6px 14px;
+  border-radius: 8px;
   font-size: 0.8rem;
   font-weight: 600;
   cursor: pointer;
 }
-.serial-input-row button:hover {
-  background: var(--accent-cyan);
-  color: #000;
+
+.modal-body {
+  padding: 20px 24px;
+  overflow-y: auto;
 }
 
-/* TAB 2 & 4 & 5 DOCUMENTATION STYLES */
-.doc-container {
-  padding: 24px 30px;
-}
-.doc-container h2 {
-  font-size: 1.5rem;
-  font-weight: 800;
-  margin-bottom: 6px;
-  color: #fff;
-}
-.section-desc {
-  color: var(--text-muted);
-  font-size: 0.92rem;
-  margin-bottom: 20px;
-}
-
-.table-responsive {
-  overflow-x: auto;
-  margin-bottom: 24px;
-}
-.spec-table {
+.clean-table {
   width: 100%;
   border-collapse: collapse;
-  text-align: left;
-  font-size: 0.86rem;
+  font-size: 0.85rem;
 }
-.spec-table th {
+.clean-table th {
   background: rgba(255, 255, 255, 0.04);
-  padding: 12px 14px;
-  font-weight: 700;
-  color: var(--accent-sky);
-  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
-}
-.spec-table td {
   padding: 10px 14px;
-  border-bottom: 1px solid var(--border-subtle);
-  color: #e5e7eb;
+  color: var(--sky);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+  text-align: left;
 }
-.spec-table tr.group-row td {
-  background: rgba(6, 182, 212, 0.08);
-  font-weight: 700;
-  color: var(--accent-cyan);
-  letter-spacing: 0.5px;
-}
-.spec-table tr:hover:not(.group-row) {
-  background: rgba(255, 255, 255, 0.02);
+.clean-table td {
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--border-card);
+  color: #e2e8f0;
 }
 
-.color-badge {
-  display: inline-block;
-  padding: 2px 8px;
-  border-radius: 4px;
-  font-size: 0.72rem;
-  font-weight: 600;
-}
-.color-badge.blue { background: #1d4ed8; color: #fff; }
-.color-badge.yellow { background: #b45309; color: #fff; }
-.color-badge.orange { background: #c2410c; color: #fff; }
-.color-badge.green { background: #15803d; color: #fff; }
-.color-badge.purple { background: #7e22ce; color: #fff; }
-.color-badge.red { background: #b91c1c; color: #fff; }
-.color-badge.black { background: #1f2937; color: #9ca3af; border: 1px solid #4b5563; }
-.color-badge.cyan { background: #0e7490; color: #fff; }
-.color-badge.white { background: #e2e8f0; color: #0f172a; }
-
-.callout {
-  display: flex;
-  gap: 14px;
-  padding: 16px 20px;
-  border-radius: var(--radius-md);
-  margin-top: 18px;
-}
-.callout.info-callout {
-  background: rgba(6, 182, 212, 0.08);
-  border: 1px solid rgba(6, 182, 212, 0.25);
-}
-.callout-icon { font-size: 1.5rem; }
-.callout h4 {
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--accent-cyan);
-  margin-bottom: 6px;
-}
-.schematic-ascii {
-  background: #05070d;
-  padding: 12px 16px;
+.code-block {
+  background: #030610;
+  padding: 16px;
   border-radius: 8px;
-  margin-top: 10px;
   font-family: var(--font-mono);
   font-size: 0.8rem;
-  color: var(--accent-sky);
+  color: #cbd5e1;
+  line-height: 1.6;
   overflow-x: auto;
 }
 
-/* TAB 3 CODE CONTAINER */
-.code-container {
-  padding: 20px 24px;
-}
-.code-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 14px;
-}
-.code-header h3 {
-  font-size: 1.2rem;
-  color: #fff;
-}
-.file-path {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  color: var(--text-dim);
-}
-.copy-btn {
-  background: linear-gradient(135deg, #0284c7, #2563eb);
-  color: #fff;
-  border: none;
-  padding: 8px 16px;
-  border-radius: var(--radius-md);
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-.copy-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
-}
-
-.code-scroller {
-  max-height: 480px;
-  overflow-y: auto;
-  background: #05070d;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border-subtle);
-  padding: 16px 20px;
-  margin-bottom: 24px;
-}
-.code-scroller pre code {
-  font-family: var(--font-mono);
-  font-size: 0.82rem;
-  color: #cbd5e1;
-  line-height: 1.6;
-}
-
-.explanation-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-}
-.explanation-card {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
-  padding: 14px 18px;
-}
-.explanation-card h4 {
-  font-size: 0.95rem;
-  color: var(--accent-cyan);
-  margin-bottom: 6px;
-}
-.explanation-card p {
-  font-size: 0.84rem;
-  color: var(--text-muted);
-}
-
-/* STAGES TIMELINE */
-.stages-timeline {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-.stage-card {
-  display: flex;
-  gap: 20px;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
-  padding: 18px 24px;
-  transition: all 0.2s ease;
-}
-.stage-card:hover {
-  border-color: rgba(6, 182, 212, 0.3);
-  background: rgba(255, 255, 255, 0.04);
-}
-.stage-number {
-  font-family: var(--font-mono);
-  font-size: 2rem;
-  font-weight: 800;
-  color: var(--accent-cyan);
-  opacity: 0.8;
-}
-.stage-body h3 {
-  font-size: 1.05rem;
-  color: #fff;
-  margin-bottom: 6px;
-}
-.stage-body p {
-  font-size: 0.86rem;
-  color: var(--text-muted);
-  margin-bottom: 8px;
-}
-.stage-body ul {
-  padding-left: 20px;
-  font-size: 0.84rem;
-  color: #d1d5db;
-}
-.stage-body li {
-  margin-bottom: 4px;
-}
-
-/* SAFETY RULES GRID */
-.rules-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-}
-.rule-box {
-  padding: 18px 20px;
-  border-radius: var(--radius-md);
-  border: 1px solid;
-}
-.rule-box.critical {
-  background: rgba(239, 68, 68, 0.08);
-  border-color: rgba(239, 68, 68, 0.35);
-}
-.rule-box.critical h4 { color: #f87171; }
-.rule-box.warning {
-  background: rgba(245, 158, 11, 0.08);
-  border-color: rgba(245, 158, 11, 0.35);
-}
-.rule-box.warning h4 { color: #fbbf24; }
-.rule-box.info {
-  background: rgba(59, 130, 246, 0.08);
-  border-color: rgba(59, 130, 246, 0.35);
-}
-.rule-box.info h4 { color: #60a5fa; }
-.rule-box.alert {
-  background: rgba(168, 85, 247, 0.08);
-  border-color: rgba(168, 85, 247, 0.35);
-}
-.rule-box.alert h4 { color: #c084fc; }
-
-.rule-box h4 {
-  font-size: 1rem;
-  font-weight: 700;
-  margin-bottom: 8px;
-}
-.rule-box p {
-  font-size: 0.85rem;
-  color: #e5e7eb;
-}
-
-/* App Footer */
-.app-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 16px;
-  padding: 10px 16px;
-  font-size: 0.78rem;
-  color: var(--text-dim);
-  border-top: 1px solid var(--border-subtle);
-}
-.footer-status {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-family: var(--font-mono);
-}
-.sep { color: #374151; }
-
-/* Animations */
-@keyframes pulse {
-  0% { transform: scale(0.95); opacity: 0.7; }
-  50% { transform: scale(1.15); opacity: 1; }
-  100% { transform: scale(0.95); opacity: 0.7; }
-}
-
-/* Responsive adjustments */
-@media (max-width: 1200px) {
-  .simulator-layout {
-    grid-template-columns: 1fr;
-  }
-  .explanation-grid, .rules-grid {
+@media (max-width: 1100px) {
+  .cockpit-grid {
     grid-template-columns: 1fr;
   }
 }
@@ -1045,10 +683,11 @@ kbd {
 </style>
 </head>
 <body>
-  <div class="app-container">
-    <!-- Top Navigation Bar -->
-    <header class="top-nav">
-      <div class="brand">
+  <div class="cockpit-container">
+    
+    <!-- TOP HEADER BAR -->
+    <header class="cockpit-header">
+      <div class="brand-group">
         <div class="brand-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <rect x="2" y="6" width="20" height="12" rx="3"></rect>
@@ -1060,605 +699,229 @@ kbd {
           </svg>
         </div>
         <div>
-          <div class="brand-title">SMARTDRIVE <span>PROTOTYPE</span></div>
-          <div class="brand-subtitle">Arduino Uno 4WD • Bluetooth • HC-SR04 • SG90 Servo</div>
+          <h1 class="brand-title">SMARTDRIVE <span>4WD PROTOTYPE</span></h1>
+          <p class="brand-meta">Arduino Uno • HC-05 Bluetooth • HC-SR04 Fast Ultrasonic • SG90 Servo</p>
         </div>
       </div>
 
-      <div class="top-badges">
-        <div class="badge connection-badge disconnected" id="btStatusBadge">
-          <span class="dot"></span>
-          <span id="btStatusText">Bluetooth: Disconnected</span>
+      <!-- Quick Action Badges & Info Modals -->
+      <div class="header-actions">
+        <div class="status-pill safe" id="radarPill">
+          <span class="pulse-dot"></span>
+          <span id="radarPillText">RADAR: CLEAR (>50cm)</span>
         </div>
-        <div class="badge mode-badge manual" id="modeBadge">
-          <span class="icon">🎮</span>
-          <span id="modeText">MANUAL MODE</span>
-        </div>
-        <button class="nav-btn primary" id="btnConnectBT">
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-            <path d="M7 12l5-5 1 1-4 4 4 4-1 1-5-5zm5-10v8.6l3.3-3.3-1.4-1.4L12 7.8V2zm0 13.4l1.9 1.9 1.4-1.4L12 12.6V22h2l4.6-4.6-3.3-3.3L12 15.4z"/>
-          </svg>
-          <span id="btConnectBtnText">Simulate Connect</span>
-        </button>
-        <button class="nav-btn emergency" id="btnEmergencyStop">
-          🛑 EMERGENCY STOP
-        </button>
+        <button class="nav-btn outline" id="btnOpenWiring">🔌 Wiring Table</button>
+        <button class="nav-btn outline" id="btnOpenCode">💻 Arduino C++ Code</button>
+        <button class="nav-btn emergency" id="btnEmergencyStop">🛑 E-STOP</button>
       </div>
     </header>
 
-    <!-- Navigation Tabs -->
-    <nav class="sub-nav">
-      <button class="tab-btn active" data-tab="arena-tab">🚗 Virtual Arena & Simulator</button>
-      <button class="tab-btn" data-tab="schematic-tab">🔌 Circuit & Wiring Table</button>
-      <button class="tab-btn" data-tab="code-tab">💻 Arduino C++ Code</button>
-      <button class="tab-btn" data-tab="testing-tab">🧪 Staged Testing Lab</button>
-      <button class="tab-btn" data-tab="safety-tab">⚠️ Safety & Engineering Rules</button>
-    </nav>
-
-    <!-- Main Workspace Content -->
-    <main class="main-content">
+    <!-- MAIN COCKPIT GRID -->
+    <main class="cockpit-grid">
       
-      <!-- TAB 1: ARENA & INTERACTIVE SIMULATOR -->
-      <section class="tab-pane active" id="arena-tab">
-        <div class="simulator-layout">
+      <!-- LEFT: ROBOTICS ARENA & HUD -->
+      <section class="arena-section glass-card">
+        <div class="section-toolbar">
+          <div class="toolbar-title">
+            <span class="indicator-led"></span>
+            <strong>Testing Arena</strong>
+            <small>Drag boxes or click anywhere to position obstacles</small>
+          </div>
+          <div class="toolbar-btns">
+            <button class="pill-btn" id="btnAddBox">＋ Box</button>
+            <button class="pill-btn" id="btnRandomMaze">🎲 Random Maze</button>
+            <button class="pill-btn" id="btnClearObs">🗑️ Clear</button>
+            <button class="pill-btn highlight" id="btnResetCar">🔄 Reset Car</button>
+            <label class="audio-switch" title="Toggle Sound">
+              <input type="checkbox" id="chkSound" checked>
+              <span>🔊 Audio</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="canvas-viewport">
+          <canvas id="arenaCanvas" width="860" height="520"></canvas>
           
-          <!-- Left: 2D Physics Arena Canvas -->
-          <div class="arena-card glass-panel">
-            <div class="card-header">
-              <div class="header-left">
-                <h3>Robotics Testing Ground</h3>
-                <span class="hint">Click or drag anywhere in the arena to place/move obstacles.</span>
-              </div>
-              <div class="arena-controls">
-                <button class="tool-btn" id="btnSpawnObstacle" title="Add Obstacle Box">＋ Box</button>
-                <button class="tool-btn" id="btnRandomizeMaze" title="Generate Random Maze">🎲 Randomize</button>
-                <button class="tool-btn" id="btnClearObstacles" title="Clear All Obstacles">🗑️ Clear</button>
-                <button class="tool-btn" id="btnResetRobot" title="Reset Robot Position">🔄 Reset Car</button>
-                <label class="toggle-label" title="Enable Sound Effects">
-                  <input type="checkbox" id="chkSound" checked> 🔊 Audio
-                </label>
-              </div>
+          <!-- Modern Floating Telemetry HUD -->
+          <div class="hud-overlay">
+            <div class="hud-badge">
+              <span class="hud-label">SONAR DISTANCE</span>
+              <span class="hud-value highlight" id="hudDistance">-- cm</span>
             </div>
-
-            <div class="canvas-wrapper">
-              <canvas id="arenaCanvas" width="820" height="520"></canvas>
-              
-              <!-- Floating HUD overlay inside canvas -->
-              <div class="canvas-hud">
-                <div class="hud-item">
-                  <span class="label">Ultrasonic Distance</span>
-                  <span class="val highlight" id="hudDistance">-- cm</span>
-                </div>
-                <div class="hud-item">
-                  <span class="label">Servo Angle</span>
-                  <span class="val" id="hudServoAngle">90° (Center)</span>
-                </div>
-                <div class="hud-item">
-                  <span class="label">Motion State</span>
-                  <span class="val" id="hudMotionState">STOPPED</span>
-                </div>
-                <div class="hud-item">
-                  <span class="label">Motor PWM Speed</span>
-                  <span class="val" id="hudSpeed">180 / 255</span>
-                </div>
-              </div>
+            <div class="hud-badge">
+              <span class="hud-label">SERVO RADAR</span>
+              <span class="hud-value" id="hudServoAngle">90° Center</span>
             </div>
-
-            <!-- Arena Footer Legend -->
-            <div class="arena-legend">
-              <div class="legend-item"><span class="legend-dot cyan"></span> Ultrasonic Cone (15° Beam)</div>
-              <div class="legend-item"><span class="legend-dot yellow"></span> Safe Zone (&gt;30 cm)</div>
-              <div class="legend-item"><span class="legend-dot red"></span> Critical Avoid Zone (&lt;15 cm)</div>
-              <div class="legend-item"><span class="legend-dot purple"></span> Draggable Obstacles</div>
+            <div class="hud-badge">
+              <span class="hud-label">MOTION STATE</span>
+              <span class="hud-value" id="hudMotion">STOPPED</span>
             </div>
-          </div>
-
-          <!-- Right: Control Deck & Telemetry -->
-          <div class="control-column">
-            
-            <!-- Virtual Bluetooth Remote Controller -->
-            <div class="remote-card glass-panel">
-              <div class="card-header">
-                <h3>Bluetooth Remote Control</h3>
-                <span class="bt-rate">9600 Baud</span>
-              </div>
-
-              <!-- Mode Toggle Buttons -->
-              <div class="mode-selector">
-                <button class="mode-toggle-btn active" id="btnModeManual" data-cmd="M">
-                  <span class="icon">🎮</span>
-                  <div>
-                    <strong>Manual Mode (M)</strong>
-                    <small>Control with D-Pad / Keys</small>
-                  </div>
-                </button>
-                <button class="mode-toggle-btn" id="btnModeAuto" data-cmd="A">
-                  <span class="icon">🤖</span>
-                  <div>
-                    <strong>Autonomous (A)</strong>
-                    <small>Auto Obstacle Avoidance</small>
-                  </div>
-                </button>
-              </div>
-
-              <!-- D-PAD Gamepad -->
-              <div class="dpad-container">
-                <button class="dpad-btn up" id="btnCmdForward" data-cmd="F" title="Forward (Key: W or Up)">
-                  <svg viewBox="0 0 24 24"><path d="M12 4l-8 8h6v8h4v-8h6z"/></svg>
-                  <span>F</span>
-                </button>
-                <div class="dpad-middle">
-                  <button class="dpad-btn left" id="btnCmdLeft" data-cmd="L" title="Turn Left (Key: A or Left)">
-                    <svg viewBox="0 0 24 24"><path d="M4 12l8-8v6h8v4h-8v6z"/></svg>
-                    <span>L</span>
-                  </button>
-                  <button class="dpad-btn stop" id="btnCmdStop" data-cmd="S" title="Stop Motors (Key: Space or S)">
-                    <div class="stop-box"></div>
-                    <span>S</span>
-                  </button>
-                  <button class="dpad-btn right" id="btnCmdRight" data-cmd="R" title="Turn Right (Key: D or Right)">
-                    <svg viewBox="0 0 24 24"><path d="M20 12l-8-8v6H4v4h8v6z"/></svg>
-                    <span>R</span>
-                  </button>
-                </div>
-                <button class="dpad-btn down" id="btnCmdBackward" data-cmd="B" title="Backward (Key: S or Down)">
-                  <svg viewBox="0 0 24 24"><path d="M12 20l8-8h-6V4h-4v8H4z"/></svg>
-                  <span>B</span>
-                </button>
-              </div>
-
-              <!-- Speed Slider -->
-              <div class="speed-slider-section">
-                <div class="speed-label-row">
-                  <span>Motor Speed (PWM)</span>
-                  <span class="speed-val" id="speedDisplayVal">180</span>
-                </div>
-                <input type="range" min="100" max="255" value="180" id="motorSpeedSlider" class="custom-slider">
-                <div class="speed-presets">
-                  <button class="preset-btn" data-speed="120">Slow (120)</button>
-                  <button class="preset-btn" data-speed="180">Normal (180)</button>
-                  <button class="preset-btn" data-speed="255">Turbo (255)</button>
-                </div>
-              </div>
-
-              <!-- Keyboard Shortcuts hint -->
-              <div class="keyboard-guide">
-                <strong>Keyboard shortcuts:</strong>
-                <kbd>W</kbd>/<kbd>↑</kbd> Forward | <kbd>S</kbd>/<kbd>↓</kbd> Back | <kbd>A</kbd>/<kbd>←</kbd> Left | <kbd>D</kbd>/<kbd>→</kbd> Right | <kbd>Space</kbd> Stop | <kbd>E</kbd> E-Brake
-              </div>
-            </div>
-
-            <!-- Virtual Hardware Pin States & Telemetry -->
-            <div class="pins-card glass-panel">
-              <div class="card-header">
-                <h3>Arduino Uno Pin Bus Status</h3>
-                <span class="active-pulse" id="mcuPulse">MCU ACTIVE</span>
-              </div>
-              <div class="pins-grid">
-                <div class="pin-indicator" id="pinD5"><span class="pin-id">D5 (ENA)</span><span class="pin-val">PWM</span></div>
-                <div class="pin-indicator" id="pinD4"><span class="pin-id">D4 (IN1)</span><span class="pin-val">LOW</span></div>
-                <div class="pin-indicator" id="pinD7"><span class="pin-id">D7 (IN2)</span><span class="pin-val">LOW</span></div>
-                <div class="pin-indicator" id="pinD8"><span class="pin-id">D8 (IN3)</span><span class="pin-val">LOW</span></div>
-                <div class="pin-indicator" id="pinD12"><span class="pin-id">D12 (IN4)</span><span class="pin-val">LOW</span></div>
-                <div class="pin-indicator" id="pinD6"><span class="pin-id">D6 (ENB)</span><span class="pin-val">PWM</span></div>
-                <div class="pin-indicator" id="pinD2"><span class="pin-id">D2 (BT RX)</span><span class="pin-val">IDLE</span></div>
-                <div class="pin-indicator" id="pinD3"><span class="pin-id">D3 (BT TX)</span><span class="pin-val">IDLE</span></div>
-                <div class="pin-indicator" id="pinD9"><span class="pin-id">D9 (SERVO)</span><span class="pin-val">90°</span></div>
-                <div class="pin-indicator" id="pinA0"><span class="pin-id">A0 (TRIG)</span><span class="pin-val">PULSE</span></div>
-                <div class="pin-indicator" id="pinA1"><span class="pin-id">A1 (ECHO)</span><span class="pin-val">OK</span></div>
-              </div>
-            </div>
-
-            <!-- Virtual Serial Monitor -->
-            <div class="terminal-card glass-panel">
-              <div class="card-header">
-                <div class="terminal-title">
-                  <span class="terminal-dot"></span>
-                  <span>Serial Monitor (COM3 @ 9600 baud)</span>
-                </div>
-                <button class="clear-log-btn" id="btnClearSerial">Clear</button>
-              </div>
-              <div class="serial-output" id="serialOutput">
-                <!-- Log messages dynamically streamed here -->
-              </div>
-              <div class="serial-input-row">
-                <input type="text" id="serialInputBox" placeholder="Type command (F, B, L, R, S, A, M, 0-9, ?)...">
-                <button id="btnSendSerial">Send</button>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </section>
-
-      <!-- TAB 2: CIRCUIT DIAGRAM & WIRING TABLE -->
-      <section class="tab-pane" id="schematic-tab">
-        <div class="doc-container glass-panel">
-          <h2>Complete Pin-by-Pin Wiring Table</h2>
-          <p class="section-desc">Follow this exact schematic table. Pay special attention to the <strong>common ground (GND)</strong> and the <strong>voltage divider</strong> on HC-05 RXD.</p>
-
-          <div class="table-responsive">
-            <table class="spec-table">
-              <thead>
-                <tr>
-                  <th>Subsystem / Module</th>
-                  <th>Module Pin</th>
-                  <th>Arduino Pin / Target</th>
-                  <th>Wire Color (Recommended)</th>
-                  <th>Function & Critical Engineering Notes</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr class="group-row"><td colspan="5">1. L298N Dual H-Bridge Motor Driver</td></tr>
-                <tr>
-                  <td>L298N Motor Driver</td>
-                  <td><strong>ENA</strong> (Left Enable)</td>
-                  <td><strong>D5</strong> (PWM)</td>
-                  <td><span class="color-badge blue">Blue</span></td>
-                  <td>Speed control for Left-side motors (Remove factory black jumper cap to use PWM).</td>
-                </tr>
-                <tr>
-                  <td>L298N Motor Driver</td>
-                  <td><strong>IN1</strong></td>
-                  <td><strong>D4</strong> (Digital)</td>
-                  <td><span class="color-badge yellow">Yellow</span></td>
-                  <td>Left Motor Direction Phase A (HIGH + IN2 LOW = Forward).</td>
-                </tr>
-                <tr>
-                  <td>L298N Motor Driver</td>
-                  <td><strong>IN2</strong></td>
-                  <td><strong>D7</strong> (Digital)</td>
-                  <td><span class="color-badge orange">Orange</span></td>
-                  <td>Left Motor Direction Phase B (LOW + IN1 HIGH = Forward).</td>
-                </tr>
-                <tr>
-                  <td>L298N Motor Driver</td>
-                  <td><strong>IN3</strong></td>
-                  <td><strong>D8</strong> (Digital)</td>
-                  <td><span class="color-badge green">Green</span></td>
-                  <td>Right Motor Direction Phase A (HIGH + IN4 LOW = Forward).</td>
-                </tr>
-                <tr>
-                  <td>L298N Motor Driver</td>
-                  <td><strong>IN4</strong></td>
-                  <td><strong>D12</strong> (Digital)</td>
-                  <td><span class="color-badge purple">Purple</span></td>
-                  <td>Right Motor Direction Phase B (LOW + IN3 HIGH = Forward).</td>
-                </tr>
-                <tr>
-                  <td>L298N Motor Driver</td>
-                  <td><strong>ENB</strong> (Right Enable)</td>
-                  <td><strong>D6</strong> (PWM)</td>
-                  <td><span class="color-badge white">White</span></td>
-                  <td>Speed control for Right-side motors (Remove factory black jumper cap).</td>
-                </tr>
-                <tr>
-                  <td>L298N Motor Driver</td>
-                  <td><strong>+12V Screw Terminal</strong></td>
-                  <td><strong>Battery Positive (+)</strong></td>
-                  <td><span class="color-badge red">Red (Thick)</span></td>
-                  <td>Connect to 7.4V (2x 18650) or 11.1V (3S LiPo) switch output.</td>
-                </tr>
-                <tr>
-                  <td>L298N Motor Driver</td>
-                  <td><strong>GND Screw Terminal</strong></td>
-                  <td><strong>Battery (-) &amp; Arduino GND</strong></td>
-                  <td><span class="color-badge black">Black (Thick)</span></td>
-                  <td><strong>CRITICAL: Common Ground!</strong> Both battery (-) and Arduino GND must tie here.</td>
-                </tr>
-                <tr>
-                  <td>L298N Motor Driver</td>
-                  <td><strong>+5V Screw Terminal</strong></td>
-                  <td><strong>Arduino VIN or 5V</strong> (See notes)</td>
-                  <td><span class="color-badge red">Red</span></td>
-                  <td>If 5V regulator jumper is fitted, this supplies regulated 5V. (Best practice: Power Arduino via VIN or USB while testing).</td>
-                </tr>
-                <tr>
-                  <td>L298N Motor Driver</td>
-                  <td><strong>OUT1 &amp; OUT2</strong></td>
-                  <td><strong>Left 2 Motors</strong> (in parallel)</td>
-                  <td>Pair Wires</td>
-                  <td>Connect front-left &amp; rear-left motor leads in parallel. If backwards, swap terminals.</td>
-                </tr>
-                <tr>
-                  <td>L298N Motor Driver</td>
-                  <td><strong>OUT3 &amp; OUT4</strong></td>
-                  <td><strong>Right 2 Motors</strong> (in parallel)</td>
-                  <td>Pair Wires</td>
-                  <td>Connect front-right &amp; rear-right motor leads in parallel.</td>
-                </tr>
-
-                <tr class="group-row"><td colspan="5">2. HC-05 Bluetooth Module</td></tr>
-                <tr>
-                  <td>HC-05 Bluetooth</td>
-                  <td><strong>VCC</strong></td>
-                  <td><strong>Arduino 5V</strong></td>
-                  <td><span class="color-badge red">Red</span></td>
-                  <td>Module on-board regulator steps down to 3.3V for Bluetooth chip power.</td>
-                </tr>
-                <tr>
-                  <td>HC-05 Bluetooth</td>
-                  <td><strong>GND</strong></td>
-                  <td><strong>Arduino GND</strong></td>
-                  <td><span class="color-badge black">Black</span></td>
-                  <td>Common ground return path.</td>
-                </tr>
-                <tr>
-                  <td>HC-05 Bluetooth</td>
-                  <td><strong>TXD</strong></td>
-                  <td><strong>Arduino D2</strong> (Software RX)</td>
-                  <td><span class="color-badge green">Green</span></td>
-                  <td>HC-05 transmits at 3.3V, which Arduino 5V logic safely accepts as HIGH (&gt;3.0V).</td>
-                </tr>
-                <tr>
-                  <td>HC-05 Bluetooth</td>
-                  <td><strong>RXD</strong></td>
-                  <td><strong>Via Voltage Divider to D3</strong></td>
-                  <td><span class="color-badge orange">Orange</span></td>
-                  <td><strong>CRITICAL VOLTAGE DIVIDER:</strong> Connect D3 to 1kΩ resistor, other side to HC-05 RXD and a 2kΩ resistor to GND. Formula: <code>5V * 2k / (1k + 2k) = 3.33V</code>! Protects module from 5V overvoltage damage.</td>
-                </tr>
-
-                <tr class="group-row"><td colspan="5">3. HC-SR04 Ultrasonic Distance Sensor</td></tr>
-                <tr>
-                  <td>HC-SR04 Sensor</td>
-                  <td><strong>VCC</strong></td>
-                  <td><strong>Arduino 5V</strong></td>
-                  <td><span class="color-badge red">Red</span></td>
-                  <td>Ultrasonic transmitter transducers require stable 5V for accurate acoustic echo timing.</td>
-                </tr>
-                <tr>
-                  <td>HC-SR04 Sensor</td>
-                  <td><strong>GND</strong></td>
-                  <td><strong>Arduino GND</strong></td>
-                  <td><span class="color-badge black">Black</span></td>
-                  <td>Common Ground.</td>
-                </tr>
-                <tr>
-                  <td>HC-SR04 Sensor</td>
-                  <td><strong>TRIG</strong></td>
-                  <td><strong>Arduino A0</strong> (Digital Output)</td>
-                  <td><span class="color-badge yellow">Yellow</span></td>
-                  <td>Analog pin A0 configured as digital output. 10µs pulse triggers 8-cycle 40kHz ultrasound bursts.</td>
-                </tr>
-                <tr>
-                  <td>HC-SR04 Sensor</td>
-                  <td><strong>ECHO</strong></td>
-                  <td><strong>Arduino A1</strong> (Digital Input)</td>
-                  <td><span class="color-badge cyan">Cyan</span></td>
-                  <td>Analog pin A1 configured as digital input. High pulse duration directly indicates echo travel time.</td>
-                </tr>
-
-                <tr class="group-row"><td colspan="5">4. SG90 Micro Servo Motor</td></tr>
-                <tr>
-                  <td>SG90 Servo</td>
-                  <td><strong>Brown / Black</strong></td>
-                  <td><strong>GND</strong></td>
-                  <td><span class="color-badge black">Black</span></td>
-                  <td>Servo ground.</td>
-                </tr>
-                <tr>
-                  <td>SG90 Servo</td>
-                  <td><strong>Red</strong></td>
-                  <td><strong>5V Rail</strong></td>
-                  <td><span class="color-badge red">Red</span></td>
-                  <td>Servo positive power. Tip: Place a 100µF capacitor across +5V and GND near servo to smooth surge draw.</td>
-                </tr>
-                <tr>
-                  <td>SG90 Servo</td>
-                  <td><strong>Orange / Yellow</strong></td>
-                  <td><strong>Arduino D9</strong> (PWM Signal)</td>
-                  <td><span class="color-badge orange">Orange</span></td>
-                  <td>50Hz PWM pulse signal controlled by Arduino <code>Servo.h</code> library.</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <!-- Voltage Divider Diagram Callout -->
-          <div class="callout info-callout">
-            <div class="callout-icon">💡</div>
-            <div>
-              <h4>HC-05 3.3V Logic Level Protection (Voltage Divider Detail)</h4>
-              <p>The HC-05 Bluetooth module chip runs internally on 3.3V. While its VCC has a 5V-to-3.3V regulator, its <strong>RXD pin directly enters the 3.3V microcontroller</strong>. Directly connecting Arduino Uno's 5V pin D3 will gradually degrade or instantly burn out the HC-05 receiver.</p>
-              <pre class="schematic-ascii">
-   Arduino D3 (5V TX) ───[ 1 kΩ Resistor ]───┬───> HC-05 RXD Pin (Safe 3.3V)
-                                             │
-                                     [ 2 kΩ Resistor ]
-                                             │
-                                            GND
-              </pre>
+            <div class="hud-badge">
+              <span class="hud-label">SPEED (PWM)</span>
+              <span class="hud-value" id="hudPwm">180 / 255</span>
             </div>
           </div>
         </div>
-      </section>
 
-      <!-- TAB 3: ARDUINO C++ CODE & EXPLANATION -->
-      <section class="tab-pane" id="code-tab">
-        <div class="code-container glass-panel">
-          <div class="code-header">
-            <div>
-              <h3>SMARTDRIVE.ino Production Firmware</h3>
-              <span class="file-path">C:\Users\ASUS\.gemini\antigravity-ide\scratch\smartdrive-robot\SMARTDRIVE.ino</span>
-            </div>
-            <button class="copy-btn" id="btnCopyCode">📋 Copy Arduino Code</button>
-          </div>
-          <div class="code-scroller">
-            <pre><code id="arduinoCodeDisplay" class="language-cpp">/*
-  SMARTDRIVE - 4WD Arduino Uno Robot Car Firmware
-  Pinout:
-  - L298N ENA: D5, IN1: D4, IN2: D7, IN3: D8, IN4: D12, ENB: D6
-  - HC-05: TX->D2, RX->D3 (via 1k/2k divider)
-  - HC-SR04: TRIG->A0, ECHO->A1
-  - SG90 Servo: D9
-*/
-#include &lt;SoftwareSerial.h&gt;
-#include &lt;Servo.h&gt;
-
-const uint8_t PIN_ENA = 5;  const uint8_t PIN_IN1 = 4;
-const uint8_t PIN_IN2 = 7;  const uint8_t PIN_IN3 = 8;
-const uint8_t PIN_IN4 = 12; const uint8_t PIN_ENB = 6;
-const uint8_t PIN_BT_RX = 2; const uint8_t PIN_BT_TX = 3;
-const uint8_t PIN_TRIG = A0; const uint8_t PIN_ECHO = A1;
-const uint8_t PIN_SERVO = 9;
-
-// (Full code is loaded in file SMARTDRIVE.ino and copied via button)</code></pre>
-          </div>
-
-          <div class="explanation-grid">
-            <div class="explanation-card">
-              <h4>1. <code>measureDistanceCm()</code> & Median Filter</h4>
-              <p>Emits a 10-microsecond trigger pulse on pin A0. Reads echo return duration in microseconds with <code>pulseIn()</code>. Computes distance via formula <code>duration / 58.2</code>. Samples three consecutive pings and chooses the median to discard electrical noise spikes caused by motor brush interference.</p>
-            </div>
-            <div class="explanation-card">
-              <h4>2. Failsafe Watchdog Timer</h4>
-              <p>Tracks <code>lastCommandTime = millis()</code>. In manual Bluetooth mode, if the phone disconnects or goes out of range for more than 1.2 seconds without sending an update, the robot cuts motor power immediately to prevent runaway crashes.</p>
-            </div>
-            <div class="explanation-card">
-              <h4>3. Autonomous Obstacle Avoidance Engine</h4>
-              <p>Continuously inspects frontal distance. If under 30 cm: brakes, reverses 280ms, sweeps servo left (150°) and right (30°), compares clear paths, and steers into the wider opening. If both sides are blocked, performs a 180° spin-around.</p>
-            </div>
-            <div class="explanation-card">
-              <h4>4. Dynamic Active Braking</h4>
-              <p>Instead of just setting PWM to 0 (which allows the car to coast forward under momentum), <code>emergencyBrake()</code> pulls both H-bridge sides HIGH, shorting motor coils through back-EMF to bring all four wheels to an instant dead stop.</p>
-            </div>
-          </div>
+        <div class="arena-footer">
+          <div class="legend-chip"><span class="chip-dot cyan"></span> Multi-Ray Ultrasonic Beam (25° Cone)</div>
+          <div class="legend-chip"><span class="chip-dot green"></span> Safe Zone (&gt;45 cm)</div>
+          <div class="legend-chip"><span class="chip-dot amber"></span> Early Detection Deceleration (28–45 cm)</div>
+          <div class="legend-chip"><span class="chip-dot red"></span> Critical Hard Brake (&lt;28 cm)</div>
         </div>
       </section>
 
-      <!-- TAB 4: STAGED TESTING PLAN -->
-      <section class="tab-pane" id="testing-tab">
-        <div class="doc-container glass-panel">
-          <h2>Staged Commissioning & Testing Plan</h2>
-          <p class="section-desc">Never test all components simultaneously on the floor! Follow these 4 rigorous engineering stages on an elevated test bench (wheels off the ground):</p>
-
-          <div class="stages-timeline">
-            <!-- Stage 1 -->
-            <div class="stage-card">
-              <div class="stage-number">01</div>
-              <div class="stage-body">
-                <h3>Stage 1: Motor Direction & PWM Polarity Verification</h3>
-                <p><strong>Goal:</strong> Ensure left and right wheels spin forward when commanded, and speed control works.</p>
-                <ul>
-                  <li>Prop the car up on a stand so all 4 wheels spin freely in the air.</li>
-                  <li>Verify L298N ENA/ENB jumper caps are removed and connected to D5/D6.</li>
-                  <li>Send command <code>F</code> via Serial Monitor. Check if both sides spin forward.</li>
-                  <li><strong>If Left wheels spin backward:</strong> Swap IN1 and IN2 wires (or swap OUT1 and OUT2 motor wires).</li>
-                  <li><strong>If Right wheels spin backward:</strong> Swap IN3 and IN4 wires (or swap OUT3 and OUT4 motor wires).</li>
-                </ul>
+      <!-- RIGHT: CONTROLLER & SENSING TELEMETRY -->
+      <aside class="control-section glass-card">
+        
+        <!-- Mode Switcher -->
+        <div class="control-group">
+          <span class="group-label">DRIVE MODE SELECTOR</span>
+          <div class="mode-toggle-grid">
+            <button class="mode-btn active" id="btnModeManual" data-cmd="M">
+              <span class="mode-icon">🎮</span>
+              <div>
+                <strong>Manual Mode</strong>
+                <small>Bluetooth Gamepad</small>
               </div>
-            </div>
-
-            <!-- Stage 2 -->
-            <div class="stage-card">
-              <div class="stage-number">02</div>
-              <div class="stage-body">
-                <h3>Stage 2: HC-05 Bluetooth Pairing & Failsafe Watchdog</h3>
-                <p><strong>Goal:</strong> Test wireless commands, smartphone pairing, and auto-stop on signal loss.</p>
-                <ul>
-                  <li>Power on car. Look at HC-05 LED: rapid flashing (2 Hz) means waiting for pairing.</li>
-                  <li>Pair Android phone with "HC-05" (PIN <code>1234</code> or <code>0000</code>). LED changes to slow double-flash.</li>
-                  <li>Open Serial Bluetooth Terminal app. Send <code>F</code>, <code>B</code>, <code>L</code>, <code>R</code>, <code>S</code>.</li>
-                  <li><strong>Failsafe Test:</strong> Send <code>F</code>, then immediately turn off phone Bluetooth. Confirm the robot stops completely within 1.2 seconds!</li>
-                </ul>
+            </button>
+            <button class="mode-btn" id="btnModeAuto" data-cmd="A">
+              <span class="mode-icon">🤖</span>
+              <div>
+                <strong>Autonomous</strong>
+                <small>Auto Obstacle Avoidance</small>
               </div>
-            </div>
-
-            <!-- Stage 3 -->
-            <div class="stage-card">
-              <div class="stage-number">03</div>
-              <div class="stage-body">
-                <h3>Stage 3: HC-SR04 Distance Calibration & SG90 Servo Sweep</h3>
-                <p><strong>Goal:</strong> Verify accurate centimetre telemetry and smooth 30°-90°-150° panning.</p>
-                <ul>
-                  <li>Keep car stationary and open Serial Monitor at 9600 baud.</li>
-                  <li>Place a flat cardboard box at 10 cm, 20 cm, and 30 cm. Verify telemetry reads ±1 cm accurate.</li>
-                  <li>Check if the sensor reads zero or random 400cm spikes. If yes, check for loose echo/trig jumper wires.</li>
-                  <li>Ensure the SG90 servo horn is aligned so 90° faces squarely forward.</li>
-                </ul>
-              </div>
-            </div>
-
-            <!-- Stage 4 -->
-            <div class="stage-card">
-              <div class="stage-number">04</div>
-              <div class="stage-body">
-                <h3>Stage 4: Autonomous Navigation & Ground Obstacle Avoidance</h3>
-                <p><strong>Goal:</strong> Full floor run in closed obstacle arena.</p>
-                <ul>
-                  <li>Place robot on a smooth, non-reflective floor (avoid thick high-pile carpet).</li>
-                  <li>Create a test arena using cardboard boxes.</li>
-                  <li>Send command <code>A</code> via Bluetooth.</li>
-                  <li>Observe cruise -> obstacle detection at 30cm -> stop -> slight backup -> left/right sweep -> steering decision!</li>
-                </ul>
-              </div>
-            </div>
+            </button>
           </div>
         </div>
-      </section>
 
-      <!-- TAB 5: SAFETY & ENGINEERING RULES -->
-      <section class="tab-pane" id="safety-tab">
-        <div class="doc-container glass-panel">
-          <h2>Battery, Voltage, Current & Safety Engineering Rules</h2>
-          
-          <div class="rules-grid">
-            <div class="rule-box critical">
-              <h4>1. Common Ground Rule (The #1 Beginner Pitfall)</h4>
-              <p>The Arduino Uno, HC-05 module, HC-SR04 sensor, SG90 servo, and L298N driver <strong>MUST ALL SHARE A COMMON GROUND (GND)</strong>. If the battery ground and Arduino ground are not connected together, control signals will have no return voltage reference, causing random motor jitter, erratic readings, and lost Bluetooth packets.</p>
-            </div>
+        <!-- Directional Gamepad -->
+        <div class="control-group gamepad-group">
+          <span class="group-label">TACTILE REMOTE CONTROLLER</span>
+          <div class="gamepad-grid">
+            <div></div>
+            <button class="pad-btn up" id="padF" data-cmd="F" title="Forward (W / Up)">
+              <svg viewBox="0 0 24 24"><path d="M12 4l-7 7h5v9h4v-9h5z"/></svg>
+              <span>FORWARD</span>
+            </button>
+            <div></div>
 
-            <div class="rule-box warning">
-              <h4>2. Never Power Motors from the Arduino 5V Pin</h4>
-              <p>DC motors are inductive loads. When starting or stalling, four TT gearmotors can draw <strong>2.5A to 4.0A of current</strong>! The onboard 5V linear regulator on the Arduino Uno can only supply ~500mA before overheating and thermal shutdown. Power motors strictly from the battery pack into the L298N 12V terminal.</p>
-            </div>
+            <button class="pad-btn left" id="padL" data-cmd="L" title="Left (A / Left)">
+              <svg viewBox="0 0 24 24"><path d="M4 12l7-7v5h9v4h-9v5z"/></svg>
+              <span>LEFT</span>
+            </button>
+            <button class="pad-btn stop" id="padS" data-cmd="S" title="Stop (Space / S)">
+              <div class="stop-glyph"></div>
+              <span>STOP</span>
+            </button>
+            <button class="pad-btn right" id="padR" data-cmd="R" title="Right (D / Right)">
+              <svg viewBox="0 0 24 24"><path d="M20 12l-7-7v5H4v4h9v5z"/></svg>
+              <span>RIGHT</span>
+            </button>
 
-            <div class="rule-box info">
-              <h4>3. L298N 5V Regulator Onboard Jumper</h4>
-              <p>The L298N board has a 3-pin 5V enable jumper:
-                <br>• If your battery is <strong>7.4V to 12V</strong>: Keep the jumper ON. The onboard 78M05 regulator generates 5V.
-                <br>• If your battery is <strong>&gt;12V (e.g. 14.8V 4S)</strong>: You MUST remove this jumper, or the onboard regulator will overheat and fry!
-              </p>
-            </div>
-
-            <div class="rule-box alert">
-              <h4>4. Inductive Back-EMF & Reset Protection</h4>
-              <p>When DC motors stop or reverse, their collapsing magnetic fields create high-voltage reverse flyback spikes. While L298N has protection diodes, solder a <strong>0.1µF (104) ceramic capacitor</strong> across each motor's solder tabs to suppress high-frequency EMI noise that causes Arduino MCU resets.</p>
-            </div>
-
-            <div class="rule-box critical">
-              <h4>5. Realistic Design Limitations & Disclaimer</h4>
-              <p><strong>This robot is an educational prototyping chassis:</strong>
-                <br>• HC-SR04 ultrasonic sensors cannot reliably detect soft sound-absorbing fabrics, thin table legs, or obstacles approached at steep grazing angles (&gt;45° reflection deflection).
-                <br>• Skid steering on 4WD causes significant lateral wheel scrub on rough surfaces.
-                <br>• <strong>Safety Notice:</strong> Under no circumstances is this architecture suitable for full-scale road vehicles or mission-critical autonomous transport.
-              </p>
-            </div>
+            <div></div>
+            <button class="pad-btn down" id="padB" data-cmd="B" title="Backward (S / Down)">
+              <svg viewBox="0 0 24 24"><path d="M12 20l7-7h-5V4h-4v9H5z"/></svg>
+              <span>REVERSE</span>
+            </button>
+            <div></div>
           </div>
         </div>
-      </section>
 
+        <!-- Speed Modulation -->
+        <div class="control-group">
+          <div class="slider-header">
+            <span class="group-label">MOTOR SPEED (PWM)</span>
+            <span class="speed-number" id="speedNum">180</span>
+          </div>
+          <input type="range" min="100" max="255" value="180" id="speedSlider" class="tech-slider">
+          <div class="preset-row">
+            <button class="preset-chip" data-speed="120">Cruise (120)</button>
+            <button class="preset-chip active" data-speed="180">Normal (180)</button>
+            <button class="preset-chip" data-speed="255">Turbo (255)</button>
+          </div>
+        </div>
+
+        <!-- Live Diagnostics Log -->
+        <div class="control-group log-group">
+          <div class="log-header">
+            <span class="group-label">SERIAL MONITOR TELEMETRY (9600 BAUD)</span>
+            <button class="clear-btn" id="btnClearLog">Clear</button>
+          </div>
+          <div class="log-stream" id="logStream"></div>
+        </div>
+
+      </aside>
     </main>
 
-    <!-- Bottom Status Bar -->
-    <footer class="app-footer">
-      <div class="footer-status">
-        <span>Firmware: SMARTDRIVE v2.1.0</span>
-        <span class="sep">•</span>
-        <span>ATmega328P 16MHz</span>
-        <span class="sep">•</span>
-        <span id="loopHz">Simulation Loop: 60 FPS</span>
+    <!-- MODAL: CIRCUIT & WIRING TABLE -->
+    <div class="modal-backdrop" id="modalWiring">
+      <div class="modal-box">
+        <div class="modal-header">
+          <h3>⚡ Pin-by-Pin Hardware Wiring Specification</h3>
+          <button class="close-btn" id="btnCloseWiring">✕</button>
+        </div>
+        <div class="modal-body">
+          <table class="clean-table">
+            <thead>
+              <tr>
+                <th>Component</th>
+                <th>Pin</th>
+                <th>Arduino Uno Pin</th>
+                <th>Color</th>
+                <th>Engineering Purpose</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>L298N Driver</td><td><strong>ENA</strong></td><td><strong>D5</strong> (PWM)</td><td>Blue</td><td>Speed PWM (Left Motors). Remove black jumper.</td></tr>
+              <tr><td>L298N Driver</td><td><strong>IN1</strong></td><td><strong>D4</strong></td><td>Yellow</td><td>Left Motors forward phase.</td></tr>
+              <tr><td>L298N Driver</td><td><strong>IN2</strong></td><td><strong>D7</strong></td><td>Orange</td><td>Left Motors reverse phase.</td></tr>
+              <tr><td>L298N Driver</td><td><strong>IN3</strong></td><td><strong>D8</strong></td><td>Green</td><td>Right Motors forward phase.</td></tr>
+              <tr><td>L298N Driver</td><td><strong>IN4</strong></td><td><strong>D12</strong></td><td>Purple</td><td>Right Motors reverse phase.</td></tr>
+              <tr><td>L298N Driver</td><td><strong>ENB</strong></td><td><strong>D6</strong> (PWM)</td><td>White</td><td>Speed PWM (Right Motors). Remove black jumper.</td></tr>
+              <tr><td>L298N Driver</td><td><strong>+12V</strong></td><td><strong>Battery (+)</strong></td><td>Red</td><td>Connect to 7.4V (2x 18650) switch output.</td></tr>
+              <tr><td>L298N Driver</td><td><strong>GND</strong></td><td><strong>Battery (-) & GND</strong></td><td>Black</td><td><strong>CRITICAL: Common Ground!</strong></td></tr>
+              <tr><td>HC-05 Bluetooth</td><td><strong>VCC / GND</strong></td><td><strong>5V / GND</strong></td><td>Red / Black</td><td>Core Bluetooth power.</td></tr>
+              <tr><td>HC-05 Bluetooth</td><td><strong>TXD</strong></td><td><strong>D2</strong> (RX)</td><td>Green</td><td>3.3V TX safely accepted by Arduino 5V input.</td></tr>
+              <tr><td>HC-05 Bluetooth</td><td><strong>RXD</strong></td><td><strong>D3 via Divider</strong></td><td>Orange</td><td><strong>1kΩ / 2kΩ Divider:</strong> Converts 5V down to safe 3.3V.</td></tr>
+              <tr><td>HC-SR04 Sensor</td><td><strong>TRIG</strong></td><td><strong>A0</strong></td><td>Yellow</td><td>10µs ultrasonic burst trigger output.</td></tr>
+              <tr><td>HC-SR04 Sensor</td><td><strong>ECHO</strong></td><td><strong>A1</strong></td><td>Cyan</td><td>Echo travel duration input.</td></tr>
+              <tr><td>SG90 Servo</td><td><strong>Signal</strong></td><td><strong>D9</strong> (PWM)</td><td>Orange</td><td>50Hz PWM position sweep signal.</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
-      <div class="footer-links">
-        <span>Project SMARTDRIVE © Educational Robotics Architecture</span>
+    </div>
+
+    <!-- MODAL: ARDUINO C++ CODE -->
+    <div class="modal-backdrop" id="modalCode">
+      <div class="modal-box">
+        <div class="modal-header">
+          <div>
+            <h3>💻 SMARTDRIVE.ino Production Firmware</h3>
+            <span class="modal-subtitle">Ready to upload via Arduino IDE</span>
+          </div>
+          <div class="modal-header-actions">
+            <button class="copy-code-btn" id="btnCopyCode">📋 Copy Full Code</button>
+            <button class="close-btn" id="btnCloseCode">✕</button>
+          </div>
+        </div>
+        <div class="modal-body">
+          <pre class="code-block"><code id="codeViewer"></code></pre>
+        </div>
       </div>
-    </footer>
+    </div>
+
   </div>
 
-<script>
-window.SMARTDRIVE_SOURCE_CODE = "/*\n  ==============================================================================\n  PROJECT: SMARTDRIVE - 4WD Bluetooth & Autonomous Obstacle-Avoiding Robot\n  TARGET MCU: Arduino Uno R3 (ATmega328P)\n  AUTHOR: Experienced Arduino Robotics Engineer & C/C++ Tutor\n  VERSION: 2.1.0 - Production Release with Failsafe Watchdog & Active Braking\n  ==============================================================================\n\n  HARDWARE PIN CONNECTIONS:\n  ------------------------------------------------------------------------------\n  L298N Motor Driver:\n    - ENA (Left Motor Speed PWM)   -> Digital Pin 5\n    - IN1 (Left Motor Dir A)       -> Digital Pin 4\n    - IN2 (Left Motor Dir B)       -> Digital Pin 7\n    - IN3 (Right Motor Dir A)      -> Digital Pin 8\n    - IN4 (Right Motor Dir B)      -> Digital Pin 12\n    - ENB (Right Motor Speed PWM)  -> Digital Pin 6\n\n  HC-05 Bluetooth Module:\n    - VCC                          -> 5V (from Arduino 5V pin or 5V rail)\n    - GND                          -> GND (Common Ground)\n    - TXD                          -> Digital Pin 2 (Arduino Software RX)\n    - RXD                          -> Digital Pin 3 (Arduino Software TX)\n                                      *IMPORTANT: Use Voltage Divider (5V -> 3.3V)\n                                      e.g., Arduino D3 -> 1k\u03a9 -> HC-05 RXD -> 2k\u03a9 -> GND\n\n  HC-SR04 Ultrasonic Distance Sensor:\n    - VCC                          -> 5V\n    - GND                          -> GND\n    - TRIG                         -> Analog Pin A0 (used as Digital Output)\n    - ECHO                         -> Analog Pin A1 (used as Digital Input)\n\n  SG90 Micro Servo Motor:\n    - Brown / Black                -> GND\n    - Red                          -> 5V (Servo power)\n    - Orange / Yellow (Signal)     -> Digital Pin 9 (PWM)\n  ==============================================================================\n*/\n\n#include <SoftwareSerial.h>\n#include <Servo.h>\n\n// ==============================================================================\n// 1. PIN DEFINITIONS\n// ==============================================================================\n// L298N Motor Driver Pins\nconst uint8_t PIN_ENA  = 5;   // PWM speed control: Left Motors\nconst uint8_t PIN_IN1  = 4;   // Direction: Left Motors forward/reverse\nconst uint8_t PIN_IN2  = 7;   // Direction: Left Motors forward/reverse\nconst uint8_t PIN_IN3  = 8;   // Direction: Right Motors forward/reverse\nconst uint8_t PIN_IN4  = 12;  // Direction: Right Motors forward/reverse\nconst uint8_t PIN_ENB  = 6;   // PWM speed control: Right Motors\n\n// HC-05 Bluetooth Pins (SoftwareSerial)\nconst uint8_t PIN_BT_RX = 2;  // Arduino receives from HC-05 TX\nconst uint8_t PIN_BT_TX = 3;  // Arduino sends to HC-05 RX (via voltage divider)\n\n// HC-SR04 Ultrasonic Distance Sensor Pins\nconst uint8_t PIN_TRIG  = A0; // Trigger pin (pulse transmitter)\nconst uint8_t PIN_ECHO  = A1; // Echo pin (pulse receiver)\n\n// SG90 Servo Signal Pin\nconst uint8_t PIN_SERVO = 9;  // Servo control PWM pin\n\n// Built-in Status LED\nconst uint8_t PIN_LED_STATUS = 13;\n\n// ==============================================================================\n// 2. CONFIGURATION PARAMETERS & CONSTANTS\n// ==============================================================================\n// Operating Speeds (0 to 255 PWM)\nconst uint8_t DEFAULT_SPEED   = 180;  // Balanced cruise speed\nconst uint8_t TURN_SPEED      = 200;  // Slightly higher torque for skid turns\nconst uint8_t MIN_SPEED       = 100;  // Minimum stall prevention threshold\nconst uint8_t MAX_SPEED       = 255;  // 100% full battery voltage\n\n// Obstacle Avoidance Thresholds (in centimeters)\nconst int DISTANCE_SAFE_THRESHOLD = 30; // Obstacle detection distance (cm)\nconst int DISTANCE_CRITICAL_STOP  = 15; // Emergency brake distance (cm)\nconst int SENSOR_TIMEOUT_MICROS   = 25000; // ~4 meters max range timeout\n\n// Servo Calibration Angles (in degrees)\nconst int SERVO_CENTER = 90;   // Looking straight ahead\nconst int SERVO_LEFT   = 150;  // Looking towards the left\nconst int SERVO_RIGHT  = 30;   // Looking towards the right\nconst int SERVO_SWEEP_DELAY_MS = 280; // Delay for servo to reach mechanical position\n\n// Bluetooth Watchdog / Connection Safety Timeout\nconst unsigned long BT_HEARTBEAT_TIMEOUT_MS = 1200; // Stop car if no command for 1.2s\n\n// Robot Operating Modes\nenum DriveMode {\n  MODE_MANUAL,     // Controlled via Bluetooth app ('M')\n  MODE_AUTONOMOUS  // Self-navigating obstacle avoidance ('A')\n};\n\n// Robot Motion States\nenum MotionState {\n  STATE_STOPPED,\n  STATE_FORWARD,\n  STATE_BACKWARD,\n  STATE_LEFT,\n  STATE_RIGHT\n};\n\n// ==============================================================================\n// 3. GLOBAL OBJECTS & VARIABLES\n// ==============================================================================\nSoftwareSerial btSerial(PIN_BT_RX, PIN_BT_TX); // RX, TX\nServo scannerServo;\n\nDriveMode currentMode = MODE_MANUAL;\nMotionState currentMotion = STATE_STOPPED;\nuint8_t currentSpeed = DEFAULT_SPEED;\n\nunsigned long lastCommandTime = 0;   // Watchdog timestamp for Bluetooth commands\nunsigned long lastTelemetryTime = 0; // Telemetry print interval\nunsigned long lastScanTime = 0;\n\n// Autonomous State Machine States\nenum AutoSubState {\n  AUTO_CRUISE,\n  AUTO_DETECTED_STOP,\n  AUTO_BACKUP,\n  AUTO_SCAN_SURROUNDINGS,\n  AUTO_DECIDE_AND_TURN\n};\nAutoSubState autoState = AUTO_CRUISE;\n\n// ==============================================================================\n// 4. FUNCTION PROTOTYPES\n// ==============================================================================\nvoid setupPins();\nvoid initPeripherals();\nvoid handleBluetoothInput();\nvoid executeAutonomousLogic();\nvoid checkWatchdogTimeout();\nvoid printTelemetry();\n\n// Motor Actuation Functions\nvoid setMotorSpeed(uint8_t leftSpeed, uint8_t rightSpeed);\nvoid moveForward();\nvoid moveBackward();\nvoid turnLeft();\nvoid turnRight();\nvoid stopMotors();\nvoid emergencyBrake();\n\n// Sensor & Servo Functions\nint measureDistanceCm();\nint getFilteredDistanceCm();\nvoid scanLeftRight(int &leftDist, int &rightDist);\n\n// ==============================================================================\n// 5. SETUP (Runs Once at Boot)\n// ==============================================================================\nvoid setup() {\n  // Initialize Hardware Serial for PC USB Debugging\n  Serial.begin(9600);\n  while (!Serial && millis() < 2000) {\n    ; // Wait briefly for USB Serial (safe on Uno)\n  }\n\n  // Initialize Software Serial for HC-05 Bluetooth\n  // Standard HC-05 default communication baud is 9600\n  btSerial.begin(9600);\n\n  // Configure Hardware Pins\n  setupPins();\n\n  // Attach and Center the Ultrasonic Servo\n  initPeripherals();\n\n  lastCommandTime = millis();\n\n  Serial.println(F(\"==================================================\"));\n  Serial.println(F(\"  SMARTDRIVE 4WD ROBOT FIRMWARE INITIALIZED      \"));\n  Serial.println(F(\"  Default Mode: MANUAL | Speed: 180 / 255        \"));\n  Serial.println(F(\"  Type '?' or send 'H' via Bluetooth for help.   \"));\n  Serial.println(F(\"==================================================\"));\n}\n\n// ==============================================================================\n// 6. MAIN LOOP (Repeats Continuously)\n// ==============================================================================\nvoid loop() {\n  // Process any incoming commands over Bluetooth or USB Serial\n  handleBluetoothInput();\n\n  // Mode-dependent execution\n  if (currentMode == MODE_AUTONOMOUS) {\n    executeAutonomousLogic();\n  } else {\n    // In Manual Mode: enforce failsafe watchdog\n    checkWatchdogTimeout();\n\n    // Active Braking Assist: If moving forward manually and obstacle gets dangerously close (<15cm)\n    if (currentMotion == STATE_FORWARD) {\n      int dist = measureDistanceCm();\n      if (dist > 0 && dist < DISTANCE_CRITICAL_STOP) {\n        Serial.println(F(\"[SAFETY] Front obstacle detected in manual mode! Active braking engaged.\"));\n        emergencyBrake();\n      }\n    }\n  }\n\n  // Periodic Serial Debug Telemetry (every 1000 ms)\n  if (millis() - lastTelemetryTime >= 1000) {\n    lastTelemetryTime = millis();\n    printTelemetry();\n  }\n}\n\n// ==============================================================================\n// 7. PIN & PERIPHERAL INITIALIZATION\n// ==============================================================================\nvoid setupPins() {\n  // Motor driver control pins\n  pinMode(PIN_ENA, OUTPUT);\n  pinMode(PIN_IN1, OUTPUT);\n  pinMode(PIN_IN2, OUTPUT);\n  pinMode(PIN_IN3, OUTPUT);\n  pinMode(PIN_IN4, OUTPUT);\n  pinMode(PIN_ENB, OUTPUT);\n\n  // Ultrasonic sensor pins\n  pinMode(PIN_TRIG, OUTPUT);\n  pinMode(PIN_ECHO, INPUT);\n  digitalWrite(PIN_TRIG, LOW); // Hold trigger LOW initially\n\n  // Status LED\n  pinMode(PIN_LED_STATUS, OUTPUT);\n  digitalWrite(PIN_LED_STATUS, LOW);\n\n  // Ensure motors start in complete stop\n  stopMotors();\n}\n\nvoid initPeripherals() {\n  scannerServo.attach(PIN_SERVO);\n  scannerServo.write(SERVO_CENTER); // Face center 90 degrees\n  delay(350); // Allow physical movement\n}\n\n// ==============================================================================\n// 8. BLUETOOTH & SERIAL COMMAND HANDLER\n// ==============================================================================\nvoid handleBluetoothInput() {\n  char cmd = 0;\n\n  // Read from Bluetooth Module\n  if (btSerial.available() > 0) {\n    cmd = (char)btSerial.read();\n  }\n  // Also accept commands from Arduino Serial Monitor for easy workbench testing!\n  else if (Serial.available() > 0) {\n    cmd = (char)Serial.read();\n  }\n\n  if (cmd == 0 || cmd == '\\r' || cmd == '\\n' || cmd == ' ') {\n    return; // Ignore empty / whitespace characters\n  }\n\n  // Update watchdog timestamp whenever valid input arrives\n  lastCommandTime = millis();\n\n  // Visual heartbeat on Pin 13 LED\n  digitalWrite(PIN_LED_STATUS, !digitalRead(PIN_LED_STATUS));\n\n  Serial.print(F(\"[COMMAND RECEIVED]: '\"));\n  Serial.print(cmd);\n  Serial.println(F(\"'\"));\n\n  switch (cmd) {\n    // Mode Selection Commands\n    case 'A':\n    case 'a':\n      currentMode = MODE_AUTONOMOUS;\n      autoState = AUTO_CRUISE;\n      scannerServo.write(SERVO_CENTER);\n      Serial.println(F(\">>> SWITCHED TO AUTONOMOUS AVOIDANCE MODE <<<\"));\n      btSerial.println(F(\"MODE: AUTONOMOUS\"));\n      break;\n\n    case 'M':\n    case 'm':\n      currentMode = MODE_MANUAL;\n      stopMotors();\n      scannerServo.write(SERVO_CENTER);\n      Serial.println(F(\">>> SWITCHED TO MANUAL BLUETOOTH MODE <<<\"));\n      btSerial.println(F(\"MODE: MANUAL\"));\n      break;\n\n    // Movement Commands (Only executed directly in MANUAL mode)\n    case 'F':\n    case 'f':\n      if (currentMode == MODE_MANUAL) moveForward();\n      break;\n\n    case 'B':\n    case 'b':\n      if (currentMode == MODE_MANUAL) moveBackward();\n      break;\n\n    case 'L':\n    case 'l':\n      if (currentMode == MODE_MANUAL) turnLeft();\n      break;\n\n    case 'R':\n    case 'r':\n      if (currentMode == MODE_MANUAL) turnRight();\n      break;\n\n    case 'S':\n    case 's':\n      stopMotors();\n      break;\n\n    // Emergency Stop\n    case 'E':\n    case 'e':\n      emergencyBrake();\n      currentMode = MODE_MANUAL; // Switch back to manual for safety\n      Serial.println(F(\"[ALERT] EMERGENCY STOP ENGAGED!\"));\n      btSerial.println(F(\"EMERGENCY STOP\"));\n      break;\n\n    // Speed Preset Controls: '0' to '9'\n    case '0': setSpeed(100); break;\n    case '1': setSpeed(120); break;\n    case '2': setSpeed(140); break;\n    case '3': setSpeed(160); break;\n    case '4': setSpeed(180); break;\n    case '5': setSpeed(200); break;\n    case '6': setSpeed(215); break;\n    case '7': setSpeed(230); break;\n    case '8': setSpeed(245); break;\n    case '9': setSpeed(255); break;\n\n    // Increment / Decrement Speed\n    case '+':\n      setSpeed(min((int)currentSpeed + 20, 255));\n      break;\n    case '-':\n      setSpeed(max((int)currentSpeed - 20, (int)MIN_SPEED));\n      break;\n\n    // Help menu\n    case '?':\n    case 'H':\n    case 'h':\n      printHelpMenu();\n      break;\n\n    default:\n      Serial.print(F(\"Unknown command: \"));\n      Serial.println(cmd);\n      break;\n  }\n}\n\nvoid setSpeed(uint8_t newSpeed) {\n  currentSpeed = constrain(newSpeed, MIN_SPEED, MAX_SPEED);\n  analogWrite(PIN_ENA, currentSpeed);\n  analogWrite(PIN_ENB, currentSpeed);\n  Serial.print(F(\"Motor Speed Adjusted: \"));\n  Serial.print(currentSpeed);\n  Serial.println(F(\" / 255\"));\n  btSerial.print(F(\"SPEED: \"));\n  btSerial.println(currentSpeed);\n}\n\n// ==============================================================================\n// 9. AUTONOMOUS OBSTACLE AVOIDANCE ENGINE\n// ==============================================================================\nvoid executeAutonomousLogic() {\n  // Ensure scanner faces front during cruising\n  scannerServo.write(SERVO_CENTER);\n\n  int frontDistance = getFilteredDistanceCm();\n\n  // Check if reading is valid and if an obstacle is closer than the safe threshold\n  if (frontDistance > 0 && frontDistance <= DISTANCE_SAFE_THRESHOLD) {\n    Serial.print(F(\"[AUTO] Obstacle Detected ahead at: \"));\n    Serial.print(frontDistance);\n    Serial.println(F(\" cm. Executing avoidance maneuver...\"));\n\n    // Step 1: Stop immediately\n    stopMotors();\n    delay(100);\n\n    // Step 2: Back up slightly to create turning clearance\n    Serial.println(F(\"[AUTO] Backing up slightly...\"));\n    moveBackward();\n    delay(280);\n    stopMotors();\n    delay(150);\n\n    // Step 3: Scan surroundings using the SG90 servo\n    int leftDist = 0;\n    int rightDist = 0;\n    scanLeftRight(leftDist, rightDist);\n\n    Serial.print(F(\"[AUTO] Scan Results -> Left: \"));\n    Serial.print(leftDist);\n    Serial.print(F(\" cm | Right: \"));\n    Serial.print(rightDist);\n    Serial.println(F(\" cm\"));\n\n    // Step 4: Decision Making\n    if (leftDist <= DISTANCE_SAFE_THRESHOLD && rightDist <= DISTANCE_SAFE_THRESHOLD) {\n      // Both pathways are blocked: execute a 180-degree spin around\n      Serial.println(F(\"[AUTO] Dead end detected! Performing 180 turnaround.\"));\n      turnRight();\n      delay(750); // Spin longer to face rear\n    } else if (leftDist >= rightDist) {\n      // Left side is clearer\n      Serial.println(F(\"[AUTO] Choosing LEFT path.\"));\n      turnLeft();\n      delay(420); // Time calibrated for approx 60-90 degree skid turn\n    } else {\n      // Right side is clearer\n      Serial.println(F(\"[AUTO] Choosing RIGHT path.\"));\n      turnRight();\n      delay(420); // Time calibrated for approx 60-90 degree skid turn\n    }\n\n    stopMotors();\n    delay(150);\n  } else {\n    // Pathway is clear: cruise forward smoothly\n    moveForward();\n  }\n}\n\n// ==============================================================================\n// 10. SENSOR & SERVO SCANNING UTILITIES\n// ==============================================================================\n/*\n  Measures distance using HC-SR04 ultrasonic sensor.\n  Uses sound speed c \u2248 343 m/s at 20\u00b0C -> 0.0343 cm/\u00b5s.\n  Distance = (Duration_us * 0.0343) / 2 = Duration_us / 58.2\n*/\nint measureDistanceCm() {\n  // Clear trigger pin\n  digitalWrite(PIN_TRIG, LOW);\n  delayMicroseconds(2);\n\n  // Send 10\u00b5s HIGH pulse to start ultrasound ping\n  digitalWrite(PIN_TRIG, HIGH);\n  delayMicroseconds(10);\n  digitalWrite(PIN_TRIG, LOW);\n\n  // Read echo pulse duration (timeout after 25ms to prevent code lockup)\n  unsigned long duration = pulseIn(PIN_ECHO, HIGH, SENSOR_TIMEOUT_MICROS);\n\n  if (duration == 0) {\n    // Sensor timed out (no echo return within ~4 meters)\n    return 400; // Treat as clear open path\n  }\n\n  int distanceCm = duration / 58;\n  return distanceCm;\n}\n\n/*\n  Takes 3 quick readings and returns the median value.\n  Rejects electrical noise spikes and momentary false reflections.\n*/\nint getFilteredDistanceCm() {\n  int r1 = measureDistanceCm();\n  delay(12);\n  int r2 = measureDistanceCm();\n  delay(12);\n  int r3 = measureDistanceCm();\n\n  // Median calculation of 3 values\n  if ((r1 >= r2 && r1 <= r3) || (r1 <= r2 && r1 >= r3)) return r1;\n  if ((r2 >= r1 && r2 <= r3) || (r2 <= r1 && r2 >= r3)) return r2;\n  return r3;\n}\n\nvoid scanLeftRight(int &leftDist, int &rightDist) {\n  // Turn servo to look LEFT\n  scannerServo.write(SERVO_LEFT);\n  delay(SERVO_SWEEP_DELAY_MS);\n  leftDist = getFilteredDistanceCm();\n\n  // Turn servo to look RIGHT\n  scannerServo.write(SERVO_RIGHT);\n  delay(SERVO_SWEEP_DELAY_MS * 1.5); // Allow extra time to cross full span\n  rightDist = getFilteredDistanceCm();\n\n  // Re-center servo forward\n  scannerServo.write(SERVO_CENTER);\n  delay(SERVO_SWEEP_DELAY_MS);\n}\n\n// ==============================================================================\n// 11. MOTOR ACTUATION & DIFFERENTIAL STEERING\n// ==============================================================================\n/*\n  L298N Logic Truth Table:\n  IN1  IN2  Left Motors\n  HIGH LOW  Forward\n  LOW  HIGH Backward\n  LOW  LOW  Stop / Coast\n  HIGH HIGH Brake\n\n  IN3  IN4  Right Motors\n  HIGH LOW  Forward\n  LOW  HIGH Backward\n  LOW  LOW  Stop / Coast\n  HIGH HIGH Brake\n*/\nvoid moveForward() {\n  currentMotion = STATE_FORWARD;\n  analogWrite(PIN_ENA, currentSpeed);\n  analogWrite(PIN_ENB, currentSpeed);\n\n  digitalWrite(PIN_IN1, HIGH);\n  digitalWrite(PIN_IN2, LOW);\n  digitalWrite(PIN_IN3, HIGH);\n  digitalWrite(PIN_IN4, LOW);\n}\n\nvoid moveBackward() {\n  currentMotion = STATE_BACKWARD;\n  analogWrite(PIN_ENA, currentSpeed);\n  analogWrite(PIN_ENB, currentSpeed);\n\n  digitalWrite(PIN_IN1, LOW);\n  digitalWrite(PIN_IN2, HIGH);\n  digitalWrite(PIN_IN3, LOW);\n  digitalWrite(PIN_IN4, HIGH);\n}\n\nvoid turnLeft() {\n  // Skid steering: Left wheels reverse, Right wheels forward\n  currentMotion = STATE_LEFT;\n  analogWrite(PIN_ENA, TURN_SPEED);\n  analogWrite(PIN_ENB, TURN_SPEED);\n\n  digitalWrite(PIN_IN1, LOW);\n  digitalWrite(PIN_IN2, HIGH);\n  digitalWrite(PIN_IN3, HIGH);\n  digitalWrite(PIN_IN4, LOW);\n}\n\nvoid turnRight() {\n  // Skid steering: Left wheels forward, Right wheels reverse\n  currentMotion = STATE_RIGHT;\n  analogWrite(PIN_ENA, TURN_SPEED);\n  analogWrite(PIN_ENB, TURN_SPEED);\n\n  digitalWrite(PIN_IN1, HIGH);\n  digitalWrite(PIN_IN2, LOW);\n  digitalWrite(PIN_IN3, LOW);\n  digitalWrite(PIN_IN4, HIGH);\n}\n\nvoid stopMotors() {\n  currentMotion = STATE_STOPPED;\n  analogWrite(PIN_ENA, 0);\n  analogWrite(PIN_ENB, 0);\n\n  digitalWrite(PIN_IN1, LOW);\n  digitalWrite(PIN_IN2, LOW);\n  digitalWrite(PIN_IN3, LOW);\n  digitalWrite(PIN_IN4, LOW);\n}\n\nvoid emergencyBrake() {\n  // Short motor coils to GND for active electric dynamic braking\n  currentMotion = STATE_STOPPED;\n  analogWrite(PIN_ENA, 255);\n  analogWrite(PIN_ENB, 255);\n\n  digitalWrite(PIN_IN1, HIGH);\n  digitalWrite(PIN_IN2, HIGH);\n  digitalWrite(PIN_IN3, HIGH);\n  digitalWrite(PIN_IN4, HIGH);\n  delay(120);\n\n  // Then cut power\n  stopMotors();\n}\n\n// ==============================================================================\n// 12. WATCHDOG, TELEMETRY & HELP\n// ==============================================================================\nvoid checkWatchdogTimeout() {\n  // In manual mode, if the car is actively driving and no command has arrived\n  // within BT_HEARTBEAT_TIMEOUT_MS, stop to prevent runaway robot!\n  if (currentMotion != STATE_STOPPED) {\n    if (millis() - lastCommandTime > BT_HEARTBEAT_TIMEOUT_MS) {\n      Serial.println(F(\"[WATCHDOG TIMEOUT] No Bluetooth signal received! Stopping car safely.\"));\n      stopMotors();\n    }\n  }\n}\n\nvoid printTelemetry() {\n  int dist = measureDistanceCm();\n  Serial.print(F(\"[STATUS] Mode: \"));\n  Serial.print(currentMode == MODE_AUTONOMOUS ? F(\"AUTONOMOUS\") : F(\"MANUAL    \"));\n  Serial.print(F(\" | Motion: \"));\n  switch (currentMotion) {\n    case STATE_STOPPED:  Serial.print(F(\"STOPPED \")); break;\n    case STATE_FORWARD:  Serial.print(F(\"FORWARD \")); break;\n    case STATE_BACKWARD: Serial.print(F(\"REVERSE \")); break;\n    case STATE_LEFT:     Serial.print(F(\"LEFT    \")); break;\n    case STATE_RIGHT:    Serial.print(F(\"RIGHT   \")); break;\n  }\n  Serial.print(F(\" | Speed: \"));\n  Serial.print(currentSpeed);\n  Serial.print(F(\" | Ping: \"));\n  if (dist >= 400) Serial.print(F(\">400\"));\n  else Serial.print(dist);\n  Serial.println(F(\" cm\"));\n}\n\nvoid printHelpMenu() {\n  Serial.println(F(\"\\n--- SMARTDRIVE COMMAND GUIDE ---\"));\n  Serial.println(F(\"  F : Drive Forward\"));\n  Serial.println(F(\"  B : Drive Backward\"));\n  Serial.println(F(\"  L : Turn Left (Pivot)\"));\n  Serial.println(F(\"  R : Turn Right (Pivot)\"));\n  Serial.println(F(\"  S : Stop Motors\"));\n  Serial.println(F(\"  E : Emergency Brake\"));\n  Serial.println(F(\"  A : Autonomous Obstacle Avoidance Mode\"));\n  Serial.println(F(\"  M : Manual Bluetooth Control Mode\"));\n  Serial.println(F(\"  0..9 : Set Speed (100 to 255 PWM)\"));\n  Serial.println(F(\"  + / - : Nudge Speed up / down\"));\n  Serial.println(F(\"--------------------------------\\n\"));\n}\n";
+  <script src="arduino_source.js"></script>
+  <script src="simulator.js"></script>
+  <script src="firmware_sim.js"></script>
+  <script>
+window.SMARTDRIVE_SOURCE_CODE = "/*\n  ==============================================================================\n  PROJECT: SMARTDRIVE - 4WD Bluetooth & Autonomous Obstacle-Avoiding Robot\n  TARGET MCU: Arduino Uno R3 (ATmega328P)\n  AUTHOR: Experienced Arduino Robotics Engineer & C/C++ Tutor\n  VERSION: 2.1.0 - Production Release with Failsafe Watchdog & Active Braking\n  ==============================================================================\n\n  HARDWARE PIN CONNECTIONS:\n  ------------------------------------------------------------------------------\n  L298N Motor Driver:\n    - ENA (Left Motor Speed PWM)   -> Digital Pin 5\n    - IN1 (Left Motor Dir A)       -> Digital Pin 4\n    - IN2 (Left Motor Dir B)       -> Digital Pin 7\n    - IN3 (Right Motor Dir A)      -> Digital Pin 8\n    - IN4 (Right Motor Dir B)      -> Digital Pin 12\n    - ENB (Right Motor Speed PWM)  -> Digital Pin 6\n\n  HC-05 Bluetooth Module:\n    - VCC                          -> 5V (from Arduino 5V pin or 5V rail)\n    - GND                          -> GND (Common Ground)\n    - TXD                          -> Digital Pin 2 (Arduino Software RX)\n    - RXD                          -> Digital Pin 3 (Arduino Software TX)\n                                      *IMPORTANT: Use Voltage Divider (5V -> 3.3V)\n                                      e.g., Arduino D3 -> 1k\u03a9 -> HC-05 RXD -> 2k\u03a9 -> GND\n\n  HC-SR04 Ultrasonic Distance Sensor:\n    - VCC                          -> 5V\n    - GND                          -> GND\n    - TRIG                         -> Analog Pin A0 (used as Digital Output)\n    - ECHO                         -> Analog Pin A1 (used as Digital Input)\n\n  SG90 Micro Servo Motor:\n    - Brown / Black                -> GND\n    - Red                          -> 5V (Servo power)\n    - Orange / Yellow (Signal)     -> Digital Pin 9 (PWM)\n  ==============================================================================\n*/\n\n#include <SoftwareSerial.h>\n#include <Servo.h>\n\n// ==============================================================================\n// 1. PIN DEFINITIONS\n// ==============================================================================\n// L298N Motor Driver Pins\nconst uint8_t PIN_ENA  = 5;   // PWM speed control: Left Motors\nconst uint8_t PIN_IN1  = 4;   // Direction: Left Motors forward/reverse\nconst uint8_t PIN_IN2  = 7;   // Direction: Left Motors forward/reverse\nconst uint8_t PIN_IN3  = 8;   // Direction: Right Motors forward/reverse\nconst uint8_t PIN_IN4  = 12;  // Direction: Right Motors forward/reverse\nconst uint8_t PIN_ENB  = 6;   // PWM speed control: Right Motors\n\n// HC-05 Bluetooth Pins (SoftwareSerial)\nconst uint8_t PIN_BT_RX = 2;  // Arduino receives from HC-05 TX\nconst uint8_t PIN_BT_TX = 3;  // Arduino sends to HC-05 RX (via voltage divider)\n\n// HC-SR04 Ultrasonic Distance Sensor Pins\nconst uint8_t PIN_TRIG  = A0; // Trigger pin (pulse transmitter)\nconst uint8_t PIN_ECHO  = A1; // Echo pin (pulse receiver)\n\n// SG90 Servo Signal Pin\nconst uint8_t PIN_SERVO = 9;  // Servo control PWM pin\n\n// Built-in Status LED\nconst uint8_t PIN_LED_STATUS = 13;\n\n// ==============================================================================\n// 2. CONFIGURATION PARAMETERS & CONSTANTS\n// ==============================================================================\n// Operating Speeds (0 to 255 PWM)\nconst uint8_t DEFAULT_SPEED   = 180;  // Balanced cruise speed\nconst uint8_t TURN_SPEED      = 200;  // Slightly higher torque for skid turns\nconst uint8_t MIN_SPEED       = 100;  // Minimum stall prevention threshold\nconst uint8_t MAX_SPEED       = 255;  // 100% full battery voltage\n\n// Obstacle Avoidance Thresholds (in centimeters)\nconst int DISTANCE_SAFE_THRESHOLD = 45; // Early obstacle warning & slow down (cm)\nconst int DISTANCE_CRITICAL_STOP  = 25; // Complete brake threshold (cm)\nconst int SENSOR_TIMEOUT_MICROS   = 25000; // ~4 meters max range timeout\n\n// Servo Calibration Angles (in degrees)\nconst int SERVO_CENTER = 90;   // Looking straight ahead\nconst int SERVO_LEFT   = 150;  // Looking towards the left\nconst int SERVO_RIGHT  = 30;   // Looking towards the right\nconst int SERVO_SWEEP_DELAY_MS = 200; // Snappy delay for servo to reach mechanical position\n\n// Bluetooth Watchdog / Connection Safety Timeout\nconst unsigned long BT_HEARTBEAT_TIMEOUT_MS = 1200; // Stop car if no command for 1.2s\n\n// Robot Operating Modes\nenum DriveMode {\n  MODE_MANUAL,     // Controlled via Bluetooth app ('M')\n  MODE_AUTONOMOUS  // Self-navigating obstacle avoidance ('A')\n};\n\n// Robot Motion States\nenum MotionState {\n  STATE_STOPPED,\n  STATE_FORWARD,\n  STATE_BACKWARD,\n  STATE_LEFT,\n  STATE_RIGHT\n};\n\n// ==============================================================================\n// 3. GLOBAL OBJECTS & VARIABLES\n// ==============================================================================\nSoftwareSerial btSerial(PIN_BT_RX, PIN_BT_TX); // RX, TX\nServo scannerServo;\n\nDriveMode currentMode = MODE_MANUAL;\nMotionState currentMotion = STATE_STOPPED;\nuint8_t currentSpeed = DEFAULT_SPEED;\n\nunsigned long lastCommandTime = 0;   // Watchdog timestamp for Bluetooth commands\nunsigned long lastTelemetryTime = 0; // Telemetry print interval\nunsigned long lastScanTime = 0;\n\n// Autonomous State Machine States\nenum AutoSubState {\n  AUTO_CRUISE,\n  AUTO_DETECTED_STOP,\n  AUTO_BACKUP,\n  AUTO_SCAN_SURROUNDINGS,\n  AUTO_DECIDE_AND_TURN\n};\nAutoSubState autoState = AUTO_CRUISE;\n\n// ==============================================================================\n// 4. FUNCTION PROTOTYPES\n// ==============================================================================\nvoid setupPins();\nvoid initPeripherals();\nvoid handleBluetoothInput();\nvoid executeAutonomousLogic();\nvoid checkWatchdogTimeout();\nvoid printTelemetry();\n\n// Motor Actuation Functions\nvoid setMotorSpeed(uint8_t leftSpeed, uint8_t rightSpeed);\nvoid moveForward();\nvoid moveBackward();\nvoid turnLeft();\nvoid turnRight();\nvoid stopMotors();\nvoid emergencyBrake();\n\n// Sensor & Servo Functions\nint measureDistanceCm();\nint getFilteredDistanceCm();\nvoid scanLeftRight(int &leftDist, int &rightDist);\n\n// ==============================================================================\n// 5. SETUP (Runs Once at Boot)\n// ==============================================================================\nvoid setup() {\n  // Initialize Hardware Serial for PC USB Debugging\n  Serial.begin(9600);\n  while (!Serial && millis() < 2000) {\n    ; // Wait briefly for USB Serial (safe on Uno)\n  }\n\n  // Initialize Software Serial for HC-05 Bluetooth\n  // Standard HC-05 default communication baud is 9600\n  btSerial.begin(9600);\n\n  // Configure Hardware Pins\n  setupPins();\n\n  // Attach and Center the Ultrasonic Servo\n  initPeripherals();\n\n  lastCommandTime = millis();\n\n  Serial.println(F(\"==================================================\"));\n  Serial.println(F(\"  SMARTDRIVE 4WD ROBOT FIRMWARE INITIALIZED      \"));\n  Serial.println(F(\"  Default Mode: MANUAL | Speed: 180 / 255        \"));\n  Serial.println(F(\"  Type '?' or send 'H' via Bluetooth for help.   \"));\n  Serial.println(F(\"==================================================\"));\n}\n\n// ==============================================================================\n// 6. MAIN LOOP (Repeats Continuously)\n// ==============================================================================\nvoid loop() {\n  // Process any incoming commands over Bluetooth or USB Serial\n  handleBluetoothInput();\n\n  // Mode-dependent execution\n  if (currentMode == MODE_AUTONOMOUS) {\n    executeAutonomousLogic();\n  } else {\n    // In Manual Mode: enforce failsafe watchdog\n    checkWatchdogTimeout();\n\n    // Active Braking Assist: If moving forward manually and obstacle gets dangerously close (<15cm)\n    if (currentMotion == STATE_FORWARD) {\n      int dist = measureDistanceCm();\n      if (dist > 0 && dist < DISTANCE_CRITICAL_STOP) {\n        Serial.println(F(\"[SAFETY] Front obstacle detected in manual mode! Active braking engaged.\"));\n        emergencyBrake();\n      }\n    }\n  }\n\n  // Periodic Serial Debug Telemetry (every 1000 ms)\n  if (millis() - lastTelemetryTime >= 1000) {\n    lastTelemetryTime = millis();\n    printTelemetry();\n  }\n}\n\n// ==============================================================================\n// 7. PIN & PERIPHERAL INITIALIZATION\n// ==============================================================================\nvoid setupPins() {\n  // Motor driver control pins\n  pinMode(PIN_ENA, OUTPUT);\n  pinMode(PIN_IN1, OUTPUT);\n  pinMode(PIN_IN2, OUTPUT);\n  pinMode(PIN_IN3, OUTPUT);\n  pinMode(PIN_IN4, OUTPUT);\n  pinMode(PIN_ENB, OUTPUT);\n\n  // Ultrasonic sensor pins\n  pinMode(PIN_TRIG, OUTPUT);\n  pinMode(PIN_ECHO, INPUT);\n  digitalWrite(PIN_TRIG, LOW); // Hold trigger LOW initially\n\n  // Status LED\n  pinMode(PIN_LED_STATUS, OUTPUT);\n  digitalWrite(PIN_LED_STATUS, LOW);\n\n  // Ensure motors start in complete stop\n  stopMotors();\n}\n\nvoid initPeripherals() {\n  scannerServo.attach(PIN_SERVO);\n  scannerServo.write(SERVO_CENTER); // Face center 90 degrees\n  delay(350); // Allow physical movement\n}\n\n// ==============================================================================\n// 8. BLUETOOTH & SERIAL COMMAND HANDLER\n// ==============================================================================\nvoid handleBluetoothInput() {\n  char cmd = 0;\n\n  // Read from Bluetooth Module\n  if (btSerial.available() > 0) {\n    cmd = (char)btSerial.read();\n  }\n  // Also accept commands from Arduino Serial Monitor for easy workbench testing!\n  else if (Serial.available() > 0) {\n    cmd = (char)Serial.read();\n  }\n\n  if (cmd == 0 || cmd == '\\r' || cmd == '\\n' || cmd == ' ') {\n    return; // Ignore empty / whitespace characters\n  }\n\n  // Update watchdog timestamp whenever valid input arrives\n  lastCommandTime = millis();\n\n  // Visual heartbeat on Pin 13 LED\n  digitalWrite(PIN_LED_STATUS, !digitalRead(PIN_LED_STATUS));\n\n  Serial.print(F(\"[COMMAND RECEIVED]: '\"));\n  Serial.print(cmd);\n  Serial.println(F(\"'\"));\n\n  switch (cmd) {\n    // Mode Selection Commands\n    case 'A':\n    case 'a':\n      currentMode = MODE_AUTONOMOUS;\n      autoState = AUTO_CRUISE;\n      scannerServo.write(SERVO_CENTER);\n      Serial.println(F(\">>> SWITCHED TO AUTONOMOUS AVOIDANCE MODE <<<\"));\n      btSerial.println(F(\"MODE: AUTONOMOUS\"));\n      break;\n\n    case 'M':\n    case 'm':\n      currentMode = MODE_MANUAL;\n      stopMotors();\n      scannerServo.write(SERVO_CENTER);\n      Serial.println(F(\">>> SWITCHED TO MANUAL BLUETOOTH MODE <<<\"));\n      btSerial.println(F(\"MODE: MANUAL\"));\n      break;\n\n    // Movement Commands (Only executed directly in MANUAL mode)\n    case 'F':\n    case 'f':\n      if (currentMode == MODE_MANUAL) moveForward();\n      break;\n\n    case 'B':\n    case 'b':\n      if (currentMode == MODE_MANUAL) moveBackward();\n      break;\n\n    case 'L':\n    case 'l':\n      if (currentMode == MODE_MANUAL) turnLeft();\n      break;\n\n    case 'R':\n    case 'r':\n      if (currentMode == MODE_MANUAL) turnRight();\n      break;\n\n    case 'S':\n    case 's':\n      stopMotors();\n      break;\n\n    // Emergency Stop\n    case 'E':\n    case 'e':\n      emergencyBrake();\n      currentMode = MODE_MANUAL; // Switch back to manual for safety\n      Serial.println(F(\"[ALERT] EMERGENCY STOP ENGAGED!\"));\n      btSerial.println(F(\"EMERGENCY STOP\"));\n      break;\n\n    // Speed Preset Controls: '0' to '9'\n    case '0': setSpeed(100); break;\n    case '1': setSpeed(120); break;\n    case '2': setSpeed(140); break;\n    case '3': setSpeed(160); break;\n    case '4': setSpeed(180); break;\n    case '5': setSpeed(200); break;\n    case '6': setSpeed(215); break;\n    case '7': setSpeed(230); break;\n    case '8': setSpeed(245); break;\n    case '9': setSpeed(255); break;\n\n    // Increment / Decrement Speed\n    case '+':\n      setSpeed(min((int)currentSpeed + 20, 255));\n      break;\n    case '-':\n      setSpeed(max((int)currentSpeed - 20, (int)MIN_SPEED));\n      break;\n\n    // Help menu\n    case '?':\n    case 'H':\n    case 'h':\n      printHelpMenu();\n      break;\n\n    default:\n      Serial.print(F(\"Unknown command: \"));\n      Serial.println(cmd);\n      break;\n  }\n}\n\nvoid setSpeed(uint8_t newSpeed) {\n  currentSpeed = constrain(newSpeed, MIN_SPEED, MAX_SPEED);\n  analogWrite(PIN_ENA, currentSpeed);\n  analogWrite(PIN_ENB, currentSpeed);\n  Serial.print(F(\"Motor Speed Adjusted: \"));\n  Serial.print(currentSpeed);\n  Serial.println(F(\" / 255\"));\n  btSerial.print(F(\"SPEED: \"));\n  btSerial.println(currentSpeed);\n}\n\n// ==============================================================================\n// 9. AUTONOMOUS OBSTACLE AVOIDANCE ENGINE\n// ==============================================================================\nvoid executeAutonomousLogic() {\n  // Ensure scanner faces front during cruising\n  scannerServo.write(SERVO_CENTER);\n\n  int frontDistance = getFilteredDistanceCm();\n\n  // Check if reading is valid and if an obstacle is closer than the safe threshold\n  if (frontDistance > 0 && frontDistance <= DISTANCE_SAFE_THRESHOLD) {\n    Serial.print(F(\"[AUTO] Obstacle Detected ahead at: \"));\n    Serial.print(frontDistance);\n    Serial.println(F(\" cm. Executing avoidance maneuver...\"));\n\n    // Step 1: Stop immediately\n    stopMotors();\n    delay(100);\n\n    // Step 2: Back up slightly to create turning clearance\n    Serial.println(F(\"[AUTO] Backing up slightly...\"));\n    moveBackward();\n    delay(280);\n    stopMotors();\n    delay(150);\n\n    // Step 3: Scan surroundings using the SG90 servo\n    int leftDist = 0;\n    int rightDist = 0;\n    scanLeftRight(leftDist, rightDist);\n\n    Serial.print(F(\"[AUTO] Scan Results -> Left: \"));\n    Serial.print(leftDist);\n    Serial.print(F(\" cm | Right: \"));\n    Serial.print(rightDist);\n    Serial.println(F(\" cm\"));\n\n    // Step 4: Decision Making\n    if (leftDist <= DISTANCE_SAFE_THRESHOLD && rightDist <= DISTANCE_SAFE_THRESHOLD) {\n      // Both pathways are blocked: execute a 180-degree spin around\n      Serial.println(F(\"[AUTO] Dead end detected! Performing 180 turnaround.\"));\n      turnRight();\n      delay(750); // Spin longer to face rear\n    } else if (leftDist >= rightDist) {\n      // Left side is clearer\n      Serial.println(F(\"[AUTO] Choosing LEFT path.\"));\n      turnLeft();\n      delay(420); // Time calibrated for approx 60-90 degree skid turn\n    } else {\n      // Right side is clearer\n      Serial.println(F(\"[AUTO] Choosing RIGHT path.\"));\n      turnRight();\n      delay(420); // Time calibrated for approx 60-90 degree skid turn\n    }\n\n    stopMotors();\n    delay(150);\n  } else {\n    // Pathway is clear: cruise forward smoothly\n    moveForward();\n  }\n}\n\n// ==============================================================================\n// 10. SENSOR & SERVO SCANNING UTILITIES\n// ==============================================================================\n/*\n  Measures distance using HC-SR04 ultrasonic sensor.\n  Uses sound speed c \u2248 343 m/s at 20\u00b0C -> 0.0343 cm/\u00b5s.\n  Distance = (Duration_us * 0.0343) / 2 = Duration_us / 58.2\n*/\nint measureDistanceCm() {\n  // Clear trigger pin\n  digitalWrite(PIN_TRIG, LOW);\n  delayMicroseconds(2);\n\n  // Send 10\u00b5s HIGH pulse to start ultrasound ping\n  digitalWrite(PIN_TRIG, HIGH);\n  delayMicroseconds(10);\n  digitalWrite(PIN_TRIG, LOW);\n\n  // Read echo pulse duration (timeout after 25ms to prevent code lockup)\n  unsigned long duration = pulseIn(PIN_ECHO, HIGH, SENSOR_TIMEOUT_MICROS);\n\n  if (duration == 0) {\n    // Sensor timed out (no echo return within ~4 meters)\n    return 400; // Treat as clear open path\n  }\n\n  int distanceCm = duration / 58;\n  return distanceCm;\n}\n\n/*\n  Takes 3 quick readings and returns the median value.\n  Rejects electrical noise spikes and momentary false reflections.\n*/\nint getFilteredDistanceCm() {\n  int r1 = measureDistanceCm();\n  delay(12);\n  int r2 = measureDistanceCm();\n  delay(12);\n  int r3 = measureDistanceCm();\n\n  // Median calculation of 3 values\n  if ((r1 >= r2 && r1 <= r3) || (r1 <= r2 && r1 >= r3)) return r1;\n  if ((r2 >= r1 && r2 <= r3) || (r2 <= r1 && r2 >= r3)) return r2;\n  return r3;\n}\n\nvoid scanLeftRight(int &leftDist, int &rightDist) {\n  // Turn servo to look LEFT\n  scannerServo.write(SERVO_LEFT);\n  delay(SERVO_SWEEP_DELAY_MS);\n  leftDist = getFilteredDistanceCm();\n\n  // Turn servo to look RIGHT\n  scannerServo.write(SERVO_RIGHT);\n  delay(SERVO_SWEEP_DELAY_MS * 1.5); // Allow extra time to cross full span\n  rightDist = getFilteredDistanceCm();\n\n  // Re-center servo forward\n  scannerServo.write(SERVO_CENTER);\n  delay(SERVO_SWEEP_DELAY_MS);\n}\n\n// ==============================================================================\n// 11. MOTOR ACTUATION & DIFFERENTIAL STEERING\n// ==============================================================================\n/*\n  L298N Logic Truth Table:\n  IN1  IN2  Left Motors\n  HIGH LOW  Forward\n  LOW  HIGH Backward\n  LOW  LOW  Stop / Coast\n  HIGH HIGH Brake\n\n  IN3  IN4  Right Motors\n  HIGH LOW  Forward\n  LOW  HIGH Backward\n  LOW  LOW  Stop / Coast\n  HIGH HIGH Brake\n*/\nvoid moveForward() {\n  currentMotion = STATE_FORWARD;\n  analogWrite(PIN_ENA, currentSpeed);\n  analogWrite(PIN_ENB, currentSpeed);\n\n  digitalWrite(PIN_IN1, HIGH);\n  digitalWrite(PIN_IN2, LOW);\n  digitalWrite(PIN_IN3, HIGH);\n  digitalWrite(PIN_IN4, LOW);\n}\n\nvoid moveBackward() {\n  currentMotion = STATE_BACKWARD;\n  analogWrite(PIN_ENA, currentSpeed);\n  analogWrite(PIN_ENB, currentSpeed);\n\n  digitalWrite(PIN_IN1, LOW);\n  digitalWrite(PIN_IN2, HIGH);\n  digitalWrite(PIN_IN3, LOW);\n  digitalWrite(PIN_IN4, HIGH);\n}\n\nvoid turnLeft() {\n  // Skid steering: Left wheels reverse, Right wheels forward\n  currentMotion = STATE_LEFT;\n  analogWrite(PIN_ENA, TURN_SPEED);\n  analogWrite(PIN_ENB, TURN_SPEED);\n\n  digitalWrite(PIN_IN1, LOW);\n  digitalWrite(PIN_IN2, HIGH);\n  digitalWrite(PIN_IN3, HIGH);\n  digitalWrite(PIN_IN4, LOW);\n}\n\nvoid turnRight() {\n  // Skid steering: Left wheels forward, Right wheels reverse\n  currentMotion = STATE_RIGHT;\n  analogWrite(PIN_ENA, TURN_SPEED);\n  analogWrite(PIN_ENB, TURN_SPEED);\n\n  digitalWrite(PIN_IN1, HIGH);\n  digitalWrite(PIN_IN2, LOW);\n  digitalWrite(PIN_IN3, LOW);\n  digitalWrite(PIN_IN4, HIGH);\n}\n\nvoid stopMotors() {\n  currentMotion = STATE_STOPPED;\n  analogWrite(PIN_ENA, 0);\n  analogWrite(PIN_ENB, 0);\n\n  digitalWrite(PIN_IN1, LOW);\n  digitalWrite(PIN_IN2, LOW);\n  digitalWrite(PIN_IN3, LOW);\n  digitalWrite(PIN_IN4, LOW);\n}\n\nvoid emergencyBrake() {\n  // Short motor coils to GND for active electric dynamic braking\n  currentMotion = STATE_STOPPED;\n  analogWrite(PIN_ENA, 255);\n  analogWrite(PIN_ENB, 255);\n\n  digitalWrite(PIN_IN1, HIGH);\n  digitalWrite(PIN_IN2, HIGH);\n  digitalWrite(PIN_IN3, HIGH);\n  digitalWrite(PIN_IN4, HIGH);\n  delay(120);\n\n  // Then cut power\n  stopMotors();\n}\n\n// ==============================================================================\n// 12. WATCHDOG, TELEMETRY & HELP\n// ==============================================================================\nvoid checkWatchdogTimeout() {\n  // In manual mode, if the car is actively driving and no command has arrived\n  // within BT_HEARTBEAT_TIMEOUT_MS, stop to prevent runaway robot!\n  if (currentMotion != STATE_STOPPED) {\n    if (millis() - lastCommandTime > BT_HEARTBEAT_TIMEOUT_MS) {\n      Serial.println(F(\"[WATCHDOG TIMEOUT] No Bluetooth signal received! Stopping car safely.\"));\n      stopMotors();\n    }\n  }\n}\n\nvoid printTelemetry() {\n  int dist = measureDistanceCm();\n  Serial.print(F(\"[STATUS] Mode: \"));\n  Serial.print(currentMode == MODE_AUTONOMOUS ? F(\"AUTONOMOUS\") : F(\"MANUAL    \"));\n  Serial.print(F(\" | Motion: \"));\n  switch (currentMotion) {\n    case STATE_STOPPED:  Serial.print(F(\"STOPPED \")); break;\n    case STATE_FORWARD:  Serial.print(F(\"FORWARD \")); break;\n    case STATE_BACKWARD: Serial.print(F(\"REVERSE \")); break;\n    case STATE_LEFT:     Serial.print(F(\"LEFT    \")); break;\n    case STATE_RIGHT:    Serial.print(F(\"RIGHT   \")); break;\n  }\n  Serial.print(F(\" | Speed: \"));\n  Serial.print(currentSpeed);\n  Serial.print(F(\" | Ping: \"));\n  if (dist >= 400) Serial.print(F(\">400\"));\n  else Serial.print(dist);\n  Serial.println(F(\" cm\"));\n}\n\nvoid printHelpMenu() {\n  Serial.println(F(\"\\n--- SMARTDRIVE COMMAND GUIDE ---\"));\n  Serial.println(F(\"  F : Drive Forward\"));\n  Serial.println(F(\"  B : Drive Backward\"));\n  Serial.println(F(\"  L : Turn Left (Pivot)\"));\n  Serial.println(F(\"  R : Turn Right (Pivot)\"));\n  Serial.println(F(\"  S : Stop Motors\"));\n  Serial.println(F(\"  E : Emergency Brake\"));\n  Serial.println(F(\"  A : Autonomous Obstacle Avoidance Mode\"));\n  Serial.println(F(\"  M : Manual Bluetooth Control Mode\"));\n  Serial.println(F(\"  0..9 : Set Speed (100 to 255 PWM)\"));\n  Serial.println(F(\"  + / - : Nudge Speed up / down\"));\n  Serial.println(F(\"--------------------------------\\n\"));\n}\n";
 
 /* ==============================================================================
-   SMARTDRIVE ROBOTICS SIMULATOR - PHYSICS, RENDERING & RAYCASTING ENGINE
+   SMARTDRIVE ROBOTICS SIMULATOR - PHYSICS, HIGH-SPEED RAYCASTING & RENDERING
    ============================================================================== */
 
 class AudioEngine {
@@ -1703,12 +966,12 @@ class AudioEngine {
       const gain = this.ctx.createGain();
       osc.type = 'triangle';
       osc.frequency.setValueAtTime(2200, this.ctx.currentTime);
-      gain.gain.setValueAtTime(0.03, this.ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.03);
+      gain.gain.setValueAtTime(0.04, this.ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.035);
       osc.connect(gain);
       gain.connect(this.ctx.destination);
       osc.start();
-      osc.stop(this.ctx.currentTime + 0.03);
+      osc.stop(this.ctx.currentTime + 0.035);
     } catch (e) {}
   }
 
@@ -1766,17 +1029,17 @@ class RobotSimulator {
     this.ctx = this.canvas.getContext('2d');
     this.audio = new AudioEngine();
 
-    // Scale conversion: 1 pixel = 0.5 cm (so 2 pixels = 1 cm)
+    // Scale conversion: 2 pixels = 1 cm (so 100 pixels = 50 cm)
     this.PX_PER_CM = 2.0;
 
-    // Robot physical dimensions
-    this.width = 38 * this.PX_PER_CM;  // ~19 cm wide
-    this.length = 50 * this.PX_PER_CM; // ~25 cm long
+    // Robot dimensions
+    this.width = 36 * this.PX_PER_CM;  // ~18 cm wide
+    this.length = 48 * this.PX_PER_CM; // ~24 cm long
 
     // Robot state
-    this.x = 240;
+    this.x = 220;
     this.y = 260;
-    this.heading = 0; // In radians (0 = facing right, -PI/2 = facing up)
+    this.heading = 0; // In radians (0 = facing right)
     this.speed = 0;   // In pixels/sec
     this.angularSpeed = 0; // In rad/sec
 
@@ -1785,11 +1048,11 @@ class RobotSimulator {
     this.measuredDistanceCm = 400;
     this.pingWaveAnim = 0;
 
-    // Wheel rotation animation (treads)
+    // Wheel rotation animation
     this.leftWheelDist = 0;
     this.rightWheelDist = 0;
 
-    // Obstacles list
+    // Obstacles
     this.obstacles = [];
     this.initDefaultObstacles();
 
@@ -1804,16 +1067,11 @@ class RobotSimulator {
 
   initDefaultObstacles() {
     this.obstacles = [
-      // Left box
-      { x: 100, y: 110, w: 90, h: 70, label: 'Box A' },
-      // Center obstacle
-      { x: 440, y: 200, w: 80, h: 120, label: 'Wall' },
-      // Bottom right box
-      { x: 620, y: 340, w: 100, h: 80, label: 'Box B' },
-      // Top right partition
-      { x: 610, y: 90, w: 90, h: 60, label: 'Obstacle' },
-      // Center left obstacle
-      { x: 220, y: 400, w: 110, h: 50, label: 'Barrier' }
+      { x: 120, y: 100, w: 90, h: 70, label: 'Obstacle A' },
+      { x: 480, y: 190, w: 90, h: 140, label: 'Wall' },
+      { x: 650, y: 350, w: 100, h: 80, label: 'Obstacle B' },
+      { x: 640, y: 90, w: 90, h: 70, label: 'Barrier' },
+      { x: 250, y: 400, w: 120, h: 50, label: 'Block' }
     ];
   }
 
@@ -1821,14 +1079,13 @@ class RobotSimulator {
     this.obstacles = [];
     const count = 5 + Math.floor(Math.random() * 3);
     for (let i = 0; i < count; i++) {
-      const w = 60 + Math.random() * 80;
-      const h = 50 + Math.random() * 70;
+      const w = 70 + Math.random() * 70;
+      const h = 60 + Math.random() * 60;
       const x = 50 + Math.random() * (this.canvas.width - w - 100);
       const y = 50 + Math.random() * (this.canvas.height - h - 100);
 
-      // Avoid placing right on top of robot start position
       const distToRobot = Math.hypot(x + w / 2 - this.x, y + h / 2 - this.y);
-      if (distToRobot > 130) {
+      if (distToRobot > 150) {
         this.obstacles.push({ x, y, w, h, label: `Obj ${i + 1}` });
       }
     }
@@ -1836,6 +1093,16 @@ class RobotSimulator {
 
   clearObstacles() {
     this.obstacles = [];
+  }
+
+  addObstacleBox() {
+    this.obstacles.push({
+      x: 350 + Math.random() * 150,
+      y: 180 + Math.random() * 150,
+      w: 80,
+      h: 70,
+      label: `Box ${this.obstacles.length + 1}`
+    });
   }
 
   resetRobot() {
@@ -1885,13 +1152,12 @@ class RobotSimulator {
       this.draggedObstacle = null;
     });
 
-    // Double-click to spawn new obstacle at click point
     this.canvas.addEventListener('dblclick', (e) => {
       const pos = getPos(e);
       this.obstacles.push({
-        x: pos.x - 35,
+        x: pos.x - 40,
         y: pos.y - 35,
-        w: 70,
+        w: 80,
         h: 70,
         label: `Box ${this.obstacles.length + 1}`
       });
@@ -1899,23 +1165,17 @@ class RobotSimulator {
     });
   }
 
-  // Raycasting for HC-SR04 Ultrasonic Distance Sensor
+  // High-Speed Multi-Ray Acoustic Sensing
   measureUltrasonicRay() {
-    // Ultrasonic sensor sits at front center of robot
-    const frontOffset = this.length / 2 - 4;
+    const frontOffset = this.length / 2 - 2;
     const sensorX = this.x + Math.cos(this.heading) * frontOffset;
     const sensorY = this.y + Math.sin(this.heading) * frontOffset;
 
-    // Servo angle relative to car heading:
-    // 90 deg = straight forward (0 rad offset)
-    // 150 deg = looking left (+60 deg / +PI/3 offset)
-    // 30 deg = looking right (-60 deg / -PI/3 offset)
     const servoOffsetRad = (90 - this.servoAngleDeg) * (Math.PI / 180);
     const rayAngle = this.heading + servoOffsetRad;
 
-    // Collect all boundary segments (arena perimeter + rectangular obstacles)
+    // Collect all boundary segments
     const segments = [
-      // Outer arena walls
       { x1: 5, y1: 5, x2: this.canvas.width - 5, y2: 5 },
       { x1: this.canvas.width - 5, y1: 5, x2: this.canvas.width - 5, y2: this.canvas.height - 5 },
       { x1: this.canvas.width - 5, y1: this.canvas.height - 5, x2: 5, y2: this.canvas.height - 5 },
@@ -1931,13 +1191,12 @@ class RobotSimulator {
       );
     }
 
-    // HC-SR04 has a ~15 degree conical emission cone. We cast 5 rays across this cone
-    // and find the closest hit point!
-    let minDistancePx = 400 * this.PX_PER_CM; // Max 400cm
+    // 25-degree wide acoustic beam with 7 multi-ray samples for instant detection
+    let minDistancePx = 400 * this.PX_PER_CM;
     let closestHit = null;
 
-    const coneHalfAngleRad = 7.5 * (Math.PI / 180);
-    const numSubRays = 5;
+    const coneHalfAngleRad = 12 * (Math.PI / 180);
+    const numSubRays = 7;
 
     for (let i = 0; i < numSubRays; i++) {
       const t = numSubRays > 1 ? (i / (numSubRays - 1) - 0.5) * 2 : 0;
@@ -1988,9 +1247,9 @@ class RobotSimulator {
   }
 
   updatePhysics(dt, motionState, speedPwm) {
-    // Convert 0..255 PWM to simulated linear speed (max ~75 cm/s = 150 px/s)
-    const baseLinearSpeed = (speedPwm / 255) * 140;
-    const baseTurnSpeed = 2.4; // rad/s for 4WD skid steering
+    // Linear speed: responsive acceleration
+    const baseLinearSpeed = (speedPwm / 255) * 150;
+    const baseTurnSpeed = 2.8;
 
     let targetSpeed = 0;
     let targetAngular = 0;
@@ -2001,7 +1260,7 @@ class RobotSimulator {
         targetAngular = 0;
         break;
       case 'BACKWARD':
-        targetSpeed = -baseLinearSpeed * 0.85;
+        targetSpeed = -baseLinearSpeed * 0.9;
         targetAngular = 0;
         break;
       case 'LEFT':
@@ -2019,25 +1278,24 @@ class RobotSimulator {
         break;
     }
 
-    // Smooth inertia
-    this.speed += (targetSpeed - this.speed) * Math.min(1, dt * 14);
-    this.angularSpeed += (targetAngular - this.angularSpeed) * Math.min(1, dt * 16);
+    // High response inertia
+    this.speed += (targetSpeed - this.speed) * Math.min(1, dt * 18);
+    this.angularSpeed += (targetAngular - this.angularSpeed) * Math.min(1, dt * 20);
 
-    // Apply movement
+    // Apply motion
     this.heading += this.angularSpeed * dt;
     const newX = this.x + Math.cos(this.heading) * this.speed * dt;
     const newY = this.y + Math.sin(this.heading) * this.speed * dt;
 
-    // Check collision against obstacles & walls
+    // Chassis Collision Check
     if (!this.checkChassisCollision(newX, newY)) {
       this.x = newX;
       this.y = newY;
     } else {
-      // Wall slide / stop on bumper contact
       this.speed = 0;
     }
 
-    // Keep inside arena borders
+    // Arena boundary clamp
     const margin = this.length / 2;
     this.x = Math.max(margin, Math.min(this.canvas.width - margin, this.x));
     this.y = Math.max(margin, Math.min(this.canvas.height - margin, this.y));
@@ -2048,19 +1306,17 @@ class RobotSimulator {
     this.leftWheelDist += vLeft * dt;
     this.rightWheelDist += vRight * dt;
 
-    // Ultrasonic ping wave animation
+    // Ultrasonic ping wave ripple
     this.pingWaveAnim += dt * 4;
     if (this.pingWaveAnim > 1) this.pingWaveAnim = 0;
 
-    // Engine audio hum
     const isMoving = Math.abs(this.speed) > 2 || Math.abs(this.angularSpeed) > 0.1;
     this.audio.setMotorHum(isMoving, speedPwm);
   }
 
   checkChassisCollision(testx, testy) {
-    const radius = this.width * 0.45;
+    const radius = this.width * 0.44;
     for (const obs of this.obstacles) {
-      // Circle vs AABB collision
       const closestX = Math.max(obs.x, Math.min(testx, obs.x + obs.w));
       const closestY = Math.max(obs.y, Math.min(testy, obs.y + obs.h));
       const distance = Math.hypot(testx - closestX, testy - closestY);
@@ -2075,17 +1331,12 @@ class RobotSimulator {
     const ctx = this.ctx;
     ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-    // 1. Grid Background
     this.renderGrid(ctx);
-
-    // 2. Obstacles
     this.renderObstacles(ctx);
 
-    // 3. Ultrasonic Scan Beam & Cone
     const rayData = this.measureUltrasonicRay();
     this.renderUltrasonicBeam(ctx, rayData);
 
-    // 4. Robot Chassis, Wheels, Servo & Electronics
     this.renderRobot(ctx);
   }
 
@@ -2107,8 +1358,7 @@ class RobotSimulator {
       ctx.stroke();
     }
 
-    // Outer boundary glow
-    ctx.strokeStyle = 'rgba(56, 189, 248, 0.3)';
+    ctx.strokeStyle = 'rgba(56, 189, 248, 0.25)';
     ctx.lineWidth = 2;
     ctx.strokeRect(2, 2, this.canvas.width - 4, this.canvas.height - 4);
     ctx.restore();
@@ -2119,12 +1369,10 @@ class RobotSimulator {
     for (const obs of this.obstacles) {
       const isDragged = this.draggedObstacle === obs;
 
-      // Obstacle Shadow
-      ctx.shadowColor = isDragged ? 'rgba(139, 92, 246, 0.5)' : 'rgba(0, 0, 0, 0.5)';
-      ctx.shadowBlur = isDragged ? 18 : 8;
+      ctx.shadowColor = isDragged ? 'rgba(139, 92, 246, 0.6)' : 'rgba(0, 0, 0, 0.5)';
+      ctx.shadowBlur = isDragged ? 20 : 8;
       ctx.shadowOffsetY = 4;
 
-      // Fill with tech gradient
       const grad = ctx.createLinearGradient(obs.x, obs.y, obs.x + obs.w, obs.y + obs.h);
       grad.addColorStop(0, '#2e1065');
       grad.addColorStop(1, '#1e1b4b');
@@ -2137,11 +1385,9 @@ class RobotSimulator {
       ctx.fill();
       ctx.stroke();
 
-      // Top highlight strip
-      ctx.fillStyle = 'rgba(168, 85, 247, 0.2)';
+      ctx.fillStyle = 'rgba(168, 85, 247, 0.25)';
       ctx.fillRect(obs.x + 2, obs.y + 2, obs.w - 4, 6);
 
-      // Label
       ctx.shadowBlur = 0;
       ctx.fillStyle = '#c7d2fe';
       ctx.font = '600 11px Outfit, sans-serif';
@@ -2158,17 +1404,20 @@ class RobotSimulator {
     const maxReach = 400 * this.PX_PER_CM;
     const hitDist = hit ? hit.dist : maxReach;
 
-    // Draw 15-degree translucent cone
+    // Visual color depends on distance zone:
+    // < 35cm: Critical RED
+    // 35cm - 55cm: Caution AMBER (Early Warning)
+    // > 55cm: Safe CYAN
     const grad = ctx.createRadialGradient(sensorX, sensorY, 5, sensorX, sensorY, hitDist);
-    if (this.measuredDistanceCm <= 15) {
-      grad.addColorStop(0, 'rgba(239, 68, 68, 0.45)');
-      grad.addColorStop(1, 'rgba(239, 68, 68, 0.02)');
-    } else if (this.measuredDistanceCm <= 30) {
-      grad.addColorStop(0, 'rgba(245, 158, 11, 0.35)');
-      grad.addColorStop(1, 'rgba(245, 158, 11, 0.02)');
+    if (this.measuredDistanceCm <= 35) {
+      grad.addColorStop(0, 'rgba(239, 68, 68, 0.55)');
+      grad.addColorStop(1, 'rgba(239, 68, 68, 0.04)');
+    } else if (this.measuredDistanceCm <= 55) {
+      grad.addColorStop(0, 'rgba(245, 158, 11, 0.45)');
+      grad.addColorStop(1, 'rgba(245, 158, 11, 0.03)');
     } else {
-      grad.addColorStop(0, 'rgba(6, 182, 212, 0.25)');
-      grad.addColorStop(1, 'rgba(6, 182, 212, 0.01)');
+      grad.addColorStop(0, 'rgba(6, 182, 212, 0.35)');
+      grad.addColorStop(1, 'rgba(6, 182, 212, 0.02)');
     }
 
     ctx.beginPath();
@@ -2185,7 +1434,8 @@ class RobotSimulator {
       sensorX + Math.cos(rayAngle) * hitDist,
       sensorY + Math.sin(rayAngle) * hitDist
     );
-    ctx.strokeStyle = this.measuredDistanceCm <= 15 ? 'rgba(239, 68, 68, 0.8)' : 'rgba(56, 189, 248, 0.7)';
+    ctx.strokeStyle = this.measuredDistanceCm <= 35 ? 'rgba(239, 68, 68, 0.9)' :
+                     (this.measuredDistanceCm <= 55 ? 'rgba(245, 158, 11, 0.85)' : 'rgba(56, 189, 248, 0.8)');
     ctx.lineWidth = 1.5;
     ctx.setLineDash([4, 4]);
     ctx.stroke();
@@ -2202,13 +1452,14 @@ class RobotSimulator {
       ctx.stroke();
     }
 
-    // Impact hit point marker
+    // Impact marker
     if (hit) {
       ctx.beginPath();
-      ctx.arc(hit.x, hit.y, 4, 0, Math.PI * 2);
-      ctx.fillStyle = this.measuredDistanceCm <= 15 ? '#ef4444' : '#06b6d4';
+      ctx.arc(hit.x, hit.y, 5, 0, Math.PI * 2);
+      ctx.fillStyle = this.measuredDistanceCm <= 35 ? '#ef4444' :
+                     (this.measuredDistanceCm <= 55 ? '#f59e0b' : '#06b6d4');
       ctx.shadowColor = ctx.fillStyle;
-      ctx.shadowBlur = 10;
+      ctx.shadowBlur = 12;
       ctx.fill();
     }
     ctx.restore();
@@ -2222,21 +1473,20 @@ class RobotSimulator {
     const halfW = this.width / 2;
     const halfL = this.length / 2;
 
-    // --- 1. FOUR WHEELS (Yellow Rims with Black Rubber Treads) ---
+    // 1. Four 4WD Wheels (Yellow rims with rotating treads)
     const wheelL = 26 * (this.PX_PER_CM / 2);
     const wheelW = 10 * (this.PX_PER_CM / 2);
     const wheelOffsets = [
-      { x: halfL - 18, y: -halfW - 3, dist: this.leftWheelDist },  // Front Left
-      { x: -halfL + 18, y: -halfW - 3, dist: this.leftWheelDist }, // Rear Left
-      { x: halfL - 18, y: halfW + 3, dist: this.rightWheelDist },  // Front Right
-      { x: -halfL + 18, y: halfW + 3, dist: this.rightWheelDist }  // Rear Right
+      { x: halfL - 18, y: -halfW - 3, dist: this.leftWheelDist },
+      { x: -halfL + 18, y: -halfW - 3, dist: this.leftWheelDist },
+      { x: halfL - 18, y: halfW + 3, dist: this.rightWheelDist },
+      { x: -halfL + 18, y: halfW + 3, dist: this.rightWheelDist }
     ];
 
     for (const w of wheelOffsets) {
       ctx.save();
       ctx.translate(w.x, w.y);
 
-      // Black rubber tire
       ctx.fillStyle = '#111827';
       ctx.strokeStyle = '#374151';
       ctx.lineWidth = 1.5;
@@ -2245,11 +1495,9 @@ class RobotSimulator {
       ctx.fill();
       ctx.stroke();
 
-      // Yellow wheel rim
       ctx.fillStyle = '#eab308';
       ctx.fillRect(-wheelL / 2 + 3, -wheelW / 2 + 2, wheelL - 6, wheelW - 4);
 
-      // Rotating treads pattern
       ctx.strokeStyle = '#854d0e';
       ctx.lineWidth = 1;
       const treadStep = 5;
@@ -2263,7 +1511,7 @@ class RobotSimulator {
       ctx.restore();
     }
 
-    // --- 2. MAIN CHASSIS (Blue Acrylic / PCB) ---
+    // 2. Main Chassis (Blue acrylic with neon edge)
     ctx.fillStyle = '#0284c7';
     ctx.strokeStyle = '#38bdf8';
     ctx.lineWidth = 2;
@@ -2276,7 +1524,7 @@ class RobotSimulator {
     ctx.stroke();
     ctx.shadowBlur = 0;
 
-    // Front bumper arrow indicator
+    // Direction arrow
     ctx.fillStyle = '#38bdf8';
     ctx.beginPath();
     ctx.moveTo(halfL - 6, 0);
@@ -2285,91 +1533,73 @@ class RobotSimulator {
     ctx.closePath();
     ctx.fill();
 
-    // --- 3. ARDUINO UNO BOARD (Blue Rectangular Shield) ---
+    // 3. Arduino Uno Module
     ctx.fillStyle = '#0891b2';
     ctx.strokeStyle = '#155e75';
     ctx.lineWidth = 1.5;
     ctx.fillRect(-halfL + 12, -halfW + 8, 38, halfW - 2);
-    // USB port
     ctx.fillStyle = '#94a3b8';
-    ctx.fillRect(-halfL + 8, -halfW + 12, 8, 12);
-    // IC chip
+    ctx.fillRect(-halfL + 8, -halfW + 12, 8, 12); // USB port
     ctx.fillStyle = '#0f172a';
-    ctx.fillRect(-halfL + 22, -halfW + 14, 20, 10);
+    ctx.fillRect(-halfL + 22, -halfW + 14, 20, 10); // MCU IC
 
-    // --- 4. L298N DUAL MOTOR DRIVER (Red PCB with Black Heatsink) ---
+    // 4. L298N Motor Driver Module
     ctx.fillStyle = '#dc2626';
     ctx.strokeStyle = '#7f1d1d';
     ctx.lineWidth = 1.5;
     ctx.fillRect(-halfL + 12, 4, 38, halfW - 12);
-    // Aluminum heatsink fins
     ctx.fillStyle = '#18181b';
-    ctx.fillRect(-halfL + 20, 10, 22, 18);
-    ctx.fillStyle = '#71717a';
-    for (let f = 12; f < 26; f += 4) {
-      ctx.fillRect(-halfL + 22, f, 18, 1.5);
-    }
+    ctx.fillRect(-halfL + 20, 10, 22, 18); // Heatsink
 
-    // --- 5. SG90 SERVO & HC-SR04 SCANNER ASSEMBLY ---
-    // Servo base mounted at front center
+    // 5. SG90 Micro Servo & HC-SR04 Ultrasonic Eyes
     const servoMountX = halfL - 18;
     ctx.fillStyle = '#1e3a8a';
     ctx.fillRect(servoMountX - 6, -6, 12, 12);
 
-    // Rotating servo head & HC-SR04 sensor
     ctx.save();
     ctx.translate(servoMountX, 0);
-    // 90 deg is straight ahead (0 rad)
     const servoRotRad = (90 - this.servoAngleDeg) * (Math.PI / 180);
     ctx.rotate(servoRotRad);
 
-    // Servo horn (White plastic arm)
     ctx.fillStyle = '#f8fafc';
     ctx.beginPath();
     ctx.roundRect(-3, -12, 6, 24, 2);
     ctx.fill();
 
-    // HC-SR04 Sensor PCB (Blue board)
+    // HC-SR04 PCB
     ctx.fillStyle = '#0369a1';
     ctx.strokeStyle = '#38bdf8';
     ctx.lineWidth = 1;
     ctx.fillRect(4, -18, 8, 36);
 
-    // Dual Ultrasonic Transducers (Transmitter 'T' and Receiver 'R' cylindrical metal cans)
+    // Dual Ultrasonic Transducers (Metal Cylinders)
     ctx.fillStyle = '#94a3b8';
     ctx.strokeStyle = '#475569';
-    // Can 1
     ctx.beginPath();
     ctx.arc(10, -9, 6.5, 0, Math.PI * 2);
     ctx.fill();
     ctx.stroke();
-    // Inner mesh
-    ctx.fillStyle = '#1e293b';
-    ctx.beginPath();
-    ctx.arc(10, -9, 3.5, 0, Math.PI * 2);
-    ctx.fill();
 
-    // Can 2
-    ctx.fillStyle = '#94a3b8';
     ctx.beginPath();
     ctx.arc(10, 9, 6.5, 0, Math.PI * 2);
     ctx.fill();
     ctx.stroke();
-    // Inner mesh
+
     ctx.fillStyle = '#1e293b';
     ctx.beginPath();
+    ctx.arc(10, -9, 3.5, 0, Math.PI * 2);
     ctx.arc(10, 9, 3.5, 0, Math.PI * 2);
     ctx.fill();
 
-    ctx.restore(); // Restore servo rotation
+    ctx.restore();
 
-    ctx.restore(); // Restore robot translation
+    ctx.restore();
   }
 }
 
 /* ==============================================================================
    SMARTDRIVE ROBOTICS SIMULATOR - FIRMWARE DIGITAL TWIN (firmware_sim.js)
-   Exact replica of SMARTDRIVE.ino Arduino Uno State Machine
+   Fast-Detection & Smooth Obstacle-Avoidance State Machine
    ============================================================================== */
 
 class ArduinoFirmwareTwin {
@@ -2378,24 +1608,21 @@ class ArduinoFirmwareTwin {
     this.onSerialLog = onSerialLog;
     this.onPinChange = onPinChange;
 
-    // Operating Modes
     this.MODE_MANUAL = 'MANUAL';
     this.MODE_AUTONOMOUS = 'AUTONOMOUS';
     this.currentMode = this.MODE_MANUAL;
 
-    // Motion States
     this.currentMotion = 'STOPPED';
     this.currentSpeed = 180;
-    this.turnSpeed = 200;
+    this.turnSpeed = 210;
 
-    // Safety & Autonomous Thresholds (match Arduino C++ constants)
-    this.SAFE_THRESHOLD_CM = 30;
-    this.CRITICAL_STOP_CM = 15;
-    this.WATCHDOG_TIMEOUT_MS = 1200; // 1.2 second watchdog
+    // Fast-Reaction Obstacle Horizons (in centimeters)
+    this.SAFE_THRESHOLD_CM = 45;   // Proactive detection horizon
+    this.CRITICAL_STOP_CM  = 28;   // Complete halt well before touching
+    this.WATCHDOG_TIMEOUT_MS = 1200;
 
-    // Watchdog timestamp
     this.lastCommandTime = performance.now();
-    this.isBluetoothConnected = false;
+    this.isBluetoothConnected = true;
 
     // Autonomous State Machine
     this.autoStep = 'CRUISE';
@@ -2403,12 +1630,9 @@ class ArduinoFirmwareTwin {
     this.scannedLeftDist = 0;
     this.scannedRightDist = 0;
 
-    // Telemetry ticker
     this.lastTelemetryTime = 0;
 
-    this.log("SMARTDRIVE 4WD FIRMWARE SIMULATOR INITIALIZED");
-    this.log("Default Mode: MANUAL | Speed: 180/255 | 9600 Baud");
-    this.updateHardwarePins();
+    this.log("SMARTDRIVE v2.2 ACTIVE - High-Speed Obstacle Sensing Engaged");
   }
 
   log(msg, type = 'normal') {
@@ -2421,24 +1645,20 @@ class ArduinoFirmwareTwin {
     this.isBluetoothConnected = connected;
     if (connected) {
       this.lastCommandTime = performance.now();
-      this.log("HC-05: Client connected via RFCOMM (9600 baud)", "cmd");
+      this.log("HC-05: Connected via RFCOMM (9600 baud)", "cmd");
     } else {
-      this.log("HC-05: Bluetooth connection lost / disconnected", "alert");
+      this.log("HC-05: Disconnected", "alert");
       if (this.currentMode === this.MODE_MANUAL) {
         this.stopMotors();
       }
     }
   }
 
-  // Receive a character command (F, B, L, R, S, A, M, E, 0-9, etc.)
   processCommand(cmdChar) {
     cmdChar = cmdChar.trim();
     if (!cmdChar) return;
 
     this.lastCommandTime = performance.now();
-    this.log(`[CMD RECV]: '${cmdChar}'`, 'cmd');
-
-    // D2 / D3 blink indicator
     this.flashBluetoothPins();
 
     const c = cmdChar.toUpperCase();
@@ -2484,7 +1704,6 @@ class ArduinoFirmwareTwin {
         this.log("[ALERT] EMERGENCY BRAKE ENGAGED!", "alert");
         break;
 
-      // Speed presets
       case '0': this.setSpeed(100); break;
       case '1': this.setSpeed(120); break;
       case '2': this.setSpeed(140); break;
@@ -2503,13 +1722,7 @@ class ArduinoFirmwareTwin {
         this.setSpeed(Math.max(100, this.currentSpeed - 20));
         break;
 
-      case '?':
-      case 'H':
-        this.printHelp();
-        break;
-
       default:
-        this.log(`Unknown command: ${cmdChar}`);
         break;
     }
 
@@ -2518,11 +1731,9 @@ class ArduinoFirmwareTwin {
 
   setSpeed(val) {
     this.currentSpeed = Math.max(100, Math.min(255, val));
-    this.log(`Motor Speed Adjusted: ${this.currentSpeed} / 255`);
     this.updateHardwarePins();
   }
 
-  // --- MOTOR ACTUATION ROUTINES ---
   moveForward() {
     this.currentMotion = 'FORWARD';
     this.updateHardwarePins();
@@ -2556,25 +1767,21 @@ class ArduinoFirmwareTwin {
     this.updateHardwarePins();
   }
 
-  // --- MAIN FIRMWARE TICK (Equivalent to Arduino loop()) ---
   tick(dt) {
     const now = performance.now();
 
-    // 1. Autonomous Engine
     if (this.currentMode === this.MODE_AUTONOMOUS) {
       this.runAutonomousLogic(dt, now);
-    } 
-    // 2. Manual Mode Watchdog & Active Braking
-    else {
-      // Bluetooth Watchdog: auto-stop if no command received for >1.2s while driving
+    } else {
+      // Manual Mode Watchdog
       if (this.currentMotion !== 'STOPPED') {
         if (now - this.lastCommandTime > this.WATCHDOG_TIMEOUT_MS) {
-          this.log("[WATCHDOG TIMEOUT] No Bluetooth signal for 1.2s! Safe stop activated.", "alert");
+          this.log("[WATCHDOG] No signal received for 1.2s -> Safe stop.", "alert");
           this.stopMotors();
         }
       }
 
-      // Active Braking Safety: If driving forward in manual mode and obstacle gets < 15cm
+      // Active Braking Safety in Manual Mode
       if (this.currentMotion === 'FORWARD') {
         const dist = this.sim.measuredDistanceCm;
         if (dist > 0 && dist < this.CRITICAL_STOP_CM) {
@@ -2584,28 +1791,38 @@ class ArduinoFirmwareTwin {
       }
     }
 
-    // Pass physics to simulator
-    const speedPwm = (this.currentMotion === 'LEFT' || this.currentMotion === 'RIGHT') ? this.turnSpeed : this.currentSpeed;
-    this.sim.updatePhysics(dt, this.currentMotion, speedPwm);
+    // Dynamic speed adjustment based on proximity
+    let effectiveSpeed = this.currentSpeed;
+    if (this.currentMotion === 'LEFT' || this.currentMotion === 'RIGHT') {
+      effectiveSpeed = this.turnSpeed;
+    } else if (this.currentMotion === 'FORWARD') {
+      // Progressive deceleration when entering safe zone (<45cm)
+      const dist = this.sim.measuredDistanceCm;
+      if (dist > this.CRITICAL_STOP_CM && dist <= this.SAFE_THRESHOLD_CM) {
+        effectiveSpeed = Math.min(130, this.currentSpeed * 0.65);
+      }
+    }
 
-    // Periodic 1-second Serial Telemetry
+    this.sim.updatePhysics(dt, this.currentMotion, effectiveSpeed);
+
     if (now - this.lastTelemetryTime >= 1000) {
       this.lastTelemetryTime = now;
       this.outputTelemetryLine();
     }
   }
 
-  // Exact step-by-step state machine from SMARTDRIVE.ino
+  // Fast, Responsive Autonomous Obstacle Avoidance
   runAutonomousLogic(dt, now) {
     const dist = this.sim.measuredDistanceCm;
 
     switch (this.autoStep) {
       case 'CRUISE':
-        this.sim.servoAngleDeg = 90; // Face forward
+        this.sim.servoAngleDeg = 90;
         this.currentMotion = 'FORWARD';
 
-        if (dist > 0 && dist <= this.SAFE_THRESHOLD_CM) {
-          this.log(`[AUTO] Obstacle at ${dist}cm! Stopping and preparing scan...`, "auto");
+        // Detect early and halt cleanly BEFORE reaching the obstacle
+        if (dist > 0 && dist <= this.CRITICAL_STOP_CM) {
+          this.log(`[AUTO] Obstacle detected early at ${dist}cm! Stopping cleanly...`, "auto");
           this.currentMotion = 'STOPPED';
           this.autoStep = 'BACKUP';
           this.autoTimer = now;
@@ -2614,7 +1831,7 @@ class ArduinoFirmwareTwin {
 
       case 'BACKUP':
         this.currentMotion = 'BACKWARD';
-        if (now - this.autoTimer >= 280) { // 280ms reverse
+        if (now - this.autoTimer >= 220) { // Quick 220ms reverse
           this.currentMotion = 'STOPPED';
           this.autoStep = 'SCAN_LEFT';
           this.autoTimer = now;
@@ -2624,10 +1841,8 @@ class ArduinoFirmwareTwin {
         break;
 
       case 'SCAN_LEFT':
-        // Wait 300ms for servo to reach 150° and settle
-        if (now - this.autoTimer >= 300) {
+        if (now - this.autoTimer >= 180) { // Fast 180ms settle
           this.scannedLeftDist = this.sim.measuredDistanceCm;
-          this.log(`[AUTO SCAN] Left: ${this.scannedLeftDist} cm`, "auto");
           this.autoStep = 'SCAN_RIGHT';
           this.autoTimer = now;
           this.sim.servoAngleDeg = 30; // Look Right
@@ -2636,38 +1851,37 @@ class ArduinoFirmwareTwin {
         break;
 
       case 'SCAN_RIGHT':
-        // Wait 450ms for servo to sweep from 150° to 30°
-        if (now - this.autoTimer >= 450) {
+        if (now - this.autoTimer >= 240) { // Fast 240ms sweep
           this.scannedRightDist = this.sim.measuredDistanceCm;
-          this.log(`[AUTO SCAN] Right: ${this.scannedRightDist} cm`, "auto");
           this.autoStep = 'DECIDE';
           this.autoTimer = now;
-          this.sim.servoAngleDeg = 90; // Return center
+          this.sim.servoAngleDeg = 90; // Center
         }
         break;
 
       case 'DECIDE':
-        // Center settling
-        if (now - this.autoTimer >= 250) {
+        if (now - this.autoTimer >= 140) {
           const left = this.scannedLeftDist;
           const right = this.scannedRightDist;
 
+          this.log(`[AUTO SCAN] Left: ${left}cm | Right: ${right}cm`, "auto");
+
           // Both blocked: 180° turnaround
-          if (left <= this.SAFE_THRESHOLD_CM && right <= this.SAFE_THRESHOLD_CM) {
-            this.log("[AUTO] Dead end! Performing 180° turnaround.", "auto");
+          if (left <= this.CRITICAL_STOP_CM && right <= this.CRITICAL_STOP_CM) {
+            this.log("[AUTO] Dead end! 180° spin.", "auto");
             this.currentMotion = 'RIGHT';
             this.autoStep = 'TURNING';
-            this.autoDuration = 750; // Turn duration
+            this.autoDuration = 680;
           } else if (left >= right) {
-            this.log("[AUTO] Choosing LEFT clear path.", "auto");
+            this.log("[AUTO] Steering LEFT path.", "auto");
             this.currentMotion = 'LEFT';
             this.autoStep = 'TURNING';
-            this.autoDuration = 420;
+            this.autoDuration = 360;
           } else {
-            this.log("[AUTO] Choosing RIGHT clear path.", "auto");
+            this.log("[AUTO] Steering RIGHT path.", "auto");
             this.currentMotion = 'RIGHT';
             this.autoStep = 'TURNING';
-            this.autoDuration = 420;
+            this.autoDuration = 360;
           }
           this.autoTimer = now;
         }
@@ -2677,7 +1891,6 @@ class ArduinoFirmwareTwin {
         if (now - this.autoTimer >= this.autoDuration) {
           this.currentMotion = 'STOPPED';
           this.autoStep = 'CRUISE';
-          this.log("[AUTO] Resuming forward cruise.", "auto");
         }
         break;
     }
@@ -2687,18 +1900,9 @@ class ArduinoFirmwareTwin {
 
   outputTelemetryLine() {
     const dist = this.sim.measuredDistanceCm;
-    const modeStr = this.currentMode === this.MODE_AUTONOMOUS ? 'AUTONOMOUS' : 'MANUAL    ';
-    const motionStr = this.currentMotion.padEnd(8, ' ');
-    const pingStr = dist >= 400 ? '>400 cm' : `${dist} cm`;
-    this.log(`[STATUS] ${modeStr} | Motion: ${motionStr} | Speed: ${this.currentSpeed} | Ping: ${pingStr}`);
-  }
-
-  printHelp() {
-    this.log("--- SMARTDRIVE COMMAND GUIDE ---");
-    this.log("  F: Forward  |  B: Backward  |  L: Left  |  R: Right  |  S: Stop");
-    this.log("  A: Autonomous Mode  |  M: Manual Mode  |  E: Emergency Brake");
-    this.log("  0..9: Speed (100 to 255 PWM)");
-    this.log("--------------------------------");
+    const modeStr = this.currentMode === this.MODE_AUTONOMOUS ? 'AUTO' : 'MANUAL';
+    const pingStr = dist >= 400 ? '>400cm' : `${dist}cm`;
+    this.log(`[STATUS] Mode: ${modeStr} | Motion: ${this.currentMotion} | Speed: ${this.currentSpeed} | Sonar: ${pingStr}`);
   }
 
   flashBluetoothPins() {
@@ -2710,7 +1914,7 @@ class ArduinoFirmwareTwin {
           this.onPinChange('pinD2', 'IDLE', false);
           this.onPinChange('pinD3', 'IDLE', false);
         }
-      }, 80);
+      }, 70);
     }
   }
 
@@ -2751,15 +1955,15 @@ class ArduinoFirmwareTwin {
         break;
     }
 
-    this.onPinChange('pinD5', `${ena} PWM`, ena > 0);
+    this.onPinChange('pinD5', `${ena}`, ena > 0);
     this.onPinChange('pinD4', in1, in1 === 'HIGH');
     this.onPinChange('pinD7', in2, in2 === 'HIGH');
     this.onPinChange('pinD8', in3, in3 === 'HIGH');
     this.onPinChange('pinD12', in4, in4 === 'HIGH');
-    this.onPinChange('pinD6', `${enb} PWM`, enb > 0);
+    this.onPinChange('pinD6', `${enb}`, enb > 0);
     this.onPinChange('pinD9', `${Math.round(this.sim.servoAngleDeg)}°`, true);
 
-    const isClose = this.sim.measuredDistanceCm <= this.SAFE_THRESHOLD_CM;
+    const isClose = this.sim.measuredDistanceCm <= this.CRITICAL_STOP_CM;
     this.onPinChange('pinA0', 'PULSE', true);
     this.onPinChange('pinA1', `${this.sim.measuredDistanceCm}cm`, isClose);
   }
@@ -2770,95 +1974,73 @@ class ArduinoFirmwareTwin {
    ============================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
-  // 1. Initialize Simulator & Firmware Twin
   const sim = new RobotSimulator('arenaCanvas');
 
   // Serial Monitor Logger
-  const serialOutput = document.getElementById('serialOutput');
+  const logStream = document.getElementById('logStream');
   const logToSerial = (text, type = 'normal') => {
+    if (!logStream) return;
     const line = document.createElement('div');
-    line.className = `serial-line ${type}`;
+    line.className = `log-line ${type}`;
 
     const now = new Date();
     const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}.${String(Math.floor(now.getMilliseconds() / 100))}`;
 
-    line.innerHTML = `<span class="time">[${timeStr}]</span> ${escapeHtml(text)}`;
-    serialOutput.appendChild(line);
+    line.innerHTML = `<span class="t">[${timeStr}]</span> ${escapeHtml(text)}`;
+    logStream.appendChild(line);
 
-    // Limit log lines to 200
-    while (serialOutput.children.length > 200) {
-      serialOutput.removeChild(serialOutput.firstChild);
+    while (logStream.children.length > 80) {
+      logStream.removeChild(logStream.firstChild);
     }
-    serialOutput.scrollTop = serialOutput.scrollHeight;
+    logStream.scrollTop = logStream.scrollHeight;
   };
 
-  // Pin Bus State updater
-  const onPinChange = (pinElementId, valueStr, isActive) => {
-    const el = document.getElementById(pinElementId);
-    if (!el) return;
-    const valSpan = el.querySelector('.pin-val');
-    if (valSpan) valSpan.textContent = valueStr;
+  const firmware = new ArduinoFirmwareTwin(sim, logToSerial, null);
 
-    if (isActive) {
-      el.classList.add('active');
-    } else {
-      el.classList.remove('active');
-    }
-  };
+  // 1. Modals (Wiring & Code)
+  const modalWiring = document.getElementById('modalWiring');
+  const modalCode = document.getElementById('modalCode');
+  const btnOpenWiring = document.getElementById('btnOpenWiring');
+  const btnOpenCode = document.getElementById('btnOpenCode');
+  const btnCloseWiring = document.getElementById('btnCloseWiring');
+  const btnCloseCode = document.getElementById('btnCloseCode');
+  const codeViewer = document.getElementById('codeViewer');
+  const btnCopyCode = document.getElementById('btnCopyCode');
 
-  const firmware = new ArduinoFirmwareTwin(sim, logToSerial, onPinChange);
+  if (window.SMARTDRIVE_SOURCE_CODE && codeViewer) {
+    codeViewer.textContent = window.SMARTDRIVE_SOURCE_CODE;
+  }
 
-  // 2. Tab Navigation
-  const tabBtns = document.querySelectorAll('.tab-btn');
-  const tabPanes = document.querySelectorAll('.tab-pane');
+  btnOpenWiring.addEventListener('click', () => {
+    modalWiring.classList.add('open');
+    sim.audio.playClick();
+  });
+  btnCloseWiring.addEventListener('click', () => modalWiring.classList.remove('open'));
 
-  tabBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const targetId = btn.getAttribute('data-tab');
-      tabBtns.forEach(b => b.classList.remove('active'));
-      tabPanes.forEach(p => p.classList.remove('active'));
+  btnOpenCode.addEventListener('click', () => {
+    modalCode.classList.add('open');
+    sim.audio.playClick();
+  });
+  btnCloseCode.addEventListener('click', () => modalCode.classList.remove('open'));
 
-      btn.classList.add('active');
-      const pane = document.getElementById(targetId);
-      if (pane) pane.classList.add('active');
-      sim.audio.playClick();
+  [modalWiring, modalCode].forEach(modal => {
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) modal.classList.remove('open');
     });
   });
 
-  // 3. Bluetooth Connection Simulation
-  const btnConnectBT = document.getElementById('btnConnectBT');
-  const btStatusBadge = document.getElementById('btStatusBadge');
-  const btStatusText = document.getElementById('btStatusText');
-  const btConnectBtnText = document.getElementById('btConnectBtnText');
-
-  let btConnected = true; // Auto-connect in simulator by default for instant gratification
-  firmware.setBluetoothConnection(true);
-  updateBTUI(true);
-
-  btnConnectBT.addEventListener('click', () => {
-    btConnected = !btConnected;
-    firmware.setBluetoothConnection(btConnected);
-    updateBTUI(btConnected);
-    sim.audio.playClick();
+  btnCopyCode.addEventListener('click', () => {
+    const code = codeViewer.textContent;
+    navigator.clipboard.writeText(code).then(() => {
+      const orig = btnCopyCode.textContent;
+      btnCopyCode.textContent = '✅ Copied!';
+      setTimeout(() => { btnCopyCode.textContent = orig; }, 1800);
+    });
   });
 
-  function updateBTUI(connected) {
-    if (connected) {
-      btStatusBadge.className = 'badge connection-badge connected';
-      btStatusText.textContent = 'Bluetooth: Paired (HC-05)';
-      btConnectBtnText.textContent = 'Disconnect';
-    } else {
-      btStatusBadge.className = 'badge connection-badge disconnected';
-      btStatusText.textContent = 'Bluetooth: Disconnected';
-      btConnectBtnText.textContent = 'Simulate Connect';
-    }
-  }
-
-  // 4. Mode Switching (Manual vs Autonomous)
+  // 2. Mode Toggles (Manual vs Autonomous)
   const btnModeManual = document.getElementById('btnModeManual');
   const btnModeAuto = document.getElementById('btnModeAuto');
-  const modeBadge = document.getElementById('modeBadge');
-  const modeText = document.getElementById('modeText');
 
   btnModeManual.addEventListener('click', () => {
     firmware.processCommand('M');
@@ -2876,19 +2058,15 @@ document.addEventListener('DOMContentLoaded', () => {
     if (mode === 'AUTONOMOUS') {
       btnModeAuto.classList.add('active');
       btnModeManual.classList.remove('active');
-      modeBadge.className = 'badge mode-badge auto';
-      modeText.textContent = 'AUTONOMOUS (A)';
     } else {
       btnModeManual.classList.add('active');
       btnModeAuto.classList.remove('active');
-      modeBadge.className = 'badge mode-badge manual';
-      modeText.textContent = 'MANUAL MODE (M)';
     }
   }
 
-  // 5. Directional D-Pad Gamepad Controls
-  const dpadButtons = document.querySelectorAll('.dpad-btn');
-  dpadButtons.forEach(btn => {
+  // 3. Tactile Gamepad Controls
+  const padButtons = document.querySelectorAll('.pad-btn');
+  padButtons.forEach(btn => {
     const cmd = btn.getAttribute('data-cmd');
 
     const handlePress = (e) => {
@@ -2902,7 +2080,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const handleRelease = (e) => {
       e.preventDefault();
       btn.classList.remove('pressed');
-      // For movement keys, auto-stop on release if in manual mode
       if (cmd === 'F' || cmd === 'B' || cmd === 'L' || cmd === 'R') {
         firmware.processCommand('S');
       }
@@ -2916,67 +2093,103 @@ document.addEventListener('DOMContentLoaded', () => {
     btn.addEventListener('touchend', handleRelease, { passive: false });
   });
 
-  // Emergency Stop Buttons
-  const btnEmergencyStop = document.getElementById('btnEmergencyStop');
-  btnEmergencyStop.addEventListener('click', () => {
+  // Emergency Stop
+  document.getElementById('btnEmergencyStop').addEventListener('click', () => {
     firmware.processCommand('E');
     updateModeUI('MANUAL');
   });
 
-  // 6. Motor Speed Slider & Presets
-  const motorSpeedSlider = document.getElementById('motorSpeedSlider');
-  const speedDisplayVal = document.getElementById('speedDisplayVal');
-  const presetBtns = document.querySelectorAll('.preset-btn');
+  // 4. Speed Slider & Presets
+  const speedSlider = document.getElementById('speedSlider');
+  const speedNum = document.getElementById('speedNum');
+  const presetChips = document.querySelectorAll('.preset-chip');
 
-  motorSpeedSlider.addEventListener('input', (e) => {
+  speedSlider.addEventListener('input', (e) => {
     const val = parseInt(e.target.value, 10);
-    speedDisplayVal.textContent = val;
+    speedNum.textContent = val;
     firmware.setSpeed(val);
+    presetChips.forEach(c => c.classList.remove('active'));
   });
 
-  presetBtns.forEach(pbtn => {
-    pbtn.addEventListener('click', () => {
-      const spd = parseInt(pbtn.getAttribute('data-speed'), 10);
-      motorSpeedSlider.value = spd;
-      speedDisplayVal.textContent = spd;
+  presetChips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      const spd = parseInt(chip.getAttribute('data-speed'), 10);
+      speedSlider.value = spd;
+      speedNum.textContent = spd;
       firmware.setSpeed(spd);
+      presetChips.forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
       sim.audio.playClick();
     });
   });
 
-  // 7. Keyboard Shortcuts (WASD / Arrows)
+  // 5. Arena Tools
+  document.getElementById('btnAddBox').addEventListener('click', () => {
+    sim.addObstacleBox();
+    sim.audio.playClick();
+  });
+
+  document.getElementById('btnRandomMaze').addEventListener('click', () => {
+    sim.randomizeObstacles();
+    sim.audio.playClick();
+  });
+
+  document.getElementById('btnClearObs').addEventListener('click', () => {
+    sim.clearObstacles();
+    sim.audio.playClick();
+  });
+
+  document.getElementById('btnResetCar').addEventListener('click', () => {
+    sim.resetRobot();
+    firmware.stopMotors();
+    sim.audio.playClick();
+  });
+
+  const chkSound = document.getElementById('chkSound');
+  chkSound.addEventListener('change', (e) => {
+    sim.audio.enabled = e.target.checked;
+    if (!sim.audio.enabled) sim.audio.setMotorHum(false);
+  });
+
+  document.getElementById('btnClearLog').addEventListener('click', () => {
+    logStream.innerHTML = '';
+  });
+
+  // 6. Keyboard Shortcuts
   const pressedKeys = new Set();
   window.addEventListener('keydown', (e) => {
-    // If typing inside serial input box, do not trigger car movements!
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
 
     const key = e.key.toUpperCase();
-    if (pressedKeys.has(key)) return; // Prevent key repeat oscillation
+    if (pressedKeys.has(key)) return;
     pressedKeys.add(key);
 
     sim.audio.init();
 
     if (key === 'W' || key === 'ARROWUP') {
       firmware.processCommand('F');
-      highlightDpad('btnCmdForward', true);
+      highlightPad('padF', true);
     } else if (key === 'S' && !e.ctrlKey) {
       firmware.processCommand('B');
-      highlightDpad('btnCmdBackward', true);
+      highlightPad('padB', true);
     } else if (key === 'A') {
       firmware.processCommand('L');
-      highlightDpad('btnCmdLeft', true);
+      highlightPad('padL', true);
     } else if (key === 'D') {
       firmware.processCommand('R');
-      highlightDpad('btnCmdRight', true);
+      highlightPad('padR', true);
     } else if (key === ' ') {
       firmware.processCommand('S');
-      highlightDpad('btnCmdStop', true);
+      highlightPad('padS', true);
     } else if (key === 'E') {
       firmware.processCommand('E');
       updateModeUI('MANUAL');
     } else if (key === 'M') {
       firmware.processCommand('M');
       updateModeUI('MANUAL');
+    } else if (key === 'A' && e.shiftKey) {
+      firmware.processCommand('A');
+      updateModeUI('AUTONOMOUS');
     }
   });
 
@@ -2986,173 +2199,78 @@ document.addEventListener('DOMContentLoaded', () => {
     pressedKeys.delete(key);
 
     if (key === 'W' || key === 'ARROWUP') {
-      highlightDpad('btnCmdForward', false);
+      highlightPad('padF', false);
       firmware.processCommand('S');
     } else if (key === 'S') {
-      highlightDpad('btnCmdBackward', false);
+      highlightPad('padB', false);
       firmware.processCommand('S');
     } else if (key === 'A') {
-      highlightDpad('btnCmdLeft', false);
+      highlightPad('padL', false);
       firmware.processCommand('S');
     } else if (key === 'D') {
-      highlightDpad('btnCmdRight', false);
+      highlightPad('padR', false);
       firmware.processCommand('S');
     } else if (key === ' ') {
-      highlightDpad('btnCmdStop', false);
+      highlightPad('padS', false);
     }
   });
 
-  function highlightDpad(id, isPressed) {
+  function highlightPad(id, isPressed) {
     const el = document.getElementById(id);
     if (!el) return;
     if (isPressed) el.classList.add('pressed');
     else el.classList.remove('pressed');
   }
 
-  // 8. Arena Controls (Obstacles, Reset, Audio)
-  document.getElementById('btnSpawnObstacle').addEventListener('click', () => {
-    sim.obstacles.push({
-      x: 300 + Math.random() * 200,
-      y: 150 + Math.random() * 200,
-      w: 80,
-      h: 60,
-      label: `Box ${sim.obstacles.length + 1}`
-    });
-    sim.audio.playClick();
-  });
-
-  document.getElementById('btnRandomizeMaze').addEventListener('click', () => {
-    sim.randomizeObstacles();
-    sim.audio.playClick();
-  });
-
-  document.getElementById('btnClearObstacles').addEventListener('click', () => {
-    sim.clearObstacles();
-    sim.audio.playClick();
-  });
-
-  document.getElementById('btnResetRobot').addEventListener('click', () => {
-    sim.resetRobot();
-    firmware.stopMotors();
-    sim.audio.playClick();
-  });
-
-  const chkSound = document.getElementById('chkSound');
-  chkSound.addEventListener('change', (e) => {
-    sim.audio.enabled = e.target.checked;
-    if (!sim.audio.enabled) {
-      sim.audio.setMotorHum(false);
-    }
-  });
-
-  // 9. Serial Monitor Input Box
-  const serialInputBox = document.getElementById('serialInputBox');
-  const btnSendSerial = document.getElementById('btnSendSerial');
-  const btnClearSerial = document.getElementById('btnClearSerial');
-
-  const sendSerialMessage = () => {
-    const val = serialInputBox.value.trim();
-    if (!val) return;
-    for (const char of val) {
-      firmware.processCommand(char);
-    }
-    serialInputBox.value = '';
-  };
-
-  btnSendSerial.addEventListener('click', sendSerialMessage);
-  serialInputBox.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
-      sendSerialMessage();
-    }
-  });
-
-  btnClearSerial.addEventListener('click', () => {
-    serialOutput.innerHTML = '';
-  });
-
-  // 10. Copy Arduino Code Button
-  const btnCopyCode = document.getElementById('btnCopyCode');
-  const arduinoCodeDisplay = document.getElementById('arduinoCodeDisplay');
-
-  // Populate code display from embedded source or fetch
-  if (window.SMARTDRIVE_SOURCE_CODE) {
-    arduinoCodeDisplay.textContent = window.SMARTDRIVE_SOURCE_CODE;
-  } else {
-    fetch('SMARTDRIVE.ino')
-      .then(r => r.text())
-      .then(codeText => {
-        arduinoCodeDisplay.textContent = codeText;
-      })
-      .catch(() => {});
-  }
-
-  btnCopyCode.addEventListener('click', () => {
-    const code = arduinoCodeDisplay.textContent;
-    navigator.clipboard.writeText(code).then(() => {
-      const orig = btnCopyCode.textContent;
-      btnCopyCode.textContent = '✅ Copied to Clipboard!';
-      btnCopyCode.style.background = '#10b981';
-      setTimeout(() => {
-        btnCopyCode.textContent = orig;
-        btnCopyCode.style.background = '';
-      }, 2000);
-    });
-  });
-
-  // 11. Canvas HUD & Telemetry Sync
+  // 7. HUD & Radar Pill Elements
   const hudDistance = document.getElementById('hudDistance');
   const hudServoAngle = document.getElementById('hudServoAngle');
-  const hudMotionState = document.getElementById('hudMotionState');
-  const hudSpeed = document.getElementById('hudSpeed');
-  const loopHz = document.getElementById('loopHz');
+  const hudMotion = document.getElementById('hudMotion');
+  const hudPwm = document.getElementById('hudPwm');
+  const radarPill = document.getElementById('radarPill');
+  const radarPillText = document.getElementById('radarPillText');
 
-  // 12. Main 60 FPS Animation & Firmware Loop
+  // 8. 60 FPS Animation & Simulation Loop
   let lastTime = performance.now();
-  let frameCount = 0;
-  let lastFpsTime = performance.now();
 
   function mainLoop(timestamp) {
     const dt = Math.min(0.05, (timestamp - lastTime) / 1000);
     lastTime = timestamp;
 
-    // Run firmware state machine
     firmware.tick(dt);
-
-    // Render physics & graphics
     sim.render();
 
-    // Update HUD values
-    hudDistance.textContent = sim.measuredDistanceCm >= 400 ? '>400 cm' : `${sim.measuredDistanceCm} cm`;
-    if (sim.measuredDistanceCm <= 15) {
+    // HUD distance & radar status pill
+    const dist = sim.measuredDistanceCm;
+    hudDistance.textContent = dist >= 400 ? '>400 cm' : `${dist} cm`;
+
+    if (dist <= 28) {
       hudDistance.style.color = '#ef4444';
-    } else if (sim.measuredDistanceCm <= 30) {
+      radarPill.className = 'status-pill danger';
+      radarPillText.textContent = `CRITICAL STOP (${dist}cm)`;
+    } else if (dist <= 45) {
       hudDistance.style.color = '#f59e0b';
+      radarPill.className = 'status-pill warning';
+      radarPillText.textContent = `CAUTION SLOWING (${dist}cm)`;
     } else {
       hudDistance.style.color = '#06b6d4';
+      radarPill.className = 'status-pill safe';
+      radarPillText.textContent = `RADAR CLEAR (${dist >= 400 ? '>400' : dist}cm)`;
     }
 
     const angleDeg = Math.round(sim.servoAngleDeg);
     let angleLabel = 'Center';
-    if (angleDeg > 110) angleLabel = 'Looking Left';
-    else if (angleDeg < 70) angleLabel = 'Looking Right';
-    hudServoAngle.textContent = `${angleDeg}° (${angleLabel})`;
+    if (angleDeg > 110) angleLabel = 'Left';
+    else if (angleDeg < 70) angleLabel = 'Right';
+    hudServoAngle.textContent = `${angleDeg}° ${angleLabel}`;
 
-    hudMotionState.textContent = firmware.currentMotion;
-    hudSpeed.textContent = `${firmware.currentSpeed} / 255`;
+    hudMotion.textContent = firmware.currentMotion;
+    hudPwm.textContent = `${firmware.currentSpeed} / 255`;
 
-    // Keep mode UI in sync if changed internally by firmware
     if (firmware.currentMode === 'AUTONOMOUS' && !btnModeAuto.classList.contains('active')) {
       updateModeUI('AUTONOMOUS');
     } else if (firmware.currentMode === 'MANUAL' && !btnModeManual.classList.contains('active')) {
       updateModeUI('MANUAL');
-    }
-
-    // FPS counter
-    frameCount++;
-    if (timestamp - lastFpsTime >= 1000) {
-      loopHz.textContent = `Simulation Loop: ${frameCount} FPS`;
-      frameCount = 0;
-      lastFpsTime = timestamp;
     }
 
     requestAnimationFrame(mainLoop);

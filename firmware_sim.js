@@ -1,6 +1,6 @@
 /* ==============================================================================
    SMARTDRIVE ROBOTICS SIMULATOR - FIRMWARE DIGITAL TWIN (firmware_sim.js)
-   Exact replica of SMARTDRIVE.ino Arduino Uno State Machine
+   Fast-Detection & Smooth Obstacle-Avoidance State Machine
    ============================================================================== */
 
 class ArduinoFirmwareTwin {
@@ -9,24 +9,21 @@ class ArduinoFirmwareTwin {
     this.onSerialLog = onSerialLog;
     this.onPinChange = onPinChange;
 
-    // Operating Modes
     this.MODE_MANUAL = 'MANUAL';
     this.MODE_AUTONOMOUS = 'AUTONOMOUS';
     this.currentMode = this.MODE_MANUAL;
 
-    // Motion States
     this.currentMotion = 'STOPPED';
     this.currentSpeed = 180;
-    this.turnSpeed = 200;
+    this.turnSpeed = 210;
 
-    // Safety & Autonomous Thresholds (match Arduino C++ constants)
-    this.SAFE_THRESHOLD_CM = 30;
-    this.CRITICAL_STOP_CM = 15;
-    this.WATCHDOG_TIMEOUT_MS = 1200; // 1.2 second watchdog
+    // Fast-Reaction Obstacle Horizons (in centimeters)
+    this.SAFE_THRESHOLD_CM = 45;   // Proactive detection horizon
+    this.CRITICAL_STOP_CM  = 28;   // Complete halt well before touching
+    this.WATCHDOG_TIMEOUT_MS = 1200;
 
-    // Watchdog timestamp
     this.lastCommandTime = performance.now();
-    this.isBluetoothConnected = false;
+    this.isBluetoothConnected = true;
 
     // Autonomous State Machine
     this.autoStep = 'CRUISE';
@@ -34,12 +31,9 @@ class ArduinoFirmwareTwin {
     this.scannedLeftDist = 0;
     this.scannedRightDist = 0;
 
-    // Telemetry ticker
     this.lastTelemetryTime = 0;
 
-    this.log("SMARTDRIVE 4WD FIRMWARE SIMULATOR INITIALIZED");
-    this.log("Default Mode: MANUAL | Speed: 180/255 | 9600 Baud");
-    this.updateHardwarePins();
+    this.log("SMARTDRIVE v2.2 ACTIVE - High-Speed Obstacle Sensing Engaged");
   }
 
   log(msg, type = 'normal') {
@@ -52,24 +46,20 @@ class ArduinoFirmwareTwin {
     this.isBluetoothConnected = connected;
     if (connected) {
       this.lastCommandTime = performance.now();
-      this.log("HC-05: Client connected via RFCOMM (9600 baud)", "cmd");
+      this.log("HC-05: Connected via RFCOMM (9600 baud)", "cmd");
     } else {
-      this.log("HC-05: Bluetooth connection lost / disconnected", "alert");
+      this.log("HC-05: Disconnected", "alert");
       if (this.currentMode === this.MODE_MANUAL) {
         this.stopMotors();
       }
     }
   }
 
-  // Receive a character command (F, B, L, R, S, A, M, E, 0-9, etc.)
   processCommand(cmdChar) {
     cmdChar = cmdChar.trim();
     if (!cmdChar) return;
 
     this.lastCommandTime = performance.now();
-    this.log(`[CMD RECV]: '${cmdChar}'`, 'cmd');
-
-    // D2 / D3 blink indicator
     this.flashBluetoothPins();
 
     const c = cmdChar.toUpperCase();
@@ -115,7 +105,6 @@ class ArduinoFirmwareTwin {
         this.log("[ALERT] EMERGENCY BRAKE ENGAGED!", "alert");
         break;
 
-      // Speed presets
       case '0': this.setSpeed(100); break;
       case '1': this.setSpeed(120); break;
       case '2': this.setSpeed(140); break;
@@ -134,13 +123,7 @@ class ArduinoFirmwareTwin {
         this.setSpeed(Math.max(100, this.currentSpeed - 20));
         break;
 
-      case '?':
-      case 'H':
-        this.printHelp();
-        break;
-
       default:
-        this.log(`Unknown command: ${cmdChar}`);
         break;
     }
 
@@ -149,11 +132,9 @@ class ArduinoFirmwareTwin {
 
   setSpeed(val) {
     this.currentSpeed = Math.max(100, Math.min(255, val));
-    this.log(`Motor Speed Adjusted: ${this.currentSpeed} / 255`);
     this.updateHardwarePins();
   }
 
-  // --- MOTOR ACTUATION ROUTINES ---
   moveForward() {
     this.currentMotion = 'FORWARD';
     this.updateHardwarePins();
@@ -187,25 +168,21 @@ class ArduinoFirmwareTwin {
     this.updateHardwarePins();
   }
 
-  // --- MAIN FIRMWARE TICK (Equivalent to Arduino loop()) ---
   tick(dt) {
     const now = performance.now();
 
-    // 1. Autonomous Engine
     if (this.currentMode === this.MODE_AUTONOMOUS) {
       this.runAutonomousLogic(dt, now);
-    } 
-    // 2. Manual Mode Watchdog & Active Braking
-    else {
-      // Bluetooth Watchdog: auto-stop if no command received for >1.2s while driving
+    } else {
+      // Manual Mode Watchdog
       if (this.currentMotion !== 'STOPPED') {
         if (now - this.lastCommandTime > this.WATCHDOG_TIMEOUT_MS) {
-          this.log("[WATCHDOG TIMEOUT] No Bluetooth signal for 1.2s! Safe stop activated.", "alert");
+          this.log("[WATCHDOG] No signal received for 1.2s -> Safe stop.", "alert");
           this.stopMotors();
         }
       }
 
-      // Active Braking Safety: If driving forward in manual mode and obstacle gets < 15cm
+      // Active Braking Safety in Manual Mode
       if (this.currentMotion === 'FORWARD') {
         const dist = this.sim.measuredDistanceCm;
         if (dist > 0 && dist < this.CRITICAL_STOP_CM) {
@@ -215,28 +192,38 @@ class ArduinoFirmwareTwin {
       }
     }
 
-    // Pass physics to simulator
-    const speedPwm = (this.currentMotion === 'LEFT' || this.currentMotion === 'RIGHT') ? this.turnSpeed : this.currentSpeed;
-    this.sim.updatePhysics(dt, this.currentMotion, speedPwm);
+    // Dynamic speed adjustment based on proximity
+    let effectiveSpeed = this.currentSpeed;
+    if (this.currentMotion === 'LEFT' || this.currentMotion === 'RIGHT') {
+      effectiveSpeed = this.turnSpeed;
+    } else if (this.currentMotion === 'FORWARD') {
+      // Progressive deceleration when entering safe zone (<45cm)
+      const dist = this.sim.measuredDistanceCm;
+      if (dist > this.CRITICAL_STOP_CM && dist <= this.SAFE_THRESHOLD_CM) {
+        effectiveSpeed = Math.min(130, this.currentSpeed * 0.65);
+      }
+    }
 
-    // Periodic 1-second Serial Telemetry
+    this.sim.updatePhysics(dt, this.currentMotion, effectiveSpeed);
+
     if (now - this.lastTelemetryTime >= 1000) {
       this.lastTelemetryTime = now;
       this.outputTelemetryLine();
     }
   }
 
-  // Exact step-by-step state machine from SMARTDRIVE.ino
+  // Fast, Responsive Autonomous Obstacle Avoidance
   runAutonomousLogic(dt, now) {
     const dist = this.sim.measuredDistanceCm;
 
     switch (this.autoStep) {
       case 'CRUISE':
-        this.sim.servoAngleDeg = 90; // Face forward
+        this.sim.servoAngleDeg = 90;
         this.currentMotion = 'FORWARD';
 
-        if (dist > 0 && dist <= this.SAFE_THRESHOLD_CM) {
-          this.log(`[AUTO] Obstacle at ${dist}cm! Stopping and preparing scan...`, "auto");
+        // Detect early and halt cleanly BEFORE reaching the obstacle
+        if (dist > 0 && dist <= this.CRITICAL_STOP_CM) {
+          this.log(`[AUTO] Obstacle detected early at ${dist}cm! Stopping cleanly...`, "auto");
           this.currentMotion = 'STOPPED';
           this.autoStep = 'BACKUP';
           this.autoTimer = now;
@@ -245,7 +232,7 @@ class ArduinoFirmwareTwin {
 
       case 'BACKUP':
         this.currentMotion = 'BACKWARD';
-        if (now - this.autoTimer >= 280) { // 280ms reverse
+        if (now - this.autoTimer >= 220) { // Quick 220ms reverse
           this.currentMotion = 'STOPPED';
           this.autoStep = 'SCAN_LEFT';
           this.autoTimer = now;
@@ -255,10 +242,8 @@ class ArduinoFirmwareTwin {
         break;
 
       case 'SCAN_LEFT':
-        // Wait 300ms for servo to reach 150° and settle
-        if (now - this.autoTimer >= 300) {
+        if (now - this.autoTimer >= 180) { // Fast 180ms settle
           this.scannedLeftDist = this.sim.measuredDistanceCm;
-          this.log(`[AUTO SCAN] Left: ${this.scannedLeftDist} cm`, "auto");
           this.autoStep = 'SCAN_RIGHT';
           this.autoTimer = now;
           this.sim.servoAngleDeg = 30; // Look Right
@@ -267,38 +252,37 @@ class ArduinoFirmwareTwin {
         break;
 
       case 'SCAN_RIGHT':
-        // Wait 450ms for servo to sweep from 150° to 30°
-        if (now - this.autoTimer >= 450) {
+        if (now - this.autoTimer >= 240) { // Fast 240ms sweep
           this.scannedRightDist = this.sim.measuredDistanceCm;
-          this.log(`[AUTO SCAN] Right: ${this.scannedRightDist} cm`, "auto");
           this.autoStep = 'DECIDE';
           this.autoTimer = now;
-          this.sim.servoAngleDeg = 90; // Return center
+          this.sim.servoAngleDeg = 90; // Center
         }
         break;
 
       case 'DECIDE':
-        // Center settling
-        if (now - this.autoTimer >= 250) {
+        if (now - this.autoTimer >= 140) {
           const left = this.scannedLeftDist;
           const right = this.scannedRightDist;
 
+          this.log(`[AUTO SCAN] Left: ${left}cm | Right: ${right}cm`, "auto");
+
           // Both blocked: 180° turnaround
-          if (left <= this.SAFE_THRESHOLD_CM && right <= this.SAFE_THRESHOLD_CM) {
-            this.log("[AUTO] Dead end! Performing 180° turnaround.", "auto");
+          if (left <= this.CRITICAL_STOP_CM && right <= this.CRITICAL_STOP_CM) {
+            this.log("[AUTO] Dead end! 180° spin.", "auto");
             this.currentMotion = 'RIGHT';
             this.autoStep = 'TURNING';
-            this.autoDuration = 750; // Turn duration
+            this.autoDuration = 680;
           } else if (left >= right) {
-            this.log("[AUTO] Choosing LEFT clear path.", "auto");
+            this.log("[AUTO] Steering LEFT path.", "auto");
             this.currentMotion = 'LEFT';
             this.autoStep = 'TURNING';
-            this.autoDuration = 420;
+            this.autoDuration = 360;
           } else {
-            this.log("[AUTO] Choosing RIGHT clear path.", "auto");
+            this.log("[AUTO] Steering RIGHT path.", "auto");
             this.currentMotion = 'RIGHT';
             this.autoStep = 'TURNING';
-            this.autoDuration = 420;
+            this.autoDuration = 360;
           }
           this.autoTimer = now;
         }
@@ -308,7 +292,6 @@ class ArduinoFirmwareTwin {
         if (now - this.autoTimer >= this.autoDuration) {
           this.currentMotion = 'STOPPED';
           this.autoStep = 'CRUISE';
-          this.log("[AUTO] Resuming forward cruise.", "auto");
         }
         break;
     }
@@ -318,18 +301,9 @@ class ArduinoFirmwareTwin {
 
   outputTelemetryLine() {
     const dist = this.sim.measuredDistanceCm;
-    const modeStr = this.currentMode === this.MODE_AUTONOMOUS ? 'AUTONOMOUS' : 'MANUAL    ';
-    const motionStr = this.currentMotion.padEnd(8, ' ');
-    const pingStr = dist >= 400 ? '>400 cm' : `${dist} cm`;
-    this.log(`[STATUS] ${modeStr} | Motion: ${motionStr} | Speed: ${this.currentSpeed} | Ping: ${pingStr}`);
-  }
-
-  printHelp() {
-    this.log("--- SMARTDRIVE COMMAND GUIDE ---");
-    this.log("  F: Forward  |  B: Backward  |  L: Left  |  R: Right  |  S: Stop");
-    this.log("  A: Autonomous Mode  |  M: Manual Mode  |  E: Emergency Brake");
-    this.log("  0..9: Speed (100 to 255 PWM)");
-    this.log("--------------------------------");
+    const modeStr = this.currentMode === this.MODE_AUTONOMOUS ? 'AUTO' : 'MANUAL';
+    const pingStr = dist >= 400 ? '>400cm' : `${dist}cm`;
+    this.log(`[STATUS] Mode: ${modeStr} | Motion: ${this.currentMotion} | Speed: ${this.currentSpeed} | Sonar: ${pingStr}`);
   }
 
   flashBluetoothPins() {
@@ -341,7 +315,7 @@ class ArduinoFirmwareTwin {
           this.onPinChange('pinD2', 'IDLE', false);
           this.onPinChange('pinD3', 'IDLE', false);
         }
-      }, 80);
+      }, 70);
     }
   }
 
@@ -382,15 +356,15 @@ class ArduinoFirmwareTwin {
         break;
     }
 
-    this.onPinChange('pinD5', `${ena} PWM`, ena > 0);
+    this.onPinChange('pinD5', `${ena}`, ena > 0);
     this.onPinChange('pinD4', in1, in1 === 'HIGH');
     this.onPinChange('pinD7', in2, in2 === 'HIGH');
     this.onPinChange('pinD8', in3, in3 === 'HIGH');
     this.onPinChange('pinD12', in4, in4 === 'HIGH');
-    this.onPinChange('pinD6', `${enb} PWM`, enb > 0);
+    this.onPinChange('pinD6', `${enb}`, enb > 0);
     this.onPinChange('pinD9', `${Math.round(this.sim.servoAngleDeg)}°`, true);
 
-    const isClose = this.sim.measuredDistanceCm <= this.SAFE_THRESHOLD_CM;
+    const isClose = this.sim.measuredDistanceCm <= this.CRITICAL_STOP_CM;
     this.onPinChange('pinA0', 'PULSE', true);
     this.onPinChange('pinA1', `${this.sim.measuredDistanceCm}cm`, isClose);
   }

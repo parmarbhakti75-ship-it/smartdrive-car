@@ -3,17 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SMARTDRIVE - Interactive 4WD Robot Digital Twin & Simulator</title>
+  <title>SMARTDRIVE - Autonomous 4WD Robot Car Simulator</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@500;600&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="app-container">
-    <!-- Top Navigation Bar -->
-    <header class="top-nav">
-      <div class="brand">
+  <div class="cockpit-container">
+    
+    <!-- TOP HEADER BAR -->
+    <header class="cockpit-header">
+      <div class="brand-group">
         <div class="brand-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <rect x="2" y="6" width="20" height="12" rx="3"></rect>
@@ -25,601 +26,221 @@
           </svg>
         </div>
         <div>
-          <div class="brand-title">SMARTDRIVE <span>PROTOTYPE</span></div>
-          <div class="brand-subtitle">Arduino Uno 4WD • Bluetooth • HC-SR04 • SG90 Servo</div>
+          <h1 class="brand-title">SMARTDRIVE <span>4WD PROTOTYPE</span></h1>
+          <p class="brand-meta">Arduino Uno • HC-05 Bluetooth • HC-SR04 Fast Ultrasonic • SG90 Servo</p>
         </div>
       </div>
 
-      <div class="top-badges">
-        <div class="badge connection-badge disconnected" id="btStatusBadge">
-          <span class="dot"></span>
-          <span id="btStatusText">Bluetooth: Disconnected</span>
+      <!-- Quick Action Badges & Info Modals -->
+      <div class="header-actions">
+        <div class="status-pill safe" id="radarPill">
+          <span class="pulse-dot"></span>
+          <span id="radarPillText">RADAR: CLEAR (>50cm)</span>
         </div>
-        <div class="badge mode-badge manual" id="modeBadge">
-          <span class="icon">🎮</span>
-          <span id="modeText">MANUAL MODE</span>
-        </div>
-        <button class="nav-btn primary" id="btnConnectBT">
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-            <path d="M7 12l5-5 1 1-4 4 4 4-1 1-5-5zm5-10v8.6l3.3-3.3-1.4-1.4L12 7.8V2zm0 13.4l1.9 1.9 1.4-1.4L12 12.6V22h2l4.6-4.6-3.3-3.3L12 15.4z"/>
-          </svg>
-          <span id="btConnectBtnText">Simulate Connect</span>
-        </button>
-        <button class="nav-btn emergency" id="btnEmergencyStop">
-          🛑 EMERGENCY STOP
-        </button>
+        <button class="nav-btn outline" id="btnOpenWiring">🔌 Wiring Table</button>
+        <button class="nav-btn outline" id="btnOpenCode">💻 Arduino C++ Code</button>
+        <button class="nav-btn emergency" id="btnEmergencyStop">🛑 E-STOP</button>
       </div>
     </header>
 
-    <!-- Navigation Tabs -->
-    <nav class="sub-nav">
-      <button class="tab-btn active" data-tab="arena-tab">🚗 Virtual Arena & Simulator</button>
-      <button class="tab-btn" data-tab="schematic-tab">🔌 Circuit & Wiring Table</button>
-      <button class="tab-btn" data-tab="code-tab">💻 Arduino C++ Code</button>
-      <button class="tab-btn" data-tab="testing-tab">🧪 Staged Testing Lab</button>
-      <button class="tab-btn" data-tab="safety-tab">⚠️ Safety & Engineering Rules</button>
-    </nav>
-
-    <!-- Main Workspace Content -->
-    <main class="main-content">
+    <!-- MAIN COCKPIT GRID -->
+    <main class="cockpit-grid">
       
-      <!-- TAB 1: ARENA & INTERACTIVE SIMULATOR -->
-      <section class="tab-pane active" id="arena-tab">
-        <div class="simulator-layout">
+      <!-- LEFT: ROBOTICS ARENA & HUD -->
+      <section class="arena-section glass-card">
+        <div class="section-toolbar">
+          <div class="toolbar-title">
+            <span class="indicator-led"></span>
+            <strong>Testing Arena</strong>
+            <small>Drag boxes or click anywhere to position obstacles</small>
+          </div>
+          <div class="toolbar-btns">
+            <button class="pill-btn" id="btnAddBox">＋ Box</button>
+            <button class="pill-btn" id="btnRandomMaze">🎲 Random Maze</button>
+            <button class="pill-btn" id="btnClearObs">🗑️ Clear</button>
+            <button class="pill-btn highlight" id="btnResetCar">🔄 Reset Car</button>
+            <label class="audio-switch" title="Toggle Sound">
+              <input type="checkbox" id="chkSound" checked>
+              <span>🔊 Audio</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="canvas-viewport">
+          <canvas id="arenaCanvas" width="860" height="520"></canvas>
           
-          <!-- Left: 2D Physics Arena Canvas -->
-          <div class="arena-card glass-panel">
-            <div class="card-header">
-              <div class="header-left">
-                <h3>Robotics Testing Ground</h3>
-                <span class="hint">Click or drag anywhere in the arena to place/move obstacles.</span>
-              </div>
-              <div class="arena-controls">
-                <button class="tool-btn" id="btnSpawnObstacle" title="Add Obstacle Box">＋ Box</button>
-                <button class="tool-btn" id="btnRandomizeMaze" title="Generate Random Maze">🎲 Randomize</button>
-                <button class="tool-btn" id="btnClearObstacles" title="Clear All Obstacles">🗑️ Clear</button>
-                <button class="tool-btn" id="btnResetRobot" title="Reset Robot Position">🔄 Reset Car</button>
-                <label class="toggle-label" title="Enable Sound Effects">
-                  <input type="checkbox" id="chkSound" checked> 🔊 Audio
-                </label>
-              </div>
+          <!-- Modern Floating Telemetry HUD -->
+          <div class="hud-overlay">
+            <div class="hud-badge">
+              <span class="hud-label">SONAR DISTANCE</span>
+              <span class="hud-value highlight" id="hudDistance">-- cm</span>
             </div>
-
-            <div class="canvas-wrapper">
-              <canvas id="arenaCanvas" width="820" height="520"></canvas>
-              
-              <!-- Floating HUD overlay inside canvas -->
-              <div class="canvas-hud">
-                <div class="hud-item">
-                  <span class="label">Ultrasonic Distance</span>
-                  <span class="val highlight" id="hudDistance">-- cm</span>
-                </div>
-                <div class="hud-item">
-                  <span class="label">Servo Angle</span>
-                  <span class="val" id="hudServoAngle">90° (Center)</span>
-                </div>
-                <div class="hud-item">
-                  <span class="label">Motion State</span>
-                  <span class="val" id="hudMotionState">STOPPED</span>
-                </div>
-                <div class="hud-item">
-                  <span class="label">Motor PWM Speed</span>
-                  <span class="val" id="hudSpeed">180 / 255</span>
-                </div>
-              </div>
+            <div class="hud-badge">
+              <span class="hud-label">SERVO RADAR</span>
+              <span class="hud-value" id="hudServoAngle">90° Center</span>
             </div>
-
-            <!-- Arena Footer Legend -->
-            <div class="arena-legend">
-              <div class="legend-item"><span class="legend-dot cyan"></span> Ultrasonic Cone (15° Beam)</div>
-              <div class="legend-item"><span class="legend-dot yellow"></span> Safe Zone (&gt;30 cm)</div>
-              <div class="legend-item"><span class="legend-dot red"></span> Critical Avoid Zone (&lt;15 cm)</div>
-              <div class="legend-item"><span class="legend-dot purple"></span> Draggable Obstacles</div>
+            <div class="hud-badge">
+              <span class="hud-label">MOTION STATE</span>
+              <span class="hud-value" id="hudMotion">STOPPED</span>
             </div>
-          </div>
-
-          <!-- Right: Control Deck & Telemetry -->
-          <div class="control-column">
-            
-            <!-- Virtual Bluetooth Remote Controller -->
-            <div class="remote-card glass-panel">
-              <div class="card-header">
-                <h3>Bluetooth Remote Control</h3>
-                <span class="bt-rate">9600 Baud</span>
-              </div>
-
-              <!-- Mode Toggle Buttons -->
-              <div class="mode-selector">
-                <button class="mode-toggle-btn active" id="btnModeManual" data-cmd="M">
-                  <span class="icon">🎮</span>
-                  <div>
-                    <strong>Manual Mode (M)</strong>
-                    <small>Control with D-Pad / Keys</small>
-                  </div>
-                </button>
-                <button class="mode-toggle-btn" id="btnModeAuto" data-cmd="A">
-                  <span class="icon">🤖</span>
-                  <div>
-                    <strong>Autonomous (A)</strong>
-                    <small>Auto Obstacle Avoidance</small>
-                  </div>
-                </button>
-              </div>
-
-              <!-- D-PAD Gamepad -->
-              <div class="dpad-container">
-                <button class="dpad-btn up" id="btnCmdForward" data-cmd="F" title="Forward (Key: W or Up)">
-                  <svg viewBox="0 0 24 24"><path d="M12 4l-8 8h6v8h4v-8h6z"/></svg>
-                  <span>F</span>
-                </button>
-                <div class="dpad-middle">
-                  <button class="dpad-btn left" id="btnCmdLeft" data-cmd="L" title="Turn Left (Key: A or Left)">
-                    <svg viewBox="0 0 24 24"><path d="M4 12l8-8v6h8v4h-8v6z"/></svg>
-                    <span>L</span>
-                  </button>
-                  <button class="dpad-btn stop" id="btnCmdStop" data-cmd="S" title="Stop Motors (Key: Space or S)">
-                    <div class="stop-box"></div>
-                    <span>S</span>
-                  </button>
-                  <button class="dpad-btn right" id="btnCmdRight" data-cmd="R" title="Turn Right (Key: D or Right)">
-                    <svg viewBox="0 0 24 24"><path d="M20 12l-8-8v6H4v4h8v6z"/></svg>
-                    <span>R</span>
-                  </button>
-                </div>
-                <button class="dpad-btn down" id="btnCmdBackward" data-cmd="B" title="Backward (Key: S or Down)">
-                  <svg viewBox="0 0 24 24"><path d="M12 20l8-8h-6V4h-4v8H4z"/></svg>
-                  <span>B</span>
-                </button>
-              </div>
-
-              <!-- Speed Slider -->
-              <div class="speed-slider-section">
-                <div class="speed-label-row">
-                  <span>Motor Speed (PWM)</span>
-                  <span class="speed-val" id="speedDisplayVal">180</span>
-                </div>
-                <input type="range" min="100" max="255" value="180" id="motorSpeedSlider" class="custom-slider">
-                <div class="speed-presets">
-                  <button class="preset-btn" data-speed="120">Slow (120)</button>
-                  <button class="preset-btn" data-speed="180">Normal (180)</button>
-                  <button class="preset-btn" data-speed="255">Turbo (255)</button>
-                </div>
-              </div>
-
-              <!-- Keyboard Shortcuts hint -->
-              <div class="keyboard-guide">
-                <strong>Keyboard shortcuts:</strong>
-                <kbd>W</kbd>/<kbd>↑</kbd> Forward | <kbd>S</kbd>/<kbd>↓</kbd> Back | <kbd>A</kbd>/<kbd>←</kbd> Left | <kbd>D</kbd>/<kbd>→</kbd> Right | <kbd>Space</kbd> Stop | <kbd>E</kbd> E-Brake
-              </div>
-            </div>
-
-            <!-- Virtual Hardware Pin States & Telemetry -->
-            <div class="pins-card glass-panel">
-              <div class="card-header">
-                <h3>Arduino Uno Pin Bus Status</h3>
-                <span class="active-pulse" id="mcuPulse">MCU ACTIVE</span>
-              </div>
-              <div class="pins-grid">
-                <div class="pin-indicator" id="pinD5"><span class="pin-id">D5 (ENA)</span><span class="pin-val">PWM</span></div>
-                <div class="pin-indicator" id="pinD4"><span class="pin-id">D4 (IN1)</span><span class="pin-val">LOW</span></div>
-                <div class="pin-indicator" id="pinD7"><span class="pin-id">D7 (IN2)</span><span class="pin-val">LOW</span></div>
-                <div class="pin-indicator" id="pinD8"><span class="pin-id">D8 (IN3)</span><span class="pin-val">LOW</span></div>
-                <div class="pin-indicator" id="pinD12"><span class="pin-id">D12 (IN4)</span><span class="pin-val">LOW</span></div>
-                <div class="pin-indicator" id="pinD6"><span class="pin-id">D6 (ENB)</span><span class="pin-val">PWM</span></div>
-                <div class="pin-indicator" id="pinD2"><span class="pin-id">D2 (BT RX)</span><span class="pin-val">IDLE</span></div>
-                <div class="pin-indicator" id="pinD3"><span class="pin-id">D3 (BT TX)</span><span class="pin-val">IDLE</span></div>
-                <div class="pin-indicator" id="pinD9"><span class="pin-id">D9 (SERVO)</span><span class="pin-val">90°</span></div>
-                <div class="pin-indicator" id="pinA0"><span class="pin-id">A0 (TRIG)</span><span class="pin-val">PULSE</span></div>
-                <div class="pin-indicator" id="pinA1"><span class="pin-id">A1 (ECHO)</span><span class="pin-val">OK</span></div>
-              </div>
-            </div>
-
-            <!-- Virtual Serial Monitor -->
-            <div class="terminal-card glass-panel">
-              <div class="card-header">
-                <div class="terminal-title">
-                  <span class="terminal-dot"></span>
-                  <span>Serial Monitor (COM3 @ 9600 baud)</span>
-                </div>
-                <button class="clear-log-btn" id="btnClearSerial">Clear</button>
-              </div>
-              <div class="serial-output" id="serialOutput">
-                <!-- Log messages dynamically streamed here -->
-              </div>
-              <div class="serial-input-row">
-                <input type="text" id="serialInputBox" placeholder="Type command (F, B, L, R, S, A, M, 0-9, ?)...">
-                <button id="btnSendSerial">Send</button>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </section>
-
-      <!-- TAB 2: CIRCUIT DIAGRAM & WIRING TABLE -->
-      <section class="tab-pane" id="schematic-tab">
-        <div class="doc-container glass-panel">
-          <h2>Complete Pin-by-Pin Wiring Table</h2>
-          <p class="section-desc">Follow this exact schematic table. Pay special attention to the <strong>common ground (GND)</strong> and the <strong>voltage divider</strong> on HC-05 RXD.</p>
-
-          <div class="table-responsive">
-            <table class="spec-table">
-              <thead>
-                <tr>
-                  <th>Subsystem / Module</th>
-                  <th>Module Pin</th>
-                  <th>Arduino Pin / Target</th>
-                  <th>Wire Color (Recommended)</th>
-                  <th>Function & Critical Engineering Notes</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr class="group-row"><td colspan="5">1. L298N Dual H-Bridge Motor Driver</td></tr>
-                <tr>
-                  <td>L298N Motor Driver</td>
-                  <td><strong>ENA</strong> (Left Enable)</td>
-                  <td><strong>D5</strong> (PWM)</td>
-                  <td><span class="color-badge blue">Blue</span></td>
-                  <td>Speed control for Left-side motors (Remove factory black jumper cap to use PWM).</td>
-                </tr>
-                <tr>
-                  <td>L298N Motor Driver</td>
-                  <td><strong>IN1</strong></td>
-                  <td><strong>D4</strong> (Digital)</td>
-                  <td><span class="color-badge yellow">Yellow</span></td>
-                  <td>Left Motor Direction Phase A (HIGH + IN2 LOW = Forward).</td>
-                </tr>
-                <tr>
-                  <td>L298N Motor Driver</td>
-                  <td><strong>IN2</strong></td>
-                  <td><strong>D7</strong> (Digital)</td>
-                  <td><span class="color-badge orange">Orange</span></td>
-                  <td>Left Motor Direction Phase B (LOW + IN1 HIGH = Forward).</td>
-                </tr>
-                <tr>
-                  <td>L298N Motor Driver</td>
-                  <td><strong>IN3</strong></td>
-                  <td><strong>D8</strong> (Digital)</td>
-                  <td><span class="color-badge green">Green</span></td>
-                  <td>Right Motor Direction Phase A (HIGH + IN4 LOW = Forward).</td>
-                </tr>
-                <tr>
-                  <td>L298N Motor Driver</td>
-                  <td><strong>IN4</strong></td>
-                  <td><strong>D12</strong> (Digital)</td>
-                  <td><span class="color-badge purple">Purple</span></td>
-                  <td>Right Motor Direction Phase B (LOW + IN3 HIGH = Forward).</td>
-                </tr>
-                <tr>
-                  <td>L298N Motor Driver</td>
-                  <td><strong>ENB</strong> (Right Enable)</td>
-                  <td><strong>D6</strong> (PWM)</td>
-                  <td><span class="color-badge white">White</span></td>
-                  <td>Speed control for Right-side motors (Remove factory black jumper cap).</td>
-                </tr>
-                <tr>
-                  <td>L298N Motor Driver</td>
-                  <td><strong>+12V Screw Terminal</strong></td>
-                  <td><strong>Battery Positive (+)</strong></td>
-                  <td><span class="color-badge red">Red (Thick)</span></td>
-                  <td>Connect to 7.4V (2x 18650) or 11.1V (3S LiPo) switch output.</td>
-                </tr>
-                <tr>
-                  <td>L298N Motor Driver</td>
-                  <td><strong>GND Screw Terminal</strong></td>
-                  <td><strong>Battery (-) &amp; Arduino GND</strong></td>
-                  <td><span class="color-badge black">Black (Thick)</span></td>
-                  <td><strong>CRITICAL: Common Ground!</strong> Both battery (-) and Arduino GND must tie here.</td>
-                </tr>
-                <tr>
-                  <td>L298N Motor Driver</td>
-                  <td><strong>+5V Screw Terminal</strong></td>
-                  <td><strong>Arduino VIN or 5V</strong> (See notes)</td>
-                  <td><span class="color-badge red">Red</span></td>
-                  <td>If 5V regulator jumper is fitted, this supplies regulated 5V. (Best practice: Power Arduino via VIN or USB while testing).</td>
-                </tr>
-                <tr>
-                  <td>L298N Motor Driver</td>
-                  <td><strong>OUT1 &amp; OUT2</strong></td>
-                  <td><strong>Left 2 Motors</strong> (in parallel)</td>
-                  <td>Pair Wires</td>
-                  <td>Connect front-left &amp; rear-left motor leads in parallel. If backwards, swap terminals.</td>
-                </tr>
-                <tr>
-                  <td>L298N Motor Driver</td>
-                  <td><strong>OUT3 &amp; OUT4</strong></td>
-                  <td><strong>Right 2 Motors</strong> (in parallel)</td>
-                  <td>Pair Wires</td>
-                  <td>Connect front-right &amp; rear-right motor leads in parallel.</td>
-                </tr>
-
-                <tr class="group-row"><td colspan="5">2. HC-05 Bluetooth Module</td></tr>
-                <tr>
-                  <td>HC-05 Bluetooth</td>
-                  <td><strong>VCC</strong></td>
-                  <td><strong>Arduino 5V</strong></td>
-                  <td><span class="color-badge red">Red</span></td>
-                  <td>Module on-board regulator steps down to 3.3V for Bluetooth chip power.</td>
-                </tr>
-                <tr>
-                  <td>HC-05 Bluetooth</td>
-                  <td><strong>GND</strong></td>
-                  <td><strong>Arduino GND</strong></td>
-                  <td><span class="color-badge black">Black</span></td>
-                  <td>Common ground return path.</td>
-                </tr>
-                <tr>
-                  <td>HC-05 Bluetooth</td>
-                  <td><strong>TXD</strong></td>
-                  <td><strong>Arduino D2</strong> (Software RX)</td>
-                  <td><span class="color-badge green">Green</span></td>
-                  <td>HC-05 transmits at 3.3V, which Arduino 5V logic safely accepts as HIGH (&gt;3.0V).</td>
-                </tr>
-                <tr>
-                  <td>HC-05 Bluetooth</td>
-                  <td><strong>RXD</strong></td>
-                  <td><strong>Via Voltage Divider to D3</strong></td>
-                  <td><span class="color-badge orange">Orange</span></td>
-                  <td><strong>CRITICAL VOLTAGE DIVIDER:</strong> Connect D3 to 1kΩ resistor, other side to HC-05 RXD and a 2kΩ resistor to GND. Formula: <code>5V * 2k / (1k + 2k) = 3.33V</code>! Protects module from 5V overvoltage damage.</td>
-                </tr>
-
-                <tr class="group-row"><td colspan="5">3. HC-SR04 Ultrasonic Distance Sensor</td></tr>
-                <tr>
-                  <td>HC-SR04 Sensor</td>
-                  <td><strong>VCC</strong></td>
-                  <td><strong>Arduino 5V</strong></td>
-                  <td><span class="color-badge red">Red</span></td>
-                  <td>Ultrasonic transmitter transducers require stable 5V for accurate acoustic echo timing.</td>
-                </tr>
-                <tr>
-                  <td>HC-SR04 Sensor</td>
-                  <td><strong>GND</strong></td>
-                  <td><strong>Arduino GND</strong></td>
-                  <td><span class="color-badge black">Black</span></td>
-                  <td>Common Ground.</td>
-                </tr>
-                <tr>
-                  <td>HC-SR04 Sensor</td>
-                  <td><strong>TRIG</strong></td>
-                  <td><strong>Arduino A0</strong> (Digital Output)</td>
-                  <td><span class="color-badge yellow">Yellow</span></td>
-                  <td>Analog pin A0 configured as digital output. 10µs pulse triggers 8-cycle 40kHz ultrasound bursts.</td>
-                </tr>
-                <tr>
-                  <td>HC-SR04 Sensor</td>
-                  <td><strong>ECHO</strong></td>
-                  <td><strong>Arduino A1</strong> (Digital Input)</td>
-                  <td><span class="color-badge cyan">Cyan</span></td>
-                  <td>Analog pin A1 configured as digital input. High pulse duration directly indicates echo travel time.</td>
-                </tr>
-
-                <tr class="group-row"><td colspan="5">4. SG90 Micro Servo Motor</td></tr>
-                <tr>
-                  <td>SG90 Servo</td>
-                  <td><strong>Brown / Black</strong></td>
-                  <td><strong>GND</strong></td>
-                  <td><span class="color-badge black">Black</span></td>
-                  <td>Servo ground.</td>
-                </tr>
-                <tr>
-                  <td>SG90 Servo</td>
-                  <td><strong>Red</strong></td>
-                  <td><strong>5V Rail</strong></td>
-                  <td><span class="color-badge red">Red</span></td>
-                  <td>Servo positive power. Tip: Place a 100µF capacitor across +5V and GND near servo to smooth surge draw.</td>
-                </tr>
-                <tr>
-                  <td>SG90 Servo</td>
-                  <td><strong>Orange / Yellow</strong></td>
-                  <td><strong>Arduino D9</strong> (PWM Signal)</td>
-                  <td><span class="color-badge orange">Orange</span></td>
-                  <td>50Hz PWM pulse signal controlled by Arduino <code>Servo.h</code> library.</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <!-- Voltage Divider Diagram Callout -->
-          <div class="callout info-callout">
-            <div class="callout-icon">💡</div>
-            <div>
-              <h4>HC-05 3.3V Logic Level Protection (Voltage Divider Detail)</h4>
-              <p>The HC-05 Bluetooth module chip runs internally on 3.3V. While its VCC has a 5V-to-3.3V regulator, its <strong>RXD pin directly enters the 3.3V microcontroller</strong>. Directly connecting Arduino Uno's 5V pin D3 will gradually degrade or instantly burn out the HC-05 receiver.</p>
-              <pre class="schematic-ascii">
-   Arduino D3 (5V TX) ───[ 1 kΩ Resistor ]───┬───> HC-05 RXD Pin (Safe 3.3V)
-                                             │
-                                     [ 2 kΩ Resistor ]
-                                             │
-                                            GND
-              </pre>
+            <div class="hud-badge">
+              <span class="hud-label">SPEED (PWM)</span>
+              <span class="hud-value" id="hudPwm">180 / 255</span>
             </div>
           </div>
         </div>
-      </section>
 
-      <!-- TAB 3: ARDUINO C++ CODE & EXPLANATION -->
-      <section class="tab-pane" id="code-tab">
-        <div class="code-container glass-panel">
-          <div class="code-header">
-            <div>
-              <h3>SMARTDRIVE.ino Production Firmware</h3>
-              <span class="file-path">C:\Users\ASUS\.gemini\antigravity-ide\scratch\smartdrive-robot\SMARTDRIVE.ino</span>
-            </div>
-            <button class="copy-btn" id="btnCopyCode">📋 Copy Arduino Code</button>
-          </div>
-          <div class="code-scroller">
-            <pre><code id="arduinoCodeDisplay" class="language-cpp">/*
-  SMARTDRIVE - 4WD Arduino Uno Robot Car Firmware
-  Pinout:
-  - L298N ENA: D5, IN1: D4, IN2: D7, IN3: D8, IN4: D12, ENB: D6
-  - HC-05: TX->D2, RX->D3 (via 1k/2k divider)
-  - HC-SR04: TRIG->A0, ECHO->A1
-  - SG90 Servo: D9
-*/
-#include &lt;SoftwareSerial.h&gt;
-#include &lt;Servo.h&gt;
-
-const uint8_t PIN_ENA = 5;  const uint8_t PIN_IN1 = 4;
-const uint8_t PIN_IN2 = 7;  const uint8_t PIN_IN3 = 8;
-const uint8_t PIN_IN4 = 12; const uint8_t PIN_ENB = 6;
-const uint8_t PIN_BT_RX = 2; const uint8_t PIN_BT_TX = 3;
-const uint8_t PIN_TRIG = A0; const uint8_t PIN_ECHO = A1;
-const uint8_t PIN_SERVO = 9;
-
-// (Full code is loaded in file SMARTDRIVE.ino and copied via button)</code></pre>
-          </div>
-
-          <div class="explanation-grid">
-            <div class="explanation-card">
-              <h4>1. <code>measureDistanceCm()</code> & Median Filter</h4>
-              <p>Emits a 10-microsecond trigger pulse on pin A0. Reads echo return duration in microseconds with <code>pulseIn()</code>. Computes distance via formula <code>duration / 58.2</code>. Samples three consecutive pings and chooses the median to discard electrical noise spikes caused by motor brush interference.</p>
-            </div>
-            <div class="explanation-card">
-              <h4>2. Failsafe Watchdog Timer</h4>
-              <p>Tracks <code>lastCommandTime = millis()</code>. In manual Bluetooth mode, if the phone disconnects or goes out of range for more than 1.2 seconds without sending an update, the robot cuts motor power immediately to prevent runaway crashes.</p>
-            </div>
-            <div class="explanation-card">
-              <h4>3. Autonomous Obstacle Avoidance Engine</h4>
-              <p>Continuously inspects frontal distance. If under 30 cm: brakes, reverses 280ms, sweeps servo left (150°) and right (30°), compares clear paths, and steers into the wider opening. If both sides are blocked, performs a 180° spin-around.</p>
-            </div>
-            <div class="explanation-card">
-              <h4>4. Dynamic Active Braking</h4>
-              <p>Instead of just setting PWM to 0 (which allows the car to coast forward under momentum), <code>emergencyBrake()</code> pulls both H-bridge sides HIGH, shorting motor coils through back-EMF to bring all four wheels to an instant dead stop.</p>
-            </div>
-          </div>
+        <div class="arena-footer">
+          <div class="legend-chip"><span class="chip-dot cyan"></span> Multi-Ray Ultrasonic Beam (25° Cone)</div>
+          <div class="legend-chip"><span class="chip-dot green"></span> Safe Zone (&gt;45 cm)</div>
+          <div class="legend-chip"><span class="chip-dot amber"></span> Early Detection Deceleration (28–45 cm)</div>
+          <div class="legend-chip"><span class="chip-dot red"></span> Critical Hard Brake (&lt;28 cm)</div>
         </div>
       </section>
 
-      <!-- TAB 4: STAGED TESTING PLAN -->
-      <section class="tab-pane" id="testing-tab">
-        <div class="doc-container glass-panel">
-          <h2>Staged Commissioning & Testing Plan</h2>
-          <p class="section-desc">Never test all components simultaneously on the floor! Follow these 4 rigorous engineering stages on an elevated test bench (wheels off the ground):</p>
-
-          <div class="stages-timeline">
-            <!-- Stage 1 -->
-            <div class="stage-card">
-              <div class="stage-number">01</div>
-              <div class="stage-body">
-                <h3>Stage 1: Motor Direction & PWM Polarity Verification</h3>
-                <p><strong>Goal:</strong> Ensure left and right wheels spin forward when commanded, and speed control works.</p>
-                <ul>
-                  <li>Prop the car up on a stand so all 4 wheels spin freely in the air.</li>
-                  <li>Verify L298N ENA/ENB jumper caps are removed and connected to D5/D6.</li>
-                  <li>Send command <code>F</code> via Serial Monitor. Check if both sides spin forward.</li>
-                  <li><strong>If Left wheels spin backward:</strong> Swap IN1 and IN2 wires (or swap OUT1 and OUT2 motor wires).</li>
-                  <li><strong>If Right wheels spin backward:</strong> Swap IN3 and IN4 wires (or swap OUT3 and OUT4 motor wires).</li>
-                </ul>
+      <!-- RIGHT: CONTROLLER & SENSING TELEMETRY -->
+      <aside class="control-section glass-card">
+        
+        <!-- Mode Switcher -->
+        <div class="control-group">
+          <span class="group-label">DRIVE MODE SELECTOR</span>
+          <div class="mode-toggle-grid">
+            <button class="mode-btn active" id="btnModeManual" data-cmd="M">
+              <span class="mode-icon">🎮</span>
+              <div>
+                <strong>Manual Mode</strong>
+                <small>Bluetooth Gamepad</small>
               </div>
-            </div>
-
-            <!-- Stage 2 -->
-            <div class="stage-card">
-              <div class="stage-number">02</div>
-              <div class="stage-body">
-                <h3>Stage 2: HC-05 Bluetooth Pairing & Failsafe Watchdog</h3>
-                <p><strong>Goal:</strong> Test wireless commands, smartphone pairing, and auto-stop on signal loss.</p>
-                <ul>
-                  <li>Power on car. Look at HC-05 LED: rapid flashing (2 Hz) means waiting for pairing.</li>
-                  <li>Pair Android phone with "HC-05" (PIN <code>1234</code> or <code>0000</code>). LED changes to slow double-flash.</li>
-                  <li>Open Serial Bluetooth Terminal app. Send <code>F</code>, <code>B</code>, <code>L</code>, <code>R</code>, <code>S</code>.</li>
-                  <li><strong>Failsafe Test:</strong> Send <code>F</code>, then immediately turn off phone Bluetooth. Confirm the robot stops completely within 1.2 seconds!</li>
-                </ul>
+            </button>
+            <button class="mode-btn" id="btnModeAuto" data-cmd="A">
+              <span class="mode-icon">🤖</span>
+              <div>
+                <strong>Autonomous</strong>
+                <small>Auto Obstacle Avoidance</small>
               </div>
-            </div>
-
-            <!-- Stage 3 -->
-            <div class="stage-card">
-              <div class="stage-number">03</div>
-              <div class="stage-body">
-                <h3>Stage 3: HC-SR04 Distance Calibration & SG90 Servo Sweep</h3>
-                <p><strong>Goal:</strong> Verify accurate centimetre telemetry and smooth 30°-90°-150° panning.</p>
-                <ul>
-                  <li>Keep car stationary and open Serial Monitor at 9600 baud.</li>
-                  <li>Place a flat cardboard box at 10 cm, 20 cm, and 30 cm. Verify telemetry reads ±1 cm accurate.</li>
-                  <li>Check if the sensor reads zero or random 400cm spikes. If yes, check for loose echo/trig jumper wires.</li>
-                  <li>Ensure the SG90 servo horn is aligned so 90° faces squarely forward.</li>
-                </ul>
-              </div>
-            </div>
-
-            <!-- Stage 4 -->
-            <div class="stage-card">
-              <div class="stage-number">04</div>
-              <div class="stage-body">
-                <h3>Stage 4: Autonomous Navigation & Ground Obstacle Avoidance</h3>
-                <p><strong>Goal:</strong> Full floor run in closed obstacle arena.</p>
-                <ul>
-                  <li>Place robot on a smooth, non-reflective floor (avoid thick high-pile carpet).</li>
-                  <li>Create a test arena using cardboard boxes.</li>
-                  <li>Send command <code>A</code> via Bluetooth.</li>
-                  <li>Observe cruise -> obstacle detection at 30cm -> stop -> slight backup -> left/right sweep -> steering decision!</li>
-                </ul>
-              </div>
-            </div>
+            </button>
           </div>
         </div>
-      </section>
 
-      <!-- TAB 5: SAFETY & ENGINEERING RULES -->
-      <section class="tab-pane" id="safety-tab">
-        <div class="doc-container glass-panel">
-          <h2>Battery, Voltage, Current & Safety Engineering Rules</h2>
-          
-          <div class="rules-grid">
-            <div class="rule-box critical">
-              <h4>1. Common Ground Rule (The #1 Beginner Pitfall)</h4>
-              <p>The Arduino Uno, HC-05 module, HC-SR04 sensor, SG90 servo, and L298N driver <strong>MUST ALL SHARE A COMMON GROUND (GND)</strong>. If the battery ground and Arduino ground are not connected together, control signals will have no return voltage reference, causing random motor jitter, erratic readings, and lost Bluetooth packets.</p>
-            </div>
+        <!-- Directional Gamepad -->
+        <div class="control-group gamepad-group">
+          <span class="group-label">TACTILE REMOTE CONTROLLER</span>
+          <div class="gamepad-grid">
+            <div></div>
+            <button class="pad-btn up" id="padF" data-cmd="F" title="Forward (W / Up)">
+              <svg viewBox="0 0 24 24"><path d="M12 4l-7 7h5v9h4v-9h5z"/></svg>
+              <span>FORWARD</span>
+            </button>
+            <div></div>
 
-            <div class="rule-box warning">
-              <h4>2. Never Power Motors from the Arduino 5V Pin</h4>
-              <p>DC motors are inductive loads. When starting or stalling, four TT gearmotors can draw <strong>2.5A to 4.0A of current</strong>! The onboard 5V linear regulator on the Arduino Uno can only supply ~500mA before overheating and thermal shutdown. Power motors strictly from the battery pack into the L298N 12V terminal.</p>
-            </div>
+            <button class="pad-btn left" id="padL" data-cmd="L" title="Left (A / Left)">
+              <svg viewBox="0 0 24 24"><path d="M4 12l7-7v5h9v4h-9v5z"/></svg>
+              <span>LEFT</span>
+            </button>
+            <button class="pad-btn stop" id="padS" data-cmd="S" title="Stop (Space / S)">
+              <div class="stop-glyph"></div>
+              <span>STOP</span>
+            </button>
+            <button class="pad-btn right" id="padR" data-cmd="R" title="Right (D / Right)">
+              <svg viewBox="0 0 24 24"><path d="M20 12l-7-7v5H4v4h9v5z"/></svg>
+              <span>RIGHT</span>
+            </button>
 
-            <div class="rule-box info">
-              <h4>3. L298N 5V Regulator Onboard Jumper</h4>
-              <p>The L298N board has a 3-pin 5V enable jumper:
-                <br>• If your battery is <strong>7.4V to 12V</strong>: Keep the jumper ON. The onboard 78M05 regulator generates 5V.
-                <br>• If your battery is <strong>&gt;12V (e.g. 14.8V 4S)</strong>: You MUST remove this jumper, or the onboard regulator will overheat and fry!
-              </p>
-            </div>
-
-            <div class="rule-box alert">
-              <h4>4. Inductive Back-EMF & Reset Protection</h4>
-              <p>When DC motors stop or reverse, their collapsing magnetic fields create high-voltage reverse flyback spikes. While L298N has protection diodes, solder a <strong>0.1µF (104) ceramic capacitor</strong> across each motor's solder tabs to suppress high-frequency EMI noise that causes Arduino MCU resets.</p>
-            </div>
-
-            <div class="rule-box critical">
-              <h4>5. Realistic Design Limitations & Disclaimer</h4>
-              <p><strong>This robot is an educational prototyping chassis:</strong>
-                <br>• HC-SR04 ultrasonic sensors cannot reliably detect soft sound-absorbing fabrics, thin table legs, or obstacles approached at steep grazing angles (&gt;45° reflection deflection).
-                <br>• Skid steering on 4WD causes significant lateral wheel scrub on rough surfaces.
-                <br>• <strong>Safety Notice:</strong> Under no circumstances is this architecture suitable for full-scale road vehicles or mission-critical autonomous transport.
-              </p>
-            </div>
+            <div></div>
+            <button class="pad-btn down" id="padB" data-cmd="B" title="Backward (S / Down)">
+              <svg viewBox="0 0 24 24"><path d="M12 20l7-7h-5V4h-4v9H5z"/></svg>
+              <span>REVERSE</span>
+            </button>
+            <div></div>
           </div>
         </div>
-      </section>
 
+        <!-- Speed Modulation -->
+        <div class="control-group">
+          <div class="slider-header">
+            <span class="group-label">MOTOR SPEED (PWM)</span>
+            <span class="speed-number" id="speedNum">180</span>
+          </div>
+          <input type="range" min="100" max="255" value="180" id="speedSlider" class="tech-slider">
+          <div class="preset-row">
+            <button class="preset-chip" data-speed="120">Cruise (120)</button>
+            <button class="preset-chip active" data-speed="180">Normal (180)</button>
+            <button class="preset-chip" data-speed="255">Turbo (255)</button>
+          </div>
+        </div>
+
+        <!-- Live Diagnostics Log -->
+        <div class="control-group log-group">
+          <div class="log-header">
+            <span class="group-label">SERIAL MONITOR TELEMETRY (9600 BAUD)</span>
+            <button class="clear-btn" id="btnClearLog">Clear</button>
+          </div>
+          <div class="log-stream" id="logStream"></div>
+        </div>
+
+      </aside>
     </main>
 
-    <!-- Bottom Status Bar -->
-    <footer class="app-footer">
-      <div class="footer-status">
-        <span>Firmware: SMARTDRIVE v2.1.0</span>
-        <span class="sep">•</span>
-        <span>ATmega328P 16MHz</span>
-        <span class="sep">•</span>
-        <span id="loopHz">Simulation Loop: 60 FPS</span>
+    <!-- MODAL: CIRCUIT & WIRING TABLE -->
+    <div class="modal-backdrop" id="modalWiring">
+      <div class="modal-box">
+        <div class="modal-header">
+          <h3>⚡ Pin-by-Pin Hardware Wiring Specification</h3>
+          <button class="close-btn" id="btnCloseWiring">✕</button>
+        </div>
+        <div class="modal-body">
+          <table class="clean-table">
+            <thead>
+              <tr>
+                <th>Component</th>
+                <th>Pin</th>
+                <th>Arduino Uno Pin</th>
+                <th>Color</th>
+                <th>Engineering Purpose</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>L298N Driver</td><td><strong>ENA</strong></td><td><strong>D5</strong> (PWM)</td><td>Blue</td><td>Speed PWM (Left Motors). Remove black jumper.</td></tr>
+              <tr><td>L298N Driver</td><td><strong>IN1</strong></td><td><strong>D4</strong></td><td>Yellow</td><td>Left Motors forward phase.</td></tr>
+              <tr><td>L298N Driver</td><td><strong>IN2</strong></td><td><strong>D7</strong></td><td>Orange</td><td>Left Motors reverse phase.</td></tr>
+              <tr><td>L298N Driver</td><td><strong>IN3</strong></td><td><strong>D8</strong></td><td>Green</td><td>Right Motors forward phase.</td></tr>
+              <tr><td>L298N Driver</td><td><strong>IN4</strong></td><td><strong>D12</strong></td><td>Purple</td><td>Right Motors reverse phase.</td></tr>
+              <tr><td>L298N Driver</td><td><strong>ENB</strong></td><td><strong>D6</strong> (PWM)</td><td>White</td><td>Speed PWM (Right Motors). Remove black jumper.</td></tr>
+              <tr><td>L298N Driver</td><td><strong>+12V</strong></td><td><strong>Battery (+)</strong></td><td>Red</td><td>Connect to 7.4V (2x 18650) switch output.</td></tr>
+              <tr><td>L298N Driver</td><td><strong>GND</strong></td><td><strong>Battery (-) & GND</strong></td><td>Black</td><td><strong>CRITICAL: Common Ground!</strong></td></tr>
+              <tr><td>HC-05 Bluetooth</td><td><strong>VCC / GND</strong></td><td><strong>5V / GND</strong></td><td>Red / Black</td><td>Core Bluetooth power.</td></tr>
+              <tr><td>HC-05 Bluetooth</td><td><strong>TXD</strong></td><td><strong>D2</strong> (RX)</td><td>Green</td><td>3.3V TX safely accepted by Arduino 5V input.</td></tr>
+              <tr><td>HC-05 Bluetooth</td><td><strong>RXD</strong></td><td><strong>D3 via Divider</strong></td><td>Orange</td><td><strong>1kΩ / 2kΩ Divider:</strong> Converts 5V down to safe 3.3V.</td></tr>
+              <tr><td>HC-SR04 Sensor</td><td><strong>TRIG</strong></td><td><strong>A0</strong></td><td>Yellow</td><td>10µs ultrasonic burst trigger output.</td></tr>
+              <tr><td>HC-SR04 Sensor</td><td><strong>ECHO</strong></td><td><strong>A1</strong></td><td>Cyan</td><td>Echo travel duration input.</td></tr>
+              <tr><td>SG90 Servo</td><td><strong>Signal</strong></td><td><strong>D9</strong> (PWM)</td><td>Orange</td><td>50Hz PWM position sweep signal.</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
-      <div class="footer-links">
-        <span>Project SMARTDRIVE © Educational Robotics Architecture</span>
+    </div>
+
+    <!-- MODAL: ARDUINO C++ CODE -->
+    <div class="modal-backdrop" id="modalCode">
+      <div class="modal-box">
+        <div class="modal-header">
+          <div>
+            <h3>💻 SMARTDRIVE.ino Production Firmware</h3>
+            <span class="modal-subtitle">Ready to upload via Arduino IDE</span>
+          </div>
+          <div class="modal-header-actions">
+            <button class="copy-code-btn" id="btnCopyCode">📋 Copy Full Code</button>
+            <button class="close-btn" id="btnCloseCode">✕</button>
+          </div>
+        </div>
+        <div class="modal-body">
+          <pre class="code-block"><code id="codeViewer"></code></pre>
+        </div>
       </div>
-    </footer>
+    </div>
+
   </div>
 
-  <!-- Audio synthesizers, physics simulator & UI scripts -->
   <script src="arduino_source.js"></script>
   <script src="simulator.js"></script>
   <script src="firmware_sim.js"></script>

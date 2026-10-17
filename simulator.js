@@ -1,5 +1,5 @@
 /* ==============================================================================
-   SMARTDRIVE ROBOTICS SIMULATOR - PHYSICS, RENDERING & RAYCASTING ENGINE
+   SMARTDRIVE ROBOTICS SIMULATOR - PHYSICS, HIGH-SPEED RAYCASTING & RENDERING
    ============================================================================== */
 
 class AudioEngine {
@@ -44,12 +44,12 @@ class AudioEngine {
       const gain = this.ctx.createGain();
       osc.type = 'triangle';
       osc.frequency.setValueAtTime(2200, this.ctx.currentTime);
-      gain.gain.setValueAtTime(0.03, this.ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.03);
+      gain.gain.setValueAtTime(0.04, this.ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.035);
       osc.connect(gain);
       gain.connect(this.ctx.destination);
       osc.start();
-      osc.stop(this.ctx.currentTime + 0.03);
+      osc.stop(this.ctx.currentTime + 0.035);
     } catch (e) {}
   }
 
@@ -107,17 +107,17 @@ class RobotSimulator {
     this.ctx = this.canvas.getContext('2d');
     this.audio = new AudioEngine();
 
-    // Scale conversion: 1 pixel = 0.5 cm (so 2 pixels = 1 cm)
+    // Scale conversion: 2 pixels = 1 cm (so 100 pixels = 50 cm)
     this.PX_PER_CM = 2.0;
 
-    // Robot physical dimensions
-    this.width = 38 * this.PX_PER_CM;  // ~19 cm wide
-    this.length = 50 * this.PX_PER_CM; // ~25 cm long
+    // Robot dimensions
+    this.width = 36 * this.PX_PER_CM;  // ~18 cm wide
+    this.length = 48 * this.PX_PER_CM; // ~24 cm long
 
     // Robot state
-    this.x = 240;
+    this.x = 220;
     this.y = 260;
-    this.heading = 0; // In radians (0 = facing right, -PI/2 = facing up)
+    this.heading = 0; // In radians (0 = facing right)
     this.speed = 0;   // In pixels/sec
     this.angularSpeed = 0; // In rad/sec
 
@@ -126,11 +126,11 @@ class RobotSimulator {
     this.measuredDistanceCm = 400;
     this.pingWaveAnim = 0;
 
-    // Wheel rotation animation (treads)
+    // Wheel rotation animation
     this.leftWheelDist = 0;
     this.rightWheelDist = 0;
 
-    // Obstacles list
+    // Obstacles
     this.obstacles = [];
     this.initDefaultObstacles();
 
@@ -145,16 +145,11 @@ class RobotSimulator {
 
   initDefaultObstacles() {
     this.obstacles = [
-      // Left box
-      { x: 100, y: 110, w: 90, h: 70, label: 'Box A' },
-      // Center obstacle
-      { x: 440, y: 200, w: 80, h: 120, label: 'Wall' },
-      // Bottom right box
-      { x: 620, y: 340, w: 100, h: 80, label: 'Box B' },
-      // Top right partition
-      { x: 610, y: 90, w: 90, h: 60, label: 'Obstacle' },
-      // Center left obstacle
-      { x: 220, y: 400, w: 110, h: 50, label: 'Barrier' }
+      { x: 120, y: 100, w: 90, h: 70, label: 'Obstacle A' },
+      { x: 480, y: 190, w: 90, h: 140, label: 'Wall' },
+      { x: 650, y: 350, w: 100, h: 80, label: 'Obstacle B' },
+      { x: 640, y: 90, w: 90, h: 70, label: 'Barrier' },
+      { x: 250, y: 400, w: 120, h: 50, label: 'Block' }
     ];
   }
 
@@ -162,14 +157,13 @@ class RobotSimulator {
     this.obstacles = [];
     const count = 5 + Math.floor(Math.random() * 3);
     for (let i = 0; i < count; i++) {
-      const w = 60 + Math.random() * 80;
-      const h = 50 + Math.random() * 70;
+      const w = 70 + Math.random() * 70;
+      const h = 60 + Math.random() * 60;
       const x = 50 + Math.random() * (this.canvas.width - w - 100);
       const y = 50 + Math.random() * (this.canvas.height - h - 100);
 
-      // Avoid placing right on top of robot start position
       const distToRobot = Math.hypot(x + w / 2 - this.x, y + h / 2 - this.y);
-      if (distToRobot > 130) {
+      if (distToRobot > 150) {
         this.obstacles.push({ x, y, w, h, label: `Obj ${i + 1}` });
       }
     }
@@ -177,6 +171,16 @@ class RobotSimulator {
 
   clearObstacles() {
     this.obstacles = [];
+  }
+
+  addObstacleBox() {
+    this.obstacles.push({
+      x: 350 + Math.random() * 150,
+      y: 180 + Math.random() * 150,
+      w: 80,
+      h: 70,
+      label: `Box ${this.obstacles.length + 1}`
+    });
   }
 
   resetRobot() {
@@ -226,13 +230,12 @@ class RobotSimulator {
       this.draggedObstacle = null;
     });
 
-    // Double-click to spawn new obstacle at click point
     this.canvas.addEventListener('dblclick', (e) => {
       const pos = getPos(e);
       this.obstacles.push({
-        x: pos.x - 35,
+        x: pos.x - 40,
         y: pos.y - 35,
-        w: 70,
+        w: 80,
         h: 70,
         label: `Box ${this.obstacles.length + 1}`
       });
@@ -240,23 +243,17 @@ class RobotSimulator {
     });
   }
 
-  // Raycasting for HC-SR04 Ultrasonic Distance Sensor
+  // High-Speed Multi-Ray Acoustic Sensing
   measureUltrasonicRay() {
-    // Ultrasonic sensor sits at front center of robot
-    const frontOffset = this.length / 2 - 4;
+    const frontOffset = this.length / 2 - 2;
     const sensorX = this.x + Math.cos(this.heading) * frontOffset;
     const sensorY = this.y + Math.sin(this.heading) * frontOffset;
 
-    // Servo angle relative to car heading:
-    // 90 deg = straight forward (0 rad offset)
-    // 150 deg = looking left (+60 deg / +PI/3 offset)
-    // 30 deg = looking right (-60 deg / -PI/3 offset)
     const servoOffsetRad = (90 - this.servoAngleDeg) * (Math.PI / 180);
     const rayAngle = this.heading + servoOffsetRad;
 
-    // Collect all boundary segments (arena perimeter + rectangular obstacles)
+    // Collect all boundary segments
     const segments = [
-      // Outer arena walls
       { x1: 5, y1: 5, x2: this.canvas.width - 5, y2: 5 },
       { x1: this.canvas.width - 5, y1: 5, x2: this.canvas.width - 5, y2: this.canvas.height - 5 },
       { x1: this.canvas.width - 5, y1: this.canvas.height - 5, x2: 5, y2: this.canvas.height - 5 },
@@ -272,13 +269,12 @@ class RobotSimulator {
       );
     }
 
-    // HC-SR04 has a ~15 degree conical emission cone. We cast 5 rays across this cone
-    // and find the closest hit point!
-    let minDistancePx = 400 * this.PX_PER_CM; // Max 400cm
+    // 25-degree wide acoustic beam with 7 multi-ray samples for instant detection
+    let minDistancePx = 400 * this.PX_PER_CM;
     let closestHit = null;
 
-    const coneHalfAngleRad = 7.5 * (Math.PI / 180);
-    const numSubRays = 5;
+    const coneHalfAngleRad = 12 * (Math.PI / 180);
+    const numSubRays = 7;
 
     for (let i = 0; i < numSubRays; i++) {
       const t = numSubRays > 1 ? (i / (numSubRays - 1) - 0.5) * 2 : 0;
@@ -329,9 +325,9 @@ class RobotSimulator {
   }
 
   updatePhysics(dt, motionState, speedPwm) {
-    // Convert 0..255 PWM to simulated linear speed (max ~75 cm/s = 150 px/s)
-    const baseLinearSpeed = (speedPwm / 255) * 140;
-    const baseTurnSpeed = 2.4; // rad/s for 4WD skid steering
+    // Linear speed: responsive acceleration
+    const baseLinearSpeed = (speedPwm / 255) * 150;
+    const baseTurnSpeed = 2.8;
 
     let targetSpeed = 0;
     let targetAngular = 0;
@@ -342,7 +338,7 @@ class RobotSimulator {
         targetAngular = 0;
         break;
       case 'BACKWARD':
-        targetSpeed = -baseLinearSpeed * 0.85;
+        targetSpeed = -baseLinearSpeed * 0.9;
         targetAngular = 0;
         break;
       case 'LEFT':
@@ -360,25 +356,24 @@ class RobotSimulator {
         break;
     }
 
-    // Smooth inertia
-    this.speed += (targetSpeed - this.speed) * Math.min(1, dt * 14);
-    this.angularSpeed += (targetAngular - this.angularSpeed) * Math.min(1, dt * 16);
+    // High response inertia
+    this.speed += (targetSpeed - this.speed) * Math.min(1, dt * 18);
+    this.angularSpeed += (targetAngular - this.angularSpeed) * Math.min(1, dt * 20);
 
-    // Apply movement
+    // Apply motion
     this.heading += this.angularSpeed * dt;
     const newX = this.x + Math.cos(this.heading) * this.speed * dt;
     const newY = this.y + Math.sin(this.heading) * this.speed * dt;
 
-    // Check collision against obstacles & walls
+    // Chassis Collision Check
     if (!this.checkChassisCollision(newX, newY)) {
       this.x = newX;
       this.y = newY;
     } else {
-      // Wall slide / stop on bumper contact
       this.speed = 0;
     }
 
-    // Keep inside arena borders
+    // Arena boundary clamp
     const margin = this.length / 2;
     this.x = Math.max(margin, Math.min(this.canvas.width - margin, this.x));
     this.y = Math.max(margin, Math.min(this.canvas.height - margin, this.y));
@@ -389,19 +384,17 @@ class RobotSimulator {
     this.leftWheelDist += vLeft * dt;
     this.rightWheelDist += vRight * dt;
 
-    // Ultrasonic ping wave animation
+    // Ultrasonic ping wave ripple
     this.pingWaveAnim += dt * 4;
     if (this.pingWaveAnim > 1) this.pingWaveAnim = 0;
 
-    // Engine audio hum
     const isMoving = Math.abs(this.speed) > 2 || Math.abs(this.angularSpeed) > 0.1;
     this.audio.setMotorHum(isMoving, speedPwm);
   }
 
   checkChassisCollision(testx, testy) {
-    const radius = this.width * 0.45;
+    const radius = this.width * 0.44;
     for (const obs of this.obstacles) {
-      // Circle vs AABB collision
       const closestX = Math.max(obs.x, Math.min(testx, obs.x + obs.w));
       const closestY = Math.max(obs.y, Math.min(testy, obs.y + obs.h));
       const distance = Math.hypot(testx - closestX, testy - closestY);
@@ -416,17 +409,12 @@ class RobotSimulator {
     const ctx = this.ctx;
     ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-    // 1. Grid Background
     this.renderGrid(ctx);
-
-    // 2. Obstacles
     this.renderObstacles(ctx);
 
-    // 3. Ultrasonic Scan Beam & Cone
     const rayData = this.measureUltrasonicRay();
     this.renderUltrasonicBeam(ctx, rayData);
 
-    // 4. Robot Chassis, Wheels, Servo & Electronics
     this.renderRobot(ctx);
   }
 
@@ -448,8 +436,7 @@ class RobotSimulator {
       ctx.stroke();
     }
 
-    // Outer boundary glow
-    ctx.strokeStyle = 'rgba(56, 189, 248, 0.3)';
+    ctx.strokeStyle = 'rgba(56, 189, 248, 0.25)';
     ctx.lineWidth = 2;
     ctx.strokeRect(2, 2, this.canvas.width - 4, this.canvas.height - 4);
     ctx.restore();
@@ -460,12 +447,10 @@ class RobotSimulator {
     for (const obs of this.obstacles) {
       const isDragged = this.draggedObstacle === obs;
 
-      // Obstacle Shadow
-      ctx.shadowColor = isDragged ? 'rgba(139, 92, 246, 0.5)' : 'rgba(0, 0, 0, 0.5)';
-      ctx.shadowBlur = isDragged ? 18 : 8;
+      ctx.shadowColor = isDragged ? 'rgba(139, 92, 246, 0.6)' : 'rgba(0, 0, 0, 0.5)';
+      ctx.shadowBlur = isDragged ? 20 : 8;
       ctx.shadowOffsetY = 4;
 
-      // Fill with tech gradient
       const grad = ctx.createLinearGradient(obs.x, obs.y, obs.x + obs.w, obs.y + obs.h);
       grad.addColorStop(0, '#2e1065');
       grad.addColorStop(1, '#1e1b4b');
@@ -478,11 +463,9 @@ class RobotSimulator {
       ctx.fill();
       ctx.stroke();
 
-      // Top highlight strip
-      ctx.fillStyle = 'rgba(168, 85, 247, 0.2)';
+      ctx.fillStyle = 'rgba(168, 85, 247, 0.25)';
       ctx.fillRect(obs.x + 2, obs.y + 2, obs.w - 4, 6);
 
-      // Label
       ctx.shadowBlur = 0;
       ctx.fillStyle = '#c7d2fe';
       ctx.font = '600 11px Outfit, sans-serif';
@@ -499,17 +482,20 @@ class RobotSimulator {
     const maxReach = 400 * this.PX_PER_CM;
     const hitDist = hit ? hit.dist : maxReach;
 
-    // Draw 15-degree translucent cone
+    // Visual color depends on distance zone:
+    // < 35cm: Critical RED
+    // 35cm - 55cm: Caution AMBER (Early Warning)
+    // > 55cm: Safe CYAN
     const grad = ctx.createRadialGradient(sensorX, sensorY, 5, sensorX, sensorY, hitDist);
-    if (this.measuredDistanceCm <= 15) {
-      grad.addColorStop(0, 'rgba(239, 68, 68, 0.45)');
-      grad.addColorStop(1, 'rgba(239, 68, 68, 0.02)');
-    } else if (this.measuredDistanceCm <= 30) {
-      grad.addColorStop(0, 'rgba(245, 158, 11, 0.35)');
-      grad.addColorStop(1, 'rgba(245, 158, 11, 0.02)');
+    if (this.measuredDistanceCm <= 35) {
+      grad.addColorStop(0, 'rgba(239, 68, 68, 0.55)');
+      grad.addColorStop(1, 'rgba(239, 68, 68, 0.04)');
+    } else if (this.measuredDistanceCm <= 55) {
+      grad.addColorStop(0, 'rgba(245, 158, 11, 0.45)');
+      grad.addColorStop(1, 'rgba(245, 158, 11, 0.03)');
     } else {
-      grad.addColorStop(0, 'rgba(6, 182, 212, 0.25)');
-      grad.addColorStop(1, 'rgba(6, 182, 212, 0.01)');
+      grad.addColorStop(0, 'rgba(6, 182, 212, 0.35)');
+      grad.addColorStop(1, 'rgba(6, 182, 212, 0.02)');
     }
 
     ctx.beginPath();
@@ -526,7 +512,8 @@ class RobotSimulator {
       sensorX + Math.cos(rayAngle) * hitDist,
       sensorY + Math.sin(rayAngle) * hitDist
     );
-    ctx.strokeStyle = this.measuredDistanceCm <= 15 ? 'rgba(239, 68, 68, 0.8)' : 'rgba(56, 189, 248, 0.7)';
+    ctx.strokeStyle = this.measuredDistanceCm <= 35 ? 'rgba(239, 68, 68, 0.9)' :
+                     (this.measuredDistanceCm <= 55 ? 'rgba(245, 158, 11, 0.85)' : 'rgba(56, 189, 248, 0.8)');
     ctx.lineWidth = 1.5;
     ctx.setLineDash([4, 4]);
     ctx.stroke();
@@ -543,13 +530,14 @@ class RobotSimulator {
       ctx.stroke();
     }
 
-    // Impact hit point marker
+    // Impact marker
     if (hit) {
       ctx.beginPath();
-      ctx.arc(hit.x, hit.y, 4, 0, Math.PI * 2);
-      ctx.fillStyle = this.measuredDistanceCm <= 15 ? '#ef4444' : '#06b6d4';
+      ctx.arc(hit.x, hit.y, 5, 0, Math.PI * 2);
+      ctx.fillStyle = this.measuredDistanceCm <= 35 ? '#ef4444' :
+                     (this.measuredDistanceCm <= 55 ? '#f59e0b' : '#06b6d4');
       ctx.shadowColor = ctx.fillStyle;
-      ctx.shadowBlur = 10;
+      ctx.shadowBlur = 12;
       ctx.fill();
     }
     ctx.restore();
@@ -563,21 +551,20 @@ class RobotSimulator {
     const halfW = this.width / 2;
     const halfL = this.length / 2;
 
-    // --- 1. FOUR WHEELS (Yellow Rims with Black Rubber Treads) ---
+    // 1. Four 4WD Wheels (Yellow rims with rotating treads)
     const wheelL = 26 * (this.PX_PER_CM / 2);
     const wheelW = 10 * (this.PX_PER_CM / 2);
     const wheelOffsets = [
-      { x: halfL - 18, y: -halfW - 3, dist: this.leftWheelDist },  // Front Left
-      { x: -halfL + 18, y: -halfW - 3, dist: this.leftWheelDist }, // Rear Left
-      { x: halfL - 18, y: halfW + 3, dist: this.rightWheelDist },  // Front Right
-      { x: -halfL + 18, y: halfW + 3, dist: this.rightWheelDist }  // Rear Right
+      { x: halfL - 18, y: -halfW - 3, dist: this.leftWheelDist },
+      { x: -halfL + 18, y: -halfW - 3, dist: this.leftWheelDist },
+      { x: halfL - 18, y: halfW + 3, dist: this.rightWheelDist },
+      { x: -halfL + 18, y: halfW + 3, dist: this.rightWheelDist }
     ];
 
     for (const w of wheelOffsets) {
       ctx.save();
       ctx.translate(w.x, w.y);
 
-      // Black rubber tire
       ctx.fillStyle = '#111827';
       ctx.strokeStyle = '#374151';
       ctx.lineWidth = 1.5;
@@ -586,11 +573,9 @@ class RobotSimulator {
       ctx.fill();
       ctx.stroke();
 
-      // Yellow wheel rim
       ctx.fillStyle = '#eab308';
       ctx.fillRect(-wheelL / 2 + 3, -wheelW / 2 + 2, wheelL - 6, wheelW - 4);
 
-      // Rotating treads pattern
       ctx.strokeStyle = '#854d0e';
       ctx.lineWidth = 1;
       const treadStep = 5;
@@ -604,7 +589,7 @@ class RobotSimulator {
       ctx.restore();
     }
 
-    // --- 2. MAIN CHASSIS (Blue Acrylic / PCB) ---
+    // 2. Main Chassis (Blue acrylic with neon edge)
     ctx.fillStyle = '#0284c7';
     ctx.strokeStyle = '#38bdf8';
     ctx.lineWidth = 2;
@@ -617,7 +602,7 @@ class RobotSimulator {
     ctx.stroke();
     ctx.shadowBlur = 0;
 
-    // Front bumper arrow indicator
+    // Direction arrow
     ctx.fillStyle = '#38bdf8';
     ctx.beginPath();
     ctx.moveTo(halfL - 6, 0);
@@ -626,84 +611,66 @@ class RobotSimulator {
     ctx.closePath();
     ctx.fill();
 
-    // --- 3. ARDUINO UNO BOARD (Blue Rectangular Shield) ---
+    // 3. Arduino Uno Module
     ctx.fillStyle = '#0891b2';
     ctx.strokeStyle = '#155e75';
     ctx.lineWidth = 1.5;
     ctx.fillRect(-halfL + 12, -halfW + 8, 38, halfW - 2);
-    // USB port
     ctx.fillStyle = '#94a3b8';
-    ctx.fillRect(-halfL + 8, -halfW + 12, 8, 12);
-    // IC chip
+    ctx.fillRect(-halfL + 8, -halfW + 12, 8, 12); // USB port
     ctx.fillStyle = '#0f172a';
-    ctx.fillRect(-halfL + 22, -halfW + 14, 20, 10);
+    ctx.fillRect(-halfL + 22, -halfW + 14, 20, 10); // MCU IC
 
-    // --- 4. L298N DUAL MOTOR DRIVER (Red PCB with Black Heatsink) ---
+    // 4. L298N Motor Driver Module
     ctx.fillStyle = '#dc2626';
     ctx.strokeStyle = '#7f1d1d';
     ctx.lineWidth = 1.5;
     ctx.fillRect(-halfL + 12, 4, 38, halfW - 12);
-    // Aluminum heatsink fins
     ctx.fillStyle = '#18181b';
-    ctx.fillRect(-halfL + 20, 10, 22, 18);
-    ctx.fillStyle = '#71717a';
-    for (let f = 12; f < 26; f += 4) {
-      ctx.fillRect(-halfL + 22, f, 18, 1.5);
-    }
+    ctx.fillRect(-halfL + 20, 10, 22, 18); // Heatsink
 
-    // --- 5. SG90 SERVO & HC-SR04 SCANNER ASSEMBLY ---
-    // Servo base mounted at front center
+    // 5. SG90 Micro Servo & HC-SR04 Ultrasonic Eyes
     const servoMountX = halfL - 18;
     ctx.fillStyle = '#1e3a8a';
     ctx.fillRect(servoMountX - 6, -6, 12, 12);
 
-    // Rotating servo head & HC-SR04 sensor
     ctx.save();
     ctx.translate(servoMountX, 0);
-    // 90 deg is straight ahead (0 rad)
     const servoRotRad = (90 - this.servoAngleDeg) * (Math.PI / 180);
     ctx.rotate(servoRotRad);
 
-    // Servo horn (White plastic arm)
     ctx.fillStyle = '#f8fafc';
     ctx.beginPath();
     ctx.roundRect(-3, -12, 6, 24, 2);
     ctx.fill();
 
-    // HC-SR04 Sensor PCB (Blue board)
+    // HC-SR04 PCB
     ctx.fillStyle = '#0369a1';
     ctx.strokeStyle = '#38bdf8';
     ctx.lineWidth = 1;
     ctx.fillRect(4, -18, 8, 36);
 
-    // Dual Ultrasonic Transducers (Transmitter 'T' and Receiver 'R' cylindrical metal cans)
+    // Dual Ultrasonic Transducers (Metal Cylinders)
     ctx.fillStyle = '#94a3b8';
     ctx.strokeStyle = '#475569';
-    // Can 1
     ctx.beginPath();
     ctx.arc(10, -9, 6.5, 0, Math.PI * 2);
     ctx.fill();
     ctx.stroke();
-    // Inner mesh
-    ctx.fillStyle = '#1e293b';
-    ctx.beginPath();
-    ctx.arc(10, -9, 3.5, 0, Math.PI * 2);
-    ctx.fill();
 
-    // Can 2
-    ctx.fillStyle = '#94a3b8';
     ctx.beginPath();
     ctx.arc(10, 9, 6.5, 0, Math.PI * 2);
     ctx.fill();
     ctx.stroke();
-    // Inner mesh
+
     ctx.fillStyle = '#1e293b';
     ctx.beginPath();
+    ctx.arc(10, -9, 3.5, 0, Math.PI * 2);
     ctx.arc(10, 9, 3.5, 0, Math.PI * 2);
     ctx.fill();
 
-    ctx.restore(); // Restore servo rotation
+    ctx.restore();
 
-    ctx.restore(); // Restore robot translation
+    ctx.restore();
   }
 }
